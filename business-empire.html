@@ -1630,8 +1630,8 @@ const QPOOL = [
   ['earn', n => `Gagner ${eur(n)}`, () => S.earned, () => Math.max(500 * S.pi, Math.max(0, incomeH()) * 2), () => true],
   ['hire', n => `Recruter ${n} employé${n > 1 ? 's' : ''}`, () => S.stats.hires, () => S.firms.length > 2 ? 2 : 1, () => S.firms.length > 0],
   ['up', () => 'Lancer une amélioration de business', () => S.stats.ups, () => 1, () => S.firms.length > 0],
-  ['trade', n => `Passer ${n} ordres en Bourse`, () => S.stats.trades, () => 2, () => S.unl.invest],
-  ['vid', n => `Publier ${n} vidéos`, () => S.stats.vids, () => 2, () => S.unl.creator && S.cr],
+  ['trade', n => `Passer ${n} ordres en Bourse`, () => S.stats.trades, () => 2, () => true],
+  ['vid', n => `Publier ${n} vidéos`, () => S.stats.vids, () => 2, () => !!S.cr],
   ['ad', () => 'Regarder une pub', () => S.stats.ads, () => 1, () => true],
 ];
 function checkQuests() {
@@ -1682,28 +1682,26 @@ function prestigeAsk() {
 // Déblocage progressif : chaque nouveauté arrive avec une bulle d'explication.
 const anyInvest = () => Object.values(S.stocks).some(q => q > 0) || Object.values(S.crypto).some(q => q > 0) || S.props.length > 0;
 const UNL = [
-  ['invest', '📈', 'La Bourse', 'Achetez des actions qui versent des dividendes chaque heure. Leurs cours bougent avec l’actualité : achetez bas, revendez haut.', () => S.firms.length > 0, 'invest'],
-  ['creator', '🎬', 'La carrière de créateur', 'Lancez votre chaîne : achetez un smartphone, publiez des vidéos et gagnez des abonnés. Les revenus arrivent à 1 000 abonnés.', () => fortune() >= 1000 || !!S.cr, 'creator'],
   ['news', '📰', 'Business Info', 'Le fil d’actualités économiques : météo, taux, scandales… Chaque info a un vrai effet sur vos business et vos placements.', () => anyInvest(), 'news'],
   ['realty', '🏠', 'L’immobilier', 'Achetez des biens, choisissez vos locataires et empruntez à la banque. Les loyers tombent chaque heure.', () => fortune() >= 2e4 || S.props.length > 0, 'invest'],
   ['crypto', '🪙', 'Les cryptomonnaies', 'Très volatiles : des envolées spectaculaires, des krachs brutaux et parfois des arnaques. À manier avec prudence.', () => fortune() >= 5e4 || Object.values(S.crypto).some(q => q > 0), 'invest'],
 ];
-const UNL_AT = { realty: 2e4, crypto: 5e4, creator: 1000 };
-const tabLocked = tb => (tb === 'invest' && !S.unl.invest) || (tb === 'creator' && !S.unl.creator);
+const UNL_AT = { realty: 2e4, crypto: 5e4 };
 function checkUnlocks(silent) {
   for (const [k, , , , ok] of UNL) if (!S.unl[k] && ok()) { S.unl[k] = 1; if (!silent) S.pending.push({ k: 'unlock', u: k }); }
 }
 function unlockModal(k) {
-  const [, ico, n, txt, , go] = UNL.find(x => x[0] === k);
+  const u = UNL.find(x => x[0] === k); if (!u) return; // anciennes bulles « Bourse » ou « Créateur » encore en attente
+  const [, ico, n, txt, , go] = u;
   modal(`<span class="ev-ico">${ico}</span><h3>Nouveau : ${n}</h3><p>${txt}</p>
     <div class="modal-actions"><button class="btn ghost" id="mNo" type="button">Plus tard</button><button class="btn go" id="mYes" type="button">Découvrir</button></div>`);
   $('mNo').onclick = () => { closeModal(); render(); };
   $('mYes').onclick = () => { closeModal(); if (go === 'news') { prevTab = tab; tab = 'news'; } else { tab = go; if (go === 'invest') { invView = null; investTab = k === 'invest' ? 'stocks' : k; } } render(); window.scrollTo(0, 0); };
 }
 function applyLocks() {
-  document.querySelectorAll('.nav [data-tab]').forEach(b => b.hidden = tabLocked(b.dataset.tab));
+  // Les 6 onglets sont toujours visibles, quels que soient les indicateurs des anciennes sauvegardes.
+  document.querySelectorAll('.nav [data-tab]').forEach(b => b.hidden = false);
   $('newsBtn').hidden = !S.unl.news;
-  if (tabLocked(tab)) tab = 'gains';
 }
 
 // Tutoriel : quelques bulles au premier lancement, qu'on peut passer.
@@ -1712,7 +1710,7 @@ const TUTO = [
   ['⬆️', 'Améliorez votre clic', 'Chaque niveau de productivité augmente ce que rapporte un clic. C’est votre premier investissement.'],
   ['🍋', 'Fondez votre première entreprise', 'Dès 50 €, ouvrez un stand de limonade dans l’onglet Entreprises : il rapporte même quand vous ne jouez pas.'],
   ['🎯', 'Objectifs et bonus', 'Chaque jour : un bonus quotidien et 3 objectifs qui rapportent de l’argent et des jetons 💠. Les jetons terminent les attentes plus vite.'],
-  ['🔓', 'Un empire qui grandit', 'La Bourse, l’immobilier, la crypto et la carrière de créateur se débloquent au fil de votre progression. Bonne chance !'],
+  ['🔓', 'Un empire qui grandit', 'La Bourse et la carrière de créateur sont ouvertes dès maintenant ; l’immobilier et la crypto se débloquent au fil de votre progression. Bonne chance !'],
 ];
 function tutoModal(i) {
   const [ico, n, txt] = TUTO[i], last = i === TUTO.length - 1;
@@ -2381,7 +2379,7 @@ function nextGoal() {
   const cand = [];
   const has = new Set(S.firms.map(x => x.t));
   if (S.firms.length < FIRMS_MAX) for (const d of BIZ) if (!has.has(d.id)) cand.push([dc(d), d.ico, `Fonder : ${d.n}`]);
-  for (const k of ['creator', 'realty', 'crypto']) if (!S.unl[k]) cand.push([UNL_AT[k], UNL.find(x => x[0] === k)[1], `Débloquer ${UNL.find(x => x[0] === k)[2].replace(/^(La |Les |L’)/, m => m.toLowerCase())} (${eur(UNL_AT[k])} de fortune)`]);
+  for (const k of ['realty', 'crypto']) if (!S.unl[k]) cand.push([UNL_AT[k], UNL.find(x => x[0] === k)[1], `Débloquer ${UNL.find(x => x[0] === k)[2].replace(/^(La |Les |L’)/, m => m.toLowerCase())} (${eur(UNL_AT[k])} de fortune)`]);
   if (S.unl.realty) for (const T of REALTY) if (!S.props.some(p => p.t === T.id)) cand.push([listPrice(T.id, getListing(T.id)) * (1 + NOTARY), T.ico, `Acheter : ${T.n}`]);
   cand.sort((a, b) => a[0] - b[0]);
   return cand.find(c => c[0] > S.cash * .2) || cand[0];
