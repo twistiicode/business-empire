@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -200,6 +200,11 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .qty { display: flex; gap: 6px; flex-wrap: wrap; }
 .qty button { border: 1.5px solid var(--line); background: var(--surface); padding: 6px 12px; border-radius: 999px; font-weight: 700; font-size: 13px; }
 .lang-row { flex-wrap: wrap; gap: 8px; }
+.flag { width: 19px; height: 13px; border-radius: 2px; vertical-align: -2px; box-shadow: 0 0 0 1px rgba(0, 0, 0, .12); flex: none; }
+.lang-sw button { display: inline-flex; align-items: center; gap: 6px; }
+.sp-lang { display: flex; gap: 10px; justify-content: center; margin: -6px 0 14px; animation: spFade .6s .3s both; }
+.sp-lang button { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; border: 1.5px solid rgba(255, 255, 255, .22); background: rgba(255, 255, 255, .06); color: #EAF2EC; font-weight: 700; font-size: 14px; }
+.sp-lang button[aria-pressed="true"] { border-color: #F2CF7A; background: rgba(242, 207, 122, .16); color: #FFF1C4; }
 .qty button[aria-pressed="true"] { border-color: var(--money); background: color-mix(in srgb, var(--money) 12%, var(--surface)); color: var(--money); }
 
 /* Listes d'actifs */
@@ -582,6 +587,43 @@ details.plbox[open] summary { margin-bottom: 8px; }
 .screen.enter { animation: enter .22s ease; }
 @keyframes enter { from { opacity: 0; transform: translateY(8px); } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+/* Effets : particules de pièces, confettis, flash, rebond de la pièce */
+#fx { position: fixed; inset: 0; pointer-events: none; z-index: 40; overflow: hidden; }
+#fx .pt { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #FFF1BF, #F2B640 55%, #B57D24); box-shadow: 0 1px 2px rgba(0, 0, 0, .25); animation: pt .7s cubic-bezier(.2, .7, .3, 1) forwards; }
+@keyframes pt { 0% { transform: translate(0, 0) scale(.6); opacity: 1; } 55% { transform: translate(var(--dx), var(--dy)) rotate(calc(var(--r) * .6)) scale(1); opacity: 1; } 100% { transform: translate(calc(var(--dx) * 1.25), calc(var(--dy) + 70px)) rotate(var(--r)) scale(.8); opacity: 0; } }
+#fx .cf { position: absolute; top: -16px; border-radius: 2px; animation: cf var(--t) cubic-bezier(.25, .6, .4, 1) forwards; }
+@keyframes cf { to { transform: translate(var(--dx), 108vh) rotate(var(--r)); } }
+#fx .flash { position: absolute; inset: 0; background: #FFFFFF; opacity: 0; animation: flash .4s ease-out; }
+#fx .flash.gold { background: radial-gradient(circle at 50% 40%, rgba(255, 220, 120, .85), rgba(255, 200, 80, .2) 60%, transparent); }
+@keyframes flash { 0% { opacity: .35; } 100% { opacity: 0; } }
+.flash.gold { animation-name: flashGold; }
+@keyframes flashGold { 0% { opacity: .9; } 100% { opacity: 0; } }
+.coin.bounce { animation: bounce .32s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes bounce { 0% { transform: scale(.86); } 55% { transform: scale(1.08); } 100% { transform: scale(1); } }
+.fly { font-size: 24px; }
+.fly.big { font-size: 30px; }
+.snd-btn { flex: none; width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--surface); font-size: 16px; display: grid; place-items: center; padding: 0; }
+/* Tutoriel : bulle qui pointe l'élément à toucher */
+.coach { position: fixed; z-index: 30; width: min(290px, calc(100vw - 24px)); padding: 12px 14px; border-radius: 16px; background: var(--ink); color: var(--bg); box-shadow: 0 12px 30px rgba(0, 0, 0, .3); font-size: 14.5px; line-height: 1.4; animation: pop .25s; }
+.coach p { margin: 0; font-weight: 600; }
+.coach::after { content: ""; position: absolute; left: var(--ax, 50%); width: 14px; height: 14px; background: inherit; transform: translateX(-50%) rotate(45deg); }
+.coach.below::after { top: -6px; }
+.coach.above::after { bottom: -6px; }
+.coach-act { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
+.coach-act button { border: 0; border-radius: 999px; padding: 7px 14px; font-weight: 700; font-size: 13px; background: var(--gold); color: #3A2604; }
+.coach-act .skip { background: transparent; color: inherit; opacity: .75; padding: 7px 6px; }
+.coach-hi { outline: 3px solid var(--gold); outline-offset: 3px; animation: coachHi 1.1s ease-in-out infinite; }
+@keyframes coachHi { 50% { outline-color: transparent; } }
+.goal .rw { color: var(--money); }
+.goal > .btn { flex: none; }
+details.more { margin-top: 10px; text-align: left; }
+details.more summary { cursor: pointer; color: var(--muted); font-size: 13px; font-weight: 600; }
+.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0 4px; }
+.kpis div { background: var(--surface-2); border-radius: 12px; padding: 8px; text-align: center; min-width: 0; }
+.kpis small { display: block; color: var(--muted); font-size: 11.5px; }
+.kpis b { font-family: var(--f-display); font-size: 15px; }
+@media (prefers-reduced-motion: reduce) { #fx .pt, #fx .cf { animation-duration: .01s; } .coin.bounce, .coach-hi { animation: none; } }
 </style>
 
 <div id="splash" class="splash" role="status" aria-label="Chargement de Net Worth: Tycoon" data-i18n-aria="ui_loading">
@@ -608,6 +650,7 @@ details.plbox[open] summary { margin-bottom: 8px; }
   <text x="256" y="452" font-size="54" letter-spacing="14" fill="url(#nw-text2)">TYCOON</text></g></svg>
     <div class="sp-titlewrap"><span class="sp-glow"></span><h1 class="sp-title"><span class="sp-t1">NET WORTH</span><span class="sp-t2">TYCOON</span></h1></div>
     <p class="sp-tag" data-i18n="ui_tagline">Construisez votre empire</p>
+    <div class="sp-lang" id="spLang" role="group" aria-label="Language" hidden><button type="button" data-splang="en" lang="en"><svg class="flag" viewBox="0 0 19 10" aria-hidden="true"><rect width="19" height="10" fill="#B22234"/><path d="M0 1.15h19M0 2.7h19M0 4.23h19M0 5.77h19M0 7.3h19M0 8.85h19" stroke="#FFF" stroke-width=".77"/><rect width="7.6" height="5.4" fill="#3C3B6E"/></svg> English</button><button type="button" data-splang="fr" lang="fr"><svg class="flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="1" height="2" fill="#0055A4"/><rect x="1" width="1" height="2" fill="#FFF"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg> Français</button></div>
     <div class="sp-bar"><i></i></div>
     <p class="sp-msg" id="spMsg" data-i18n="ouverture_des_marches">Ouverture des marchés…</p>
   </div>
@@ -622,6 +665,7 @@ details.plbox[open] summary { margin-bottom: 8px; }
     </div>
     <button class="news-btn" id="newsBtn" type="button" aria-label="Business Info, les actualités" data-i18n-aria="ui_news">📰<span class="nbadge" id="newsBadge" hidden>0</span></button>
     <button class="tok-pill" id="tokBtn" type="button" aria-label="Jetons" data-i18n-aria="ui_tokens">💠<b id="hdrTok" class="num">0</b></button>
+    <button class="snd-btn" id="sndBtn" type="button" aria-pressed="true" aria-label="Son">🔊</button>
     <div class="balance-pill"><b id="hdrCash" class="num">0,00 €</b><span id="hdrIncome" class="num">+0 €/h</span></div>
   </header>
   <div class="alert-bar" id="alertBar" role="alert" hidden></div>
@@ -795,7 +839,7 @@ const I18N = {
   atlas_luxe: ["Atlas Luxe", "Atlas Luxury"],
   luxe: ["Luxe", "Luxury"],
   maroquinerie_et_haute_couture_marges_tre: ["Maroquinerie et haute couture. Marges très élevées, clientèle fortunée dans le monde entier.", "Leather goods and haute couture. Very high margins, wealthy customers all over the world."],
-  maison_sauvageot: ["Maison Sauvageot", "Maison Sauvageot"],
+  maison_sauvageot: ["Maison Sauvageot", "Sauvageot & Co"],
   champagnes_et_spiritueux_de_prestige_sen: ["Champagnes et spiritueux de prestige. Sensible à la demande asiatique.", "Prestige champagnes and spirits. Sensitive to demand from Asia."],
   banque_orsay: ["Banque Orsay", "Orsay Bank"],
   banque_de_detail_et_dinvestissement_prof: ["Banque de détail et d’investissement. Profite de la hausse des taux, souffre lors des krachs.", "Retail and investment bank. Benefits when rates rise, suffers in crashes."],
@@ -815,7 +859,7 @@ const I18N = {
   nordis_telecom: ["Nordis Télécom", "Nordis Telecom"],
   telecom: ["Télécom", "Telecom"],
   operateur_mobile_et_fibre_revenus_recurr: ["Opérateur mobile et fibre. Revenus récurrents et dividende élevé.", "Mobile and fiber operator. Recurring revenue and a high dividend."],
-  batir_cie: ["Bâtir & Cie", "Bâtir & Co"],
+  batir_cie: ["Bâtir & Cie", "BuildRight & Co"],
   construction: ["Construction", "Construction"],
   travaux_publics_autoroutes_et_batiments: ["Travaux publics, autoroutes et bâtiments. Dépend des grands chantiers publics.", "Public works, highways and buildings. Depends on big government projects."],
   pixel_forge: ["Pixel Forge", "Pixel Forge"],
@@ -951,7 +995,7 @@ const I18N = {
   temoignages_de_millionnaires_impossibles: ["Témoignages de « millionnaires » impossibles à vérifier", "Testimonials from \"millionaires\" that can't be verified"],
   verdane_energie: ["Verdane Énergie", "Verdane Energy"],
   helio_robotics: ["Helio Robotics", "Helio Robotics"],
-  maison_lacombe: ["Maison Lacombe", "Maison Lacombe"],
+  maison_lacombe: ["Maison Lacombe", "Lacombe & Co"],
   orion_sante: ["Orion Santé", "Orion Health"],
   des_analystes_redoutent_un_krach_boursie: ["Des analystes redoutent un krach boursier imminent.", "Analysts fear an imminent stock market crash."],
   krach_boursier_les_marches_seffondrent: ["Krach boursier : les marchés s’effondrent", "Stock market crash: markets collapse"],
@@ -1122,17 +1166,17 @@ const I18N = {
   les_pires_excuses_au_travail: ["Les pires excuses au travail", "The worst excuses at work"],
   si_les_objets_pouvaient_parler: ["Si les objets pouvaient parler", "If objects could talk"],
   mon_premier_jour_en_entreprise: ["Mon premier jour en entreprise", "My first day at the office"],
-  comment_jai_investi_mes_1_000: ["Comment j’ai investi mes 1 000 premiers euros", "How I invested my first €1,000"],
+  comment_jai_investi_mes_1_000: ["Comment j’ai investi mes 1 000 premiers euros", "How I invested my first $1,000"],
   les_5_erreurs_qui_ruinent_les: ["Les 5 erreurs qui ruinent les débutants", "5 mistakes that ruin beginners"],
   faut_il_acheter_de_limmobilier: ["Faut-il acheter de l’immobilier ?", "Should you buy property?"],
   ma_routine_du_matin: ["Ma routine du matin", "My morning routine"],
   une_semaine_sans_telephone: ["Une semaine sans téléphone", "A week without my phone"],
   je_range_tout_mon_appartement: ["Je range tout mon appartement", "I declutter my whole apartment"],
   jai_teste_le_smartphone_le_moins: ["J’ai testé le smartphone le moins cher", "I tested the cheapest smartphone"],
-  le_pc_parfait_pour_800: ["Le PC parfait pour 800 €", "The perfect PC for €800"],
+  le_pc_parfait_pour_800: ["Le PC parfait pour 800 €", "The perfect PC for $800"],
   ces_gadgets_sont_ils_utiles: ["Ces gadgets sont-ils utiles ?", "Are these gadgets actually useful?"],
   le_burger_parfait_en_10_minutes: ["Le burger parfait en 10 minutes", "The perfect burger in 10 minutes"],
-  je_cuisine_avec_5_pour_la: ["Je cuisine avec 5 € pour la semaine", "Cooking on €5 for the whole week"],
+  je_cuisine_avec_5_pour_la: ["Je cuisine avec 5 € pour la semaine", "Cooking on $5 for the whole week"],
   recette_de_grand_mere_revisitee: ["Recette de grand-mère revisitée", "Grandma's recipe, reinvented"],
   ma_routine_soin_a_petit_prix: ["Ma routine soin à petit prix", "My budget skincare routine"],
   je_teste_les_produits_viraux: ["Je teste les produits viraux", "Testing viral products"],
@@ -1151,10 +1195,10 @@ const I18N = {
   agent: ["Agent", "Agent"],
   sponsors_30_mieux_payes_et_plus: ["Sponsors 30 % mieux payés et plus fréquents (commission de 10 %)", "Sponsors pay 30% more and come more often (10% commission)"],
   krunch_snacks: ["Krunch Snacks", "Krunch Snacks"],
-  velocity: ["VéloCity", "VéloCity"],
+  velocity: ["VéloCity", "VeloCity"],
   mira_cosmetiques: ["Mira Cosmétiques", "Mira Cosmetics"],
   banque_neo: ["Banque Néo", "Neo Bank"],
-  cuisto_box: ["Cuisto Box", "Cuisto Box"],
+  cuisto_box: ["Cuisto Box", "Chef Box"],
   cryptomoon_academy: ["CryptoMoon Academy", "CryptoMoon Academy"],
   formation_trader_millionnaire: ["Formation Trader Millionnaire", "Millionaire Trader Course"],
   pari_express: ["Pari Express", "Bet Express"],
@@ -1443,7 +1487,7 @@ const I18N = {
   premier_bien_immobilier: ["Premier bien immobilier", "First property"],
   premiere_video: ["Première vidéo", "First video"],
   premier_article_de_luxe: ["Premier article de luxe", "First luxury item"],
-  t_100_000_de_fortune: ["100 000 € de fortune", "€100,000 net worth"],
+  t_100_000_de_fortune: ["100 000 € de fortune", "$100K net worth"],
   millionnaire: ["Millionnaire", "Millionaire"],
   milliardaire: ["Milliardaire", "Billionaire"],
   succes: ["Succès : {0}", "Achievement: {0}"],
@@ -1462,7 +1506,7 @@ const I18N = {
   objectif_du_jour: ["Objectif du jour", "Daily goal"],
   objectif_reussi_et: ["Objectif réussi : +{0} et +{1} {2}", "Goal complete: +{0} and +{1} {2}"],
   tout_revendre_etoile: ["Tout revendre · +{0} étoile{1}", "Sell everything · +{0} star{1}"],
-  premiere_etoile_a_1_m_de: ["Première étoile à 1 M€ de fortune, la suivante à 4 M€, puis 9 M€…", "First star at €1M net worth, the next at €4M, then €9M…"],
+  premiere_etoile_a_1_m_de: ["Première étoile à 1 M€ de fortune, la suivante à 4 M€, puis 9 M€…", "First star at $1M net worth, the next at $4M, then $9M…"],
   prestige: ["⭐ Prestige", "⭐ Prestige"],
   etoile_prestige: ["{0} étoile{1} · {2} prestige{3}", "{0} star{1} · {2} prestige{3}"],
   chaque_etoile_dentrepreneur_donne_pour_t: ["Chaque Étoile d’entrepreneur donne pour toujours +5 % sur tous vos revenus et +10 % par clic. Bonus actuel : +{0} % de revenus.", "Each Entrepreneur Star permanently gives +5% on all your income and +10% per tap. Current bonus: +{0}% income."],
@@ -1480,11 +1524,11 @@ const I18N = {
   plus_tard: ["Plus tard", "Later"],
   decouvrir: ["Découvrir", "Take a look"],
   bienvenue_dans_net_worth_tycoon: ["Bienvenue dans Net Worth: Tycoon !", "Welcome to Net Worth: Tycoon!"],
-  vous_partez_de_zero_touchez_la: ["Vous partez de zéro. Touchez la pièce dorée pour gagner vos premiers euros.", "You're starting from nothing. Tap the gold coin to earn your first euros."],
+  vous_partez_de_zero_touchez_la: ["Vous partez de zéro. Touchez la pièce dorée pour gagner vos premiers euros.", "You're starting from nothing. Tap the gold coin to earn your first dollars."],
   ameliorez_votre_clic: ["Améliorez votre clic", "Upgrade your tap"],
   chaque_niveau_de_productivite_augmente_c: ["Chaque niveau de productivité augmente ce que rapporte un clic. C’est votre premier investissement.", "Each productivity level increases what a tap earns. It's your first investment."],
-  fondez_votre_premiere_entreprise: ["Fondez votre première entreprise", "Start your first business"],
-  des_50_ouvrez_un_stand_de: ["Dès 50 €, ouvrez un stand de limonade dans l’onglet Entreprises : il rapporte même quand vous ne jouez pas.", "From €50, open a lemonade stand in the Business tab: it earns money even when you're not playing."],
+  fondez_votre_premiere_entreprise: ["Fondez votre première entreprise", "Buy your first business"],
+  des_50_ouvrez_un_stand_de: ["Dès 50 €, ouvrez un stand de limonade dans l’onglet Entreprises : il rapporte même quand vous ne jouez pas.", "From $50, buy a lemonade stand in the Business tab: it earns money even when you're not playing."],
   objectifs_et_bonus: ["Objectifs et bonus", "Goals and bonuses"],
   chaque_jour_un_bonus_quotidien_et: ["Chaque jour : un bonus quotidien et 3 objectifs qui rapportent de l’argent et des jetons 💠. Les jetons terminent les attentes plus vite.", "Every day: a daily bonus and 3 goals that pay out money and 💠 tokens. Tokens make waits finish faster."],
   un_empire_qui_grandit: ["Un empire qui grandit", "A growing empire"],
@@ -1767,7 +1811,7 @@ const I18N = {
   moteur_gratuit: ["Moteur gratuit", "Free engine"],
   moteur_standard: ["Moteur standard", "Standard engine"],
   moteur_haut_de_gamme: ["Moteur haut de gamme", "High-end engine"],
-  jeu_a_30: ["Jeu à 30 €", "€30 game"],
+  jeu_a_30: ["Jeu à 30 €", "$30 game"],
   contenu_additionnel: ["Contenu additionnel", "DLC"],
   stations_de_developpement: ["Stations de développement", "Dev workstations"],
   studio_de_capture_de_mouvement: ["Studio de capture de mouvement", "Motion capture studio"],
@@ -1936,18 +1980,18 @@ const I18N = {
   jeune_start_up: ["Jeune start-up", "Young start-up"],
   concept_store_ephemere: ["Concept-store éphémère", "Pop-up concept store"],
   restaurant_en_creation: ["Restaurant en création", "Restaurant opening soon"],
-  maison_duval: ["Maison Duval", "Maison Duval"],
+  maison_duval: ["Maison Duval", "Duval & Co"],
   optique_bernard: ["Optique Bernard", "Bernard Opticians"],
   groupe_arcadia: ["Groupe Arcadia", "Arcadia Group"],
   hexagone_conseil: ["Hexagone Conseil", "Hexagone Consulting"],
-  le_comptoir: ["Le Comptoir", "Le Comptoir"],
+  le_comptoir: ["Le Comptoir", "The Counter"],
   novaterra: ["Novaterra", "Novaterra"],
-  cafe_des_arts: ["Café des Arts", "Café des Arts"],
+  cafe_des_arts: ["Café des Arts", "Arts Café"],
   studio_kappa: ["Studio Kappa", "Studio Kappa"],
-  atelier_moreau: ["Atelier Moreau", "Atelier Moreau"],
+  atelier_moreau: ["Atelier Moreau", "Moreau Workshop"],
   horizon_hotels: ["Horizon Hôtels", "Horizon Hotels"],
   vertigo: ["Vertigo", "Vertigo"],
-  les_halles_gourmandes: ["Les Halles Gourmandes", "Les Halles Gourmandes"],
+  les_halles_gourmandes: ["Les Halles Gourmandes", "Gourmet Market Hall"],
   credit_entierement_rembourse: ["Crédit entièrement remboursé !", "Loan fully repaid!"],
   renovation_terminee_niveau_valeur_et_loy: ["Rénovation terminée : niveau {0}, valeur et loyer en hausse.", "Renovation complete: level {0}, value and rent go up."],
   le_locataire: ["le locataire", "the tenant"],
@@ -1957,16 +2001,16 @@ const I18N = {
   loyers_impayes_ne_paie_plus: ["Loyers impayés : {0} ne paie plus.", "Unpaid rent: {0} has stopped paying."],
   donne_son_preavis_et_quitte_les: ["{0} donne son préavis et quitte les lieux.", "{0} gives notice and moves out."],
   txt: ["{0} {1} %", "{0} {1}%"],
-  fonder: ["Fonder : {0}", "Start: {0}"],
+  fonder: ["Fonder : {0}", "Buy: {0}"],
   debloquer_de_fortune: ["Débloquer {0} ({1} de fortune)", "Unlock {0} ({1} net worth)"],
   acheter: ["Acheter : {0}", "Buy: {0}"],
   prochain_objectif: ["Prochain objectif", "Next goal"],
   bonus_permanents_collections_et_etoiles: ["Bonus permanents (collections et étoiles) : +{0} % sur tous les revenus.", "Permanent bonuses (collections and stars): +{0}% on all income."],
   travailler_et_gagner_de_largent: ["Travailler et gagner de l’argent", "Work and earn money"],
   net_worth_tycoon: ["<b>Net Worth: Tycoon</b>", "<b>Net Worth: Tycoon</b>"],
-  solde_disponible: ["Solde disponible", "Available balance"],
+  solde_disponible: ["Solde disponible", "Cash"],
   titulaire: ["Titulaire", "Cardholder"],
-  revenu_passif: ["Revenu passif", "Passive income"],
+  revenu_passif: ["Revenu passif", "Income/h"],
   x: ["x{0} ·", "x{0} ·"],
   par_clic_clics_au_total: ["par clic · <i id=\"gClicks\" style=\"font-style:normal\">{0}</i> clics au total", "per tap · <i id=\"gClicks\" style=\"font-style:normal\">{0}</i> taps in total"],
   productivite_niveau: ["<b>Productivité · niveau {0}</b>", "<b>Productivity · level {0}</b>"],
@@ -1974,7 +2018,7 @@ const I18N = {
   ameliorer_le_clic: ["Améliorer le clic · {0}", "Upgrade tap · {0}"],
   bonus_x_sur_les_clics: ["<b>Bonus x{0} sur les clics</b>", "<b>x{0} bonus on taps</b>"],
   regarder: ["Regarder", "Watch"],
-  revenus_passifs: ["Revenus passifs", "Passive income"],
+  revenus_passifs: ["Revenus passifs", "Income/h"],
   h: ["<b class=\"num\"{0}>{1}/h</b>", "<b class=\"num\"{0}>{1}/h</b>"],
   loyers_nets: ["Loyers nets", "Net rent"],
   dividendes: ["Dividendes", "Dividends"],
@@ -2065,7 +2109,7 @@ const I18N = {
   acheter_ou_vendre: ["Acheter ou vendre", "Buy or sell"],
   courtage: ["Courtage {0} %{1}", "Fees {0}%{1}"],
   max: ["Max", "Max"],
-  montant_2: ["Montant €", "Amount €"],
+  montant_2: ["Montant €", "Amount $"],
   vendre: ["Vendre", "Sell"],
   acheter_2: ["Acheter", "Buy"],
   ma_position: ["Ma position", "My position"],
@@ -2199,14 +2243,14 @@ const I18N = {
   revendez_en_une_pour_fonder_autre: ["Revendez-en une pour fonder autre chose.", "Sell one to start something else."],
   vous_pouvez_en_posseder_plusieurs_du: ["Vous pouvez en posséder plusieurs du même type.", "You can own several of the same type."],
   entreprises_2: ["<b>{0} / {1} entreprises</b>", "<b>{0} / {1} businesses</b>"],
-  fonder_une_entreprise: ["＋ Fonder une entreprise", "＋ Start a business"],
+  fonder_une_entreprise: ["＋ Fonder une entreprise", "＋ Buy a business"],
   aucune_entreprise_pour_linstant: ["<b>Aucune entreprise pour l’instant</b>", "<b>No businesses yet</b>"],
   commencez_petit_un_coute_et_se: ["Commencez petit : un {0} coûte {1} et se rembourse en {2} h de jeu.", "Start small: a {0} costs {1} and pays for itself in {2} h of play."],
   poste_a_pourvoir: ["{0} poste{1} à pourvoir", "{0} open position{1}"],
   niveau_sur: ["Niveau {0} sur {1} · {2}", "Level {0} of {1} · {2}"],
   benefice_net_2: ["bénéfice net", "net profit"],
   employes: ["👥 <b>{0}/{1}</b> employés{2}", "👥 <b>{0}/{1}</b> employees{2}"],
-  h_3: ["💶 <b class=\"num\">{0}/h</b>", "💶 <b class=\"num\">{0}/h</b>"],
+  h_3: ["💶 <b class=\"num\">{0}/h</b>", "💵 <b class=\"num\">{0}/h</b>"],
   gerer_lentreprise: ["Gérer l’entreprise", "Manage business"],
   lequipe_est_en_greve: ["<b>✊ L’équipe est en grève</b>", "<b>✊ The team is on strike</b>"],
   plus_aucune_production_ni_salaire_verse: ["Plus aucune production (ni salaire versé) pendant encore {0}. Les salariés réclament 10 % d’augmentation.", "No production (and no wages paid) for another {0}. Staff are demanding a 10% raise."],
@@ -2238,11 +2282,11 @@ const I18N = {
   masse_salariale: ["Masse salariale", "Payroll"],
   humeur_moyenne: ["Humeur moyenne", "Average mood"],
   productivite: ["Productivité", "Productivity"],
-  travaux_en_cours_encore: ["🏗️ Travaux en cours : <b>{0}</b>, encore {1}.", "🏗️ Works in progress: <b>{0}</b>, {1} left."],
+  travaux_en_cours_encore: ["🏗️ Travaux en cours : <b>{0}</b>, encore {1}.", "🏗️ Upgrade in progress: <b>{0}</b>, {1} left."],
   niveau_maximal_atteint: ["Niveau maximal atteint", "Max level reached"],
   un_poste_de_plus_a_pourvoir: ["(un poste de plus à pourvoir)", "(one more position to fill)"],
   prochaine_etape_benefice_prevu_avec_une: ["Prochaine étape : <b>{0}</b>. Bénéfice prévu {1} avec une équipe complète{2}.", "Next step: <b>{0}</b>. Expected profit {1} with a full team{2}."],
-  developper: ["Développer", "Grow"],
+  developper: ["Développer", "Upgrade"],
   revendre: ["Revendre · {0}", "Sell · {0}"],
   niveau_sur_satisfaction: ["Niveau {0} sur {1} · {2} · ★ {3} · satisfaction {4} %", "Level {0} of {1} · {2} · ★ {3} · satisfaction {4}%"],
   la_carte: ["La carte", "The menu"],
@@ -2323,7 +2367,7 @@ const I18N = {
   nouveau_vehicule_pensez_a_recruter_son: ["Nouveau véhicule : {0} ({1}). Pensez à recruter son {2}.", "New vehicle: {0} ({1}). Remember to hire its {2}."],
   revendu: ["{0} revendu {1}.", "{0} sold for {1}."],
   entretien_de: ["Entretien de {0} : {1}.", "{0} serviced: {1}."],
-  fonder_une_entreprise_2: ["Fonder une entreprise", "Start a business"],
+  fonder_une_entreprise_2: ["Fonder une entreprise", "Buy a business"],
   place: ["{0} place{1}", "{0} slot{1}"],
   du_moins_cher_au_plus_cher: ["Du moins cher au plus cher. Touchez une carte pour voir ses comptes.", "From cheapest to most expensive. Tap a card to see its accounts."],
   a_partir_de: ["À partir de<b class=\"num\">{0}</b>", "From<b class=\"num\">{0}</b>"],
@@ -2335,12 +2379,12 @@ const I18N = {
   vous_possedez_deja_entreprises: ["Vous possédez déjà {0} entreprises.", "You already own {0} businesses."],
   il_vous_manque_2: ["Il vous manque {0}", "You're short {0}"],
   demarre_sans_employe_postes_a_pourvoir: ["Démarre sans employé. Postes à pourvoir : {0}. {1} {2} Remboursé en environ {3} h de jeu avec une équipe complète et motivée.", "Starts with no employees. Positions to fill: {0}. {1} {2} Pays for itself in about {3} h of play with a full, motivated team."],
-  fonder_2: ["Fonder · {0}", "Start · {0}"],
+  fonder_2: ["Fonder · {0}", "Buy · {0}"],
   ouverture_vous_tenez_vous_meme_laffaire: ["Ouverture ! Vous tenez vous-même l’affaire pour l’instant. Recrutez pour la développer ({0}).", "Grand opening! You're running the place yourself for now. Hire people to grow it ({0})."],
   ouverture_poste_a_pourvoir_rien_ne: ["Ouverture ! {0} poste{1} à pourvoir : {2}. Rien ne sera produit tant que personne n’est recruté.", "Grand opening! {0} position{1} to fill: {2}. Nothing gets made until someone is hired."],
   nouvelle_entreprise: ["Nouvelle entreprise : {0}.", "New business: {0}."],
-  travaux_lances: ["Travaux lancés : {0} ({1}).", "Works started: {0} ({1})."],
-  travaux_lances_fin_dans: ["Travaux lancés : {0}. Fin dans {1}.", "Works started: {0}. Done in {1}."],
+  travaux_lances: ["Travaux lancés : {0} ({1}).", "Upgrade started: {0} ({1})."],
+  travaux_lances_fin_dans: ["Travaux lancés : {0}. Fin dans {1}.", "Upgrade started: {0}. Done in {1}."],
   une_fois_lentreprise_rodee_48_h: ["une fois l’entreprise rodée (48 h)", "once the business is established (48 h)"],
   revendre_2: ["Revendre ?", "Sell?"],
   niveau_trouve_preneur_un_repreneur_paie: ["{0} (niveau {1}) trouve preneur. Un repreneur paie environ 40 h de bénéfice{2}, et jamais moins de 50 % de ce que vous y avez investi.", "{0} (level {1}) has a buyer. A buyer pays about 40 h of profit{2}, and never less than 50% of what you've invested."],
@@ -2409,7 +2453,7 @@ const I18N = {
   prochain: ["Prochain :", "Next:"],
   votre_nom: ["Votre nom", "Your name"],
   repartition_de_la_fortune: ["Répartition de la fortune", "Net worth breakdown"],
-  fortune_totale: ["Fortune totale", "Total net worth"],
+  fortune_totale: ["Fortune totale", "Net Worth"],
   du_classement_niveau: ["#{0} du classement · niveau {1}", "#{0} in the ranking · {1} tier"],
   repartition: ["Répartition", "Breakdown"],
   classement_des_plus_riches: ["Classement des plus riches", "Rich list"],
@@ -2432,7 +2476,7 @@ const I18N = {
   regardez_une_pub_de_s_s: ["Regardez une pub de {0} s · {1} s de bonus", "Watch a {0}s ad · {1}s bonus"],
   bonus_x_active_pendant_secondes: ["Bonus x{0} activé pendant {1} secondes !", "x{0} bonus active for {1} seconds!"],
   pub_interrompue_pas_de_bonus_cette: ["Pub interrompue : pas de bonus cette fois.", "Ad interrupted: no bonus this time."],
-  votre_entreprise_perd_de_largent_solde: ["⚠️ Votre entreprise perd de l’argent ({0}). Solde à 0 € : les salaires ne sont plus payés et l’humeur des équipes chute.", "⚠️ Your business is losing money ({0}). Balance at €0: wages aren't being paid and team morale is dropping."],
+  votre_entreprise_perd_de_largent_solde: ["⚠️ Votre entreprise perd de l’argent ({0}). Solde à 0 € : les salaires ne sont plus payés et l’humeur des équipes chute.", "⚠️ Your business is losing money ({0}). Balance at $0: wages aren't being paid and team morale is dropping."],
   votre_entreprise_perd_de_largent: ["Votre entreprise perd de l’argent !", "Your business is losing money!"],
   dont_h_comptees: [", dont {0} h comptées", ", {0} h of it counted"],
   gagne: ["gagné", "earned"],
@@ -2449,7 +2493,7 @@ const I18N = {
   vous_refusez_de_ceder_la_greve: ["Vous refusez de céder : la grève continue.", "You refuse to give in: the strike goes on."],
   mode_test: ["Mode test", "Test mode"],
   ajoute_de_largent_sur_votre_solde: ["Ajoute de l’argent sur votre solde pour essayer le jeu.", "Adds money to your balance so you can try the game."],
-  t_9_md: ["+9 Md€", "+€9B"],
+  t_9_md: ["+9 Md€", "+$9B"],
   mode_test_100_jetons_ajoutes: ["Mode test : 100 jetons ajoutés.", "Test mode: 100 tokens added."],
   mode_test_9_milliards_ajoutes: ["Mode test : 9 milliards ajoutés.", "Test mode: 9 billion added."],
   assurance_souscrite: ["Assurance {0} souscrite.", "{0} insurance taken out."],
@@ -2485,8 +2529,39 @@ const I18N = {
   ui_lang_fr: ["Français", "Français"],
   ui_lang_en: ["English", "English"],
   pub_indisponible: ["Pub indisponible, réessayez plus tard", "Ad unavailable, please try again later"],
+  ui_sound_on: ["Son activé (toucher pour couper)", "Sound on (tap to mute)"],
+  ui_sound_off: ["Son coupé (toucher pour activer)", "Sound off (tap to unmute)"],
+  co_tap: ["Touchez la pièce pour gagner de l’argent ! {0} / {1}", "Tap the coin to earn money! {0} / {1}"],
+  co_buy: ["Bravo ! Achetez maintenant votre stand de limonade.", "Nice! Now buy your lemonade stand."],
+  co_income: ["Votre stand rapporte tout seul, même quand vous ne jouez pas : voici votre revenu passif.", "Your stand earns money on its own, even when you're not playing: this is your income per hour."],
+  co_goals: ["Suivez vos objectifs : ils rapportent de l’argent et débloquent la Bourse, la crypto et l’immobilier.", "Follow your goals: they pay out and unlock stocks, crypto and real estate."],
+  co_ok: ["Compris", "Got it"],
+  co_skip: ["Passer", "Skip"],
+  st_title: ["Objectif", "Goal"],
+  st_up: ["Améliorez votre clic", "Upgrade your tap"],
+  st_hire: ["Recrutez un vendeur pour votre stand", "Hire a salesperson for your stand"],
+  st_biz2: ["Fondez une deuxième entreprise", "Buy a second business"],
+  st_stock: ["Achetez votre première action", "Buy your first stock"],
+  st_channel: ["Créez votre chaîne (onglet Créateur)", "Create your channel (Creator tab)"],
+  st_upbiz: ["Agrandissez une entreprise", "Upgrade a business"],
+  st_go: ["Y aller ›", "Go ›"],
+  st_fortune: ["Atteignez {0} de fortune", "Reach {0} net worth"],
+  st_crypto: ["Achetez votre première crypto", "Buy your first crypto"],
+  st_done: ["{0} Objectif atteint : {1} !", "{0} Goal complete: {1}!"],
+  par_clic_next: ["Prochain niveau : {0} par clic", "Next level: {0} per tap"],
+  fm_profit: ["Bénéfice prévu", "Expected profit"],
+  fm_payback: ["Rentabilisé en", "Pays back in"],
+  fm_hours: ["≈ {0} h", "≈ {0}h"],
+  fm_staff: ["À recruter", "To hire"],
+  fm_details: ["Voir les comptes détaillés", "See detailed accounts"],
+  ui_choose_lang: ["Langue", "Language"],
+  per_1h: ["1 h", "1h"],
+  per_24h: ["24 h", "24h"],
+  per_7d: ["7 j", "7d"],
+  per_30d: ["30 j", "30d"],
 };
-const LANGS = ['fr', 'en'];
+const LANGS = ['en', 'fr'];
+const FLAGS = { en: '<svg class="flag" viewBox="0 0 19 10" aria-hidden="true"><rect width="19" height="10" fill="#B22234"/><path d="M0 1.15h19M0 2.7h19M0 4.23h19M0 5.77h19M0 7.3h19M0 8.85h19" stroke="#FFF" stroke-width=".77"/><rect width="7.6" height="5.4" fill="#3C3B6E"/></svg>', fr: '<svg class="flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="1" height="2" fill="#0055A4"/><rect x="1" width="1" height="2" fill="#FFF"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg>' };
 let LANG = 'fr';
 const pc = () => LANG === 'en' ? '%' : '\u00A0%';
 const locale = () => LANG === 'en' ? 'en-GB' : 'fr-FR';
@@ -2512,9 +2587,8 @@ function revive(k, v) {
   }
   return v;
 }
-// Langue au premier lancement : celle du navigateur (français si elle commence par « fr », sinon anglais).
-// Une partie existante garde sa langue ; une ancienne partie sans langue enregistrée reste en français.
-const browserLang = () => /^fr/i.test((navigator.languages && navigator.languages[0]) || navigator.language || '') ? 'fr' : 'en';
+// Langue : anglais par défaut pour une nouvelle partie. Une partie existante garde sa langue ;
+// une ancienne partie sans langue enregistrée reste en français (joueurs d'avant le choix de langue).
 const isDefaultName = n => ['Vous', 'You'].includes(String(n));
 function applyStatic() {
   document.documentElement.lang = LANG;
@@ -2708,7 +2782,7 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const rf = (a, b) => a + Math.random() * (b - a);
 const gauss = () => { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-// Nombres et montants : 1 234,50 € en français, €1,234.50 en anglais.
+// Nombres et montants : 1 234,50 € en français, $1,234.50 en anglais. Seuls le symbole et le format changent, jamais les montants.
 const NFO = { 0: { maximumFractionDigits: 0 }, 1: { minimumFractionDigits: 1, maximumFractionDigits: 1 }, 2: { minimumFractionDigits: 2, maximumFractionDigits: 2 }, 4: { maximumFractionDigits: 4 } };
 const nfCache = {};
 const nfx = (d, v) => (nfCache[LANG + d] ||= new Intl.NumberFormat(locale(), NFO[d])).format(v);
@@ -2716,8 +2790,10 @@ const nf0 = { format: lzf('n0', v => nfx(0, v)) };
 const nf1 = { format: lzf('n1', v => nfx(1, v)) };
 const nf2 = { format: lzf('n2', v => nfx(2, v)) };
 const nf4 = { format: lzf('n4', v => nfx(4, v)) };
-const money = (s, n, u = '') => LANG === 'en' ? `${s}€${n}${u}` : `${s}${n}\u00A0${u}€`;
-const UNITS = { fr: [[1e12, 'Bn'], [1e9, 'Md'], [1e6, 'M'], [1e3, 'k']], en: [[1e12, 'T'], [1e9, 'B'], [1e6, 'M'], [1e3, 'k']] };
+const money = (s, n, u = '') => LANG === 'en' ? `${s}$${n}${u}` : `${s}${n}\u00A0${u}€`;
+const CUR = () => LANG === 'en' ? '$' : '€';
+const CASH_ICO = lazy(() => LANG === 'en' ? '💵' : '💶', '💶');
+const UNITS = { fr: [[1e12, 'Bn'], [1e9, 'Md'], [1e6, 'M'], [1e3, 'k']], en: [[1e12, 'T'], [1e9, 'B'], [1e6, 'M'], [1e3, 'K']] };
 const eur = lzf('eur', v => {
   const a = Math.abs(v), s = v < 0 ? '−' : '';
   if (a < 100) return money(s, nfx(2, a));
@@ -2740,7 +2816,7 @@ const KEY = 'business-empire.v1';
 function defaultState() {
   return {
     v: 1, lang: LANG, name: tl('vous'), cash: 0, earned: 0, clicks: 0, clickLvl: 1, boostUntil: 0,
-    stocks: {}, crypto: {}, basis: {}, realized: 0, trades: [], orders: [], rug: {}, tok: 0, tokDay: null, tokAdNext: 0, tokLog: [], quests: null, stats: { hires: 0, ups: 0, trades: 0, vids: 0, ads: 0 }, stars: 0, prestiges: 0, unl: {}, tuto: 0, daily: { d: '', s: 0 }, ach: {}, cr: null, pending: [], losses: [], ins: {}, opps: [], info: [], rumors: [], unread: 0, nextInfo: Date.now() + 3 * 60e3, infl: .02, pi: 1, taxPaid: 0, rt: {}, divPend: 0, divNext: 0, divTot: 0, divRec: {}, props: [], listings: {}, firms: [], uid: 0, owned: {}, fx: [], adNext: 0, nextEvent: Date.now() + 15 * 60000,
+    stocks: {}, crypto: {}, basis: {}, realized: 0, trades: [], orders: [], rug: {}, tok: 0, tokDay: null, tokAdNext: 0, tokLog: [], quests: null, stats: { hires: 0, ups: 0, trades: 0, vids: 0, ads: 0 }, stars: 0, prestiges: 0, unl: {}, tuto: 0, coach: 0, start: 0, mute: false, daily: { d: '', s: 0 }, ach: {}, cr: null, pending: [], losses: [], ins: {}, opps: [], info: [], rumors: [], unread: 0, nextInfo: Date.now() + 3 * 60e3, infl: .02, pi: 1, taxPaid: 0, rt: {}, divPend: 0, divNext: 0, divTot: 0, divRec: {}, props: [], listings: {}, firms: [], uid: 0, owned: {}, fx: [], adNext: 0, nextEvent: Date.now() + 15 * 60000,
     mk: freshMarket(), pfH: emptyHist(), last: Date.now(), started: Date.now(), seen: {}, playMs: 0,
   };
 }
@@ -2772,6 +2848,9 @@ function load() {
     if (!S.pfH || !S.pfH.h) S.pfH = emptyHist();
     // Parties déjà commencées : pas de tutoriel, et les fonctionnalités déjà atteintes restent ouvertes sans bulle.
     if (d.tuto == null) S.tuto = 1;
+    // Joueurs déjà installés : pas de tutoriel ni d'objectifs de démarrage.
+    if (d.coach == null) S.coach = COACH_DONE;
+    if (d.start == null) S.start = START.length;
     S.stats = Object.assign({ hires: 0, ups: 0, trades: 0, vids: 0, ads: 0 }, S.stats);
     if (!d.unl) { S.unl = {}; checkUnlocks(true); }
     delete S.news;
@@ -2802,7 +2881,7 @@ function load() {
 function save() { try { S.last = Date.now(); localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 
 /* ================= Économie ================= */
-const clickBase = l => .5 * Math.pow(1.3, l - 1);
+const clickBase = l => Math.pow(1.3, l - 1);   // 1 € par clic au départ : le premier stand s'achète en une quinzaine de secondes
 const clickCost = l => 15 * Math.pow(1.55, l - 1);
 const boosted = () => Date.now() < S.boostUntil;
 const clickValue = () => (clickBase(S.clickLvl) + Math.max(0, incomeH()) * .001) * (boosted() ? BOOST_MULT : 1) * (1 + .1 * (S.stars || 0));
@@ -2999,7 +3078,7 @@ const THEMES = [['gaming', tl('gaming'), '🎮', 1.2, .7, .03], ['humour', tl('h
 const TITLES = {
   gaming: [[tl('jai_fini_le_jeu_le_plus'), '🎮'], [tl('je_teste_les_jeux_les_plus'), '🕹️'], [tl('t_24_h_sur_le_meme_jeu'), '⏱️']],
   humour: [[tl('les_pires_excuses_au_travail'), '😂'], [tl('si_les_objets_pouvaient_parler'), '🗣️'], [tl('mon_premier_jour_en_entreprise'), '💼']],
-  finance: [[tl('comment_jai_investi_mes_1_000'), '💶'], [tl('les_5_erreurs_qui_ruinent_les'), '⚠️'], [tl('faut_il_acheter_de_limmobilier'), '🏠']],
+  finance: [[tl('comment_jai_investi_mes_1_000'), CASH_ICO], [tl('les_5_erreurs_qui_ruinent_les'), '⚠️'], [tl('faut_il_acheter_de_limmobilier'), '🏠']],
   lifestyle: [[tl('ma_routine_du_matin'), '☀️'], [tl('une_semaine_sans_telephone'), '📵'], [tl('je_range_tout_mon_appartement'), '🧹']],
   tech: [[tl('jai_teste_le_smartphone_le_moins'), '📱'], [tl('le_pc_parfait_pour_800'), '🖥️'], [tl('ces_gadgets_sont_ils_utiles'), '🔌']],
   cuisine: [[tl('le_burger_parfait_en_10_minutes'), '🍔'], [tl('je_cuisine_avec_5_pour_la'), '🥕'], [tl('recette_de_grand_mere_revisitee'), '🥧']],
@@ -3111,7 +3190,7 @@ function vidList(c, t) {
     <div class="qty" style="margin:10px 0">${[['date', tl('date')], ['views', tl('vues')], ['rev', tl('revenus')]].map(([k, l]) => `<button type="button" data-crsort="${k}" aria-pressed="${crSort === k}">${l}</button>`).join('')}</div>
     <div class="vlist">${sorted.map(v => `<button class="vrow" type="button" data-vid="${v.id}"><span class="vthumb" style="--cc:var(${PALETTE[v.id % PALETTE.length]})">${v.ico || thOf(v.th)[2]}</span>
       <span class="emp-main"><b>${esc(v.title)}</b><small>${tl('qualite_100', vidDate(v.t), Math.round(v.q))}</small>
-        <small class="num">👁 ${nf0.format(v.del)} · 👥 +${nf0.format(v.gain)} · 💶 ${eur(vidRev(v))}</small>${chips(vidBadges(v, t))}</span></button>`).join('') || `<p class="muted">${tl('aucune_video_publiee_pour_linstant')}</p>`}</div></div>`;
+        <small class="num">👁 ${nf0.format(v.del)} · 👥 +${nf0.format(v.gain)} · ${CASH_ICO} ${eur(vidRev(v))}</small>${chips(vidBadges(v, t))}</span></button>`).join('') || `<p class="muted">${tl('aucune_video_publiee_pour_linstant')}</p>`}</div></div>`;
 }
 function renderVideo(c, v, t) {
   const s = vidStats(v), others = c.vids.filter(x => x !== v && vidAge(x, t) >= Math.min(vidAge(v, t), 48) * .5);
@@ -3309,7 +3388,7 @@ function renderCreator() {
 }
 function crAction(el) {
   const c = S.cr, t = Date.now(), ds = el.dataset;
-  if (el.id === 'crCreate') { const n = (newName || '').trim().slice(0, 24) || tl('ma_chaine'); S.cr = newChannel(n, newPlat, t); crLog(tl('chaine_creee_sur_achetez_du_materiel', n, PLATS[newPlat].n), 'good', t); return afterAction(); }
+  if (el.id === 'crCreate') { const n = (newName || '').trim().slice(0, 24) || tl('ma_chaine'); S.cr = newChannel(n, newPlat, t); crLog(tl('chaine_creee_sur_achetez_du_materiel', n, PLATS[newPlat].n), 'good', t); winFx(); return afterAction(); }
   if (ds.newplat) { newPlat = ds.newplat; return render(); }
   if (!c) return;
   if (ds.percr != null) perCr = +ds.percr;
@@ -3317,7 +3396,7 @@ function crAction(el) {
   else if (ds.crdu != null) c.sel.du = +ds.crdu;
   else if (ds.crpr != null) c.sel.pr = +ds.crpr;
   else if (el.id === 'crPost') { if (!canFilm(c) || c.prod || c.burn > t) return; startProd(c, t); toast(tl('production_lancee'), 'good'); }
-  else if (ds.creq) { const e = CR_EQ.find(x => x[0] === ds.creq), p = e[3] * S.pi; if (S.cash < p) return; S.cash -= p; c.eq[e[0]] = 1; crLog(tl('nouveau_materiel', e[1], eur(p)), 'good', t); }
+  else if (ds.creq) { const e = CR_EQ.find(x => x[0] === ds.creq), p = e[3] * S.pi; if (S.cash < p) return; S.cash -= p; c.eq[e[0]] = 1; crLog(tl('nouveau_materiel', e[1], eur(p)), 'good', t); buyFx(); }
   else if (ds.crst) { const s = CR_STAFF.find(x => x[0] === ds.crst); c.st[s[0]] = !c.st[s[0]]; crLog(c.st[s[0]] ? tl('recrute', s[1]) : tl('vous_vous_separez_de_votre', s[1].toLowerCase()), '', t); }
   else if (ds.spok) { const o = c.offers.find(x => x.id === +ds.spok); if (!o || c.spon) return; const adv = o.pay / 2 * (c.st.agent ? .9 : 1); S.cash += adv; S.earned += adv; c.rev.spons += adv; c.spon = o; c.offers = c.offers.filter(x => x !== o); crLog(tl('contrat_signe_avec_davance_le_reste', o.brand, eur(adv)), 'good', t); }
   else if (ds.spno) c.offers = c.offers.filter(x => x.id !== +ds.spno);
@@ -3403,7 +3482,7 @@ function maybePending() {
   if (splashOn || !S.pending.length || !$('modal').hidden || document.hidden) return;
   const x = S.pending.shift();
   if (x.k === 'daily') return dailyModal(x);
-  if (x.k === 'tuto') { if (!S.tuto) tutoModal(0); return; }
+  if (x.k === 'tuto') return;   // ancien tutoriel en fenêtres, remplacé par les bulles
   if (x.k === 'unlock') return unlockModal(x.u);
   if (x.k === 'polemic') { if (S.cr) polemicModal(); return; }
   const f = findFirm(x.f); if (!f) return;
@@ -3512,6 +3591,7 @@ function buyTokenPack(id) {
 }
 // Bonus quotidien : de l'argent et des jetons, plus généreux jour après jour (série de 7 jours au maximum).
 function checkDaily() {
+  if (S.coach < COACH_DONE) return;
   const d = today(); if (S.daily.d === d) return;
   const y = new Date(Date.now() - 864e5).toDateString(), streak = S.daily.d === y ? Math.min(7, S.daily.s + 1) : 1;
   S.daily = { d, s: streak };
@@ -3522,18 +3602,18 @@ function dailyModal(x) {
   modal(`<span class="ev-ico">🎁</span><h3>${tl('bonus_quotidien')}</h3><p>${tl('jour_daffilee', x.streak, x.streak < 7 ? ` ${tl('revenez_demain_pour_un_bonus_plus')}` : ` ${tl('bonus_maximal')}`)}</p>
     <span class="big num">${eur(x.cash)}</span><p>${tl('jetons_4', x.tok, TOK)}</p>
     <div class="modal-actions"><button class="btn go" id="mYes" type="button">${tl('recuperer')}</button></div>`);
-  $('mYes').onclick = () => { S.cash += x.cash; S.earned += x.cash; giveTok(x.tok, tl('bonus_quotidien_jour', x.streak)); closeModal(); afterAction(); };
+  $('mYes').onclick = () => { S.cash += x.cash; S.earned += x.cash; giveTok(x.tok, tl('bonus_quotidien_jour', x.streak)); closeModal(); winFx(); afterAction(); };
 }
 // Succès : quelques jetons pour les grandes étapes.
 const ACH = [
   ['firstBiz', tl('premier_business'), '🏪', 5, () => S.firms.length >= 1], ['team', tl('premiere_embauche'), '🤝', 3, () => S.firms.some(f => f.staff.length)],
   ['five', tl('cinq_business'), '🏢', 10, () => S.firms.length >= 5], ['stock', tl('premier_placement_en_bourse'), '📈', 3, () => Object.values(S.stocks).some(q => q > 0)],
   ['home', tl('premier_bien_immobilier'), '🔑', 5, () => S.props.length > 0], ['video', tl('premiere_video'), '🎬', 3, () => S.cr && S.cr.n > 0],
-  ['lux', tl('premier_article_de_luxe'), '💎', 3, () => Object.keys(S.owned).length > 0], ['k100', tl('t_100_000_de_fortune'), '💶', 5, () => fortune() >= 1e5],
+  ['lux', tl('premier_article_de_luxe'), '💎', 3, () => Object.keys(S.owned).length > 0], ['k100', tl('t_100_000_de_fortune'), CASH_ICO, 5, () => fortune() >= 1e5],
   ['m1', tl('millionnaire'), '💰', 10, () => fortune() >= 1e6], ['md1', tl('milliardaire'), '👑', 25, () => fortune() >= 1e9],
 ];
 function checkAch() {
-  for (const [id, n, ico, tok, ok] of ACH) if (!S.ach[id] && ok()) { S.ach[id] = Date.now(); giveTok(tok, tl('succes', n)); toast(tl('succes_2', ico, n, tok, TOK), 'good'); }
+  for (const [id, n, ico, tok, ok] of ACH) if (!S.ach[id] && ok()) { S.ach[id] = Date.now(); giveTok(tok, tl('succes', n)); toast(tl('succes_2', ico, n, tok, TOK), 'good'); winFx(); }
 }
 const renderAch = () => `<div class="card"><div class="row"><span class="label">${tl('succes_3')}</span><span class="muted">${Object.keys(S.ach).length}/${ACH.length}</span></div>
   <div class="trophies" style="margin-top:10px">${ACH.map(([id, n, ico, tok]) => `<div class="trophy${S.ach[id] ? ' on' : ''}"><span>${ico}</span><b>${n}</b><small>+${tok} ${TOK}</small></div>`).join('')}</div></div>`;
@@ -3568,7 +3648,7 @@ function renderQuests() {
 function claimQuest(i) {
   const q = S.quests.list[i]; if (!q || q.claimed || questProg(q) < q.n) return;
   const [cash, tk] = questReward(); q.claimed = true; S.cash += cash; S.earned += cash; giveTok(tk, tl('objectif_du_jour'));
-  toast(tl('objectif_reussi_et', eur(cash), tk, TOK), 'good'); afterAction();
+  toast(tl('objectif_reussi_et', eur(cash), tk, TOK), 'good'); winFx(); afterAction();
 }
 
 // Prestige : à partir de 1 M€ de fortune, tout revendre contre des Étoiles d'entrepreneur (+5 % de revenus et +10 % par clic chacune).
@@ -3587,7 +3667,7 @@ function prestigeAsk() {
     <div class="modal-actions"><button class="btn ghost" id="mNo" type="button">${tl('annuler')}</button><button class="btn gold" id="mYes" type="button">${tl('revendre_et_recommencer')}</button></div>`);
   $('mNo').onclick = closeModal;
   $('mYes').onclick = () => {
-    const keep = { name: S.name, tok: S.tok, tokDay: S.tokDay, tokAdNext: S.tokAdNext, tokLog: S.tokLog, daily: S.daily, ach: S.ach, quests: S.quests, stats: S.stats, unl: S.unl, tuto: 1, lang: S.lang, stars: S.stars + gain, prestiges: (S.prestiges || 0) + 1 };
+    const keep = { name: S.name, tok: S.tok, tokDay: S.tokDay, tokAdNext: S.tokAdNext, tokLog: S.tokLog, daily: S.daily, ach: S.ach, quests: S.quests, stats: S.stats, unl: S.unl, tuto: 1, coach: COACH_DONE, start: START.length, mute: S.mute, lang: S.lang, stars: S.stars + gain, prestiges: (S.prestiges || 0) + 1 };
     S = Object.assign(defaultState(), keep);
     closeModal(); tab = 'gains'; invView = null; bizView = 'list'; crView = 0; render();
     toast(tl('prestige_vous_avez_maintenant_etoile', S.stars, S.stars > 1 ? 's' : ''), 'good'); save();
@@ -3598,16 +3678,17 @@ function prestigeAsk() {
 const anyInvest = () => Object.values(S.stocks).some(q => q > 0) || Object.values(S.crypto).some(q => q > 0) || S.props.length > 0;
 const UNL = [
   ['news', '📰', tl('business_info'), tl('le_fil_dactualites_economiques_meteo_tau'), () => anyInvest(), 'news'],
-  ['realty', '🏠', tl('limmobilier'), tl('achetez_des_biens_choisissez_vos_locatai'), () => fortune() >= 2e4 || S.props.length > 0, 'invest'],
-  ['crypto', '🪙', tl('les_cryptomonnaies'), tl('tres_volatiles_des_envolees_spectaculair'), () => fortune() >= 5e4 || Object.values(S.crypto).some(q => q > 0), 'invest'],
+  ['realty', '🏠', tl('limmobilier'), tl('achetez_des_biens_choisissez_vos_locatai'), () => fortune() >= UNL_AT.realty * S.pi || S.props.length > 0, 'invest'],
+  ['crypto', '🪙', tl('les_cryptomonnaies'), tl('tres_volatiles_des_envolees_spectaculair'), () => fortune() >= UNL_AT.crypto * S.pi || Object.values(S.crypto).some(q => q > 0), 'invest'],
 ];
-const UNL_AT = { realty: 2e4, crypto: 5e4 };
+const UNL_AT = { realty: 5e3, crypto: 2e3 };   // atteints dans les premières minutes grâce aux objectifs de démarrage
 function checkUnlocks(silent) {
   for (const [k, , , , ok] of UNL) if (!S.unl[k] && ok()) { S.unl[k] = 1; if (!silent) S.pending.push({ k: 'unlock', u: k }); }
 }
 function unlockModal(k) {
   const u = UNL.find(x => x[0] === k); if (!u) return; // anciennes bulles « Bourse » ou « Créateur » encore en attente
   const [, ico, n, txt, , go] = u;
+  winFx();
   modal(`<span class="ev-ico">${ico}</span><h3>${tl('nouveau', n)}</h3><p>${txt}</p>
     <div class="modal-actions"><button class="btn ghost" id="mNo" type="button">${tl('plus_tard')}</button><button class="btn go" id="mYes" type="button">${tl('decouvrir')}</button></div>`);
   $('mNo').onclick = () => { closeModal(); render(); };
@@ -3617,22 +3698,6 @@ function applyLocks() {
   // Les 6 onglets sont toujours visibles, quels que soient les indicateurs des anciennes sauvegardes.
   document.querySelectorAll('.nav [data-tab]').forEach(b => b.hidden = false);
   $('newsBtn').hidden = !S.unl.news;
-}
-
-// Tutoriel : quelques bulles au premier lancement, qu'on peut passer.
-const TUTO = [
-  ['👋', tl('bienvenue_dans_net_worth_tycoon'), tl('vous_partez_de_zero_touchez_la')],
-  ['⬆️', tl('ameliorez_votre_clic'), tl('chaque_niveau_de_productivite_augmente_c')],
-  ['🍋', tl('fondez_votre_premiere_entreprise'), tl('des_50_ouvrez_un_stand_de')],
-  ['🎯', tl('objectifs_et_bonus'), tl('chaque_jour_un_bonus_quotidien_et')],
-  ['🔓', tl('un_empire_qui_grandit'), tl('la_bourse_et_la_carriere_de')],
-];
-function tutoModal(i) {
-  const [ico, n, txt] = TUTO[i], last = i === TUTO.length - 1;
-  modal(`<span class="ev-ico">${ico}</span><h3>${n}</h3><p>${txt}</p><div class="dots tuto-dots">${TUTO.map((_, j) => `<i class="${j <= i ? 'on' : ''}"></i>`).join('')}</div>
-    <div class="modal-actions">${last ? '' : `<button class="btn ghost" id="mNo" type="button">${tl('passer_le_tutoriel')}</button>`}<button class="btn go" id="mYes" type="button">${last ? tl('cest_parti') : tl('suivant')}</button></div>`);
-  if (!last) $('mNo').onclick = () => { S.tuto = 1; closeModal(); };
-  $('mYes').onclick = () => { if (last) { S.tuto = 1; closeModal(); } else tutoModal(i + 1); };
 }
 
 /* ================= Entreprises : économie ================= */
@@ -4291,7 +4356,7 @@ function nextGoal() {
   const cand = [];
   const has = new Set(S.firms.map(x => x.t));
   if (S.firms.length < FIRMS_MAX) for (const d of BIZ) if (!has.has(d.id)) cand.push([dc(d), d.ico, tl('fonder', d.n)]);
-  for (const k of ['realty', 'crypto']) if (!S.unl[k]) cand.push([UNL_AT[k], UNL.find(x => x[0] === k)[1], tl('debloquer_de_fortune', UNL.find(x => x[0] === k)[2].replace(/^(La |Les |L’)/, m => m.toLowerCase()), eur(UNL_AT[k]))]);
+  for (const k of ['realty', 'crypto']) if (!S.unl[k]) cand.push([UNL_AT[k] * S.pi, UNL.find(x => x[0] === k)[1], tl('debloquer_de_fortune', UNL.find(x => x[0] === k)[2].replace(/^(La |Les |L’)/, m => m.toLowerCase()), eur(UNL_AT[k] * S.pi))]);
   if (S.unl.realty) for (const T of REALTY) if (!S.props.some(p => p.t === T.id)) cand.push([listPrice(T.id, getListing(T.id)) * (1 + NOTARY), T.ico, tl('acheter', T.n)]);
   cand.sort((a, b) => a[0] - b[0]);
   return cand.find(c => c[0] > S.cash * .2) || cand[0];
@@ -4310,29 +4375,30 @@ function renderGains() {
 
     <div class="card clickzone" id="clickzone">
       <span class="badge-boost" id="boostBadge" ${boosted() ? '' : 'hidden'}>${tl('x', BOOST_MULT)} <span id="boostLeft">${mmss(S.boostUntil - Date.now())}</span></span>
-      <button class="coin${boosted() ? ' boost' : ''}" id="coin" type="button" aria-label="${tl('travailler_et_gagner_de_largent')}"><span>€</span></button>
+      <button class="coin${boosted() ? ' boost' : ''}" id="coin" type="button" aria-label="${tl('travailler_et_gagner_de_largent')}"><span>${CUR()}</span></button>
       <div class="click-hint"><b id="gClick" class="num">+${eur(clickValue())}</b><span>${tl('par_clic_clics_au_total', nf0.format(S.clicks))}</span></div>
     </div>
 
     <div class="card lvl-card">
-      <div class="lvl-top"><span class="lvl-badge">${S.clickLvl}</span><div>${tl('productivite_niveau', S.clickLvl)}<span class="muted">${tl('prochain_niveau_de_base_par_clic', eur(clickBase(S.clickLvl + 1)))}</span></div></div>
+      <div class="lvl-top"><span class="lvl-badge">${S.clickLvl}</span><div>${tl('productivite_niveau', S.clickLvl)}<span class="muted">${tl('par_clic_next', eur(clickBase(S.clickLvl + 1)))}</span></div></div>
       <div class="bar"><i id="lvlBar" style="width:${clamp(S.cash / cost * 100, 0, 100)}%"></i></div>
       <button class="btn go full" id="upClick" type="button" data-cost="${cost}" ${S.cash < cost ? 'disabled' : ''}>${tl('ameliorer_le_clic', eur(cost))}</button>
     </div>
 
-    <div class="card ad-card">
+    ${S.coach < COACH_DONE ? '' : `<div class="card ad-card">
       <span class="ico">📺</span>
       <div>${tl('bonus_x_sur_les_clics', BOOST_MULT)}<span id="adTxt">${adLabel()}</span></div>
       <button class="btn sm" id="adBtn" type="button" ${adLocked() ? 'disabled' : ''}>${tl('regarder')}</button>
-    </div>
+    </div>`}
+    ${renderStarter()}
 
-    ${goal ? `<div class="card goal"><span class="ico">${goal[1]}</span><div><span class="label">${tl('prochain_objectif')}</span><b>${esc(goal[2])}</b><div class="bar"><i id="goalBar" data-target="${goal[0]}" style="width:${clamp((goal[2].includes('fortune') ? fortune() : S.cash) / goal[0] * 100, 0, 100)}%"></i></div><span class="muted num">${eur(goal[0])}</span></div></div>` : ''}
+    ${goal && S.start >= START.length ? `<div class="card goal"><span class="ico">${goal[1]}</span><div><span class="label">${tl('prochain_objectif')}</span><b>${esc(goal[2])}</b><div class="bar"><i id="goalBar" data-target="${goal[0]}" style="width:${clamp((goal[2].includes('fortune') ? fortune() : S.cash) / goal[0] * 100, 0, 100)}%"></i></div><span class="muted num">${eur(goal[0])}</span></div></div>` : ''}
 
-    ${renderQuests()}
-    <div class="card"><div class="row" style="margin-bottom:10px"><span class="label">${tl('revenus_passifs')}</span><b class="num" style="color:var(${incomeH() < 0 ? '--neg' : '--money'})">${perH(incomeH())}</b></div>
+    ${S.start >= START.length ? renderQuests() : ''}
+    ${!ip.biz && !ip.rent && !ip.div ? '' : `<div class="card"><div class="row" style="margin-bottom:10px"><span class="label">${tl('revenus_passifs')}</span><b class="num" style="color:var(${incomeH() < 0 ? '--neg' : '--money'})">${perH(incomeH())}</b></div>
       <div class="income-split"><div><small>${tl('entreprises')}</small>${tl('h', negS(ip.biz), eur(ip.biz))}</div><div><small>${tl('loyers_nets')}</small>${tl('h', negS(ip.rent), eur(ip.rent))}</div><div><small>${tl('dividendes')}</small>${tl('h_2', eur(ip.div))}</div></div>
       ${collBonus() ? `<p class="muted" style="margin:10px 0 0">${tl('bonus_permanents_collections_et_etoiles', Math.round(collBonus() * 100))}</p>` : ''}
-    </div>
+    </div>`}
   </section>`;
 }
 function doClick(e) {
@@ -4343,19 +4409,21 @@ function doClick(e) {
   const x = (e && e.clientX ? e.clientX : rect.left + rect.width / 2) - rect.left + rf(-18, 18);
   const y = (e && e.clientY ? e.clientY : rect.top + 100) - rect.top - 10;
   const f = document.createElement('span');
-  f.className = 'fly' + (boosted() ? ' x5' : '');
+  f.className = 'fly' + (boosted() ? ' x5' : '') + (S.clicks % 10 === 0 ? ' big' : '');
   f.textContent = '+' + eur(v);
+  f.style.rotate = rf(-8, 8).toFixed(0) + 'deg';
   f.style.left = x + 'px'; f.style.top = y + 'px';
   zone.appendChild(f);
   setTimeout(() => f.remove(), 900);
   const ring = document.createElement('span'); ring.className = 'ring'; zone.appendChild(ring); setTimeout(() => ring.remove(), 500);
-  coin.classList.add('press'); setTimeout(() => coin.classList.remove('press'), 80);
-  vibrate(6);
+  coin.classList.remove('bounce'); void coin.offsetWidth; coin.classList.add('bounce');
+  coinBurst(e && e.clientX ? e.clientX : rect.left + rect.width / 2, e && e.clientY ? e.clientY : rect.top + 100, boosted() ? 7 : 4);
+  sfx('click'); vibrate(6);
   refresh();
 }
 
 /* --- Investir --- */
-const PERIODS = [['1 h', H], ['24 h', 24 * H], ['7 j', 7 * 24 * H], ['30 j', 30 * 24 * H], [tl('tout'), 0]];
+const PERIODS = [[tl('per_1h'), H], [tl('per_24h'), 24 * H], [tl('per_7d'), 7 * 24 * H], [tl('per_30d'), 30 * 24 * H], [tl('tout'), 0]];
 // Série de points [t (s), valeur] sur une période, rééchantillonnée en 120 points au plus.
 function series(hs, ms, cur, mult = 1) {
   const now = Date.now() / 1000, from = ms ? now - ms / 1000 : 0, all = [];
@@ -4483,7 +4551,7 @@ function renderAsset(id) {
     const rank = [...CRYPTO].sort((a, b) => S.mk[b.id].p * b.sup - S.mk[a.id].p * a.sup).findIndex(x => x.id === id) + 1, cap = p * d.sup;
     const vol = cap * (.03 + .04 * d.risk) * (1 + 6 * Math.abs(chgSince(m.H, 24 * H, p)));
     stats = `<div><small>${tl('capitalisation')}</small><b class="num" id="dCap">${eur(cap)}</b></div><div><small>${tl('volume_24_h')}</small><b class="num" id="dVol">${eur(vol)}</b></div>
-      <div><small>${tl('offre_en_circulation')}</small><b class="num">${eur(d.sup).replace('€', '').replace(/ $/, '')} ${d.id}</b></div><div><small>${tl('classement')}</small>${tl('sur', rank, CRYPTO.length)}</div>`;
+      <div><small>${tl('offre_en_circulation')}</small><b class="num">${String(eur(d.sup)).replace(/[€$]/g, '').trim()} ${d.id}</b></div><div><small>${tl('classement')}</small>${tl('sur', rank, CRYPTO.length)}</div>`;
   } else stats = `<div><small>${tl('dividende')}</small>${tl('an', nf1.format(d.y * 100))}</div><div><small>${tl('verse_chaque_heure')}</small>${tl('action_2', eurFine(p * d.y / 12))}</div>
       <div><small>${tl('secteur')}</small><b>${d.sec}</b></div><div><small>${tl('volatilite')}</small><b>${d.s >= .028 ? tl('elevee') : d.s >= .018 ? tl('moyenne') : tl('faible')}</b></div>`;
   return `<section class="screen" id="scr"><div class="screen-title with-back"><button class="back" id="invBack" type="button" aria-label="${tl('retour')}">←</button><h1>${d.n}</h1></div>
@@ -4495,7 +4563,7 @@ function renderAsset(id) {
 
     <div class="card trade"><div class="row"><span class="label">${tl('acheter_ou_vendre')}</span><span class="muted">${tl('courtage', nf1.format(feeRate(id) * 100), feeRate(id) > (isC ? FEE_C : FEE_S) ? ` ${tl('majore')}` : '')}</span></div>
       <div class="qty">${[1, 10, 100].map(n => `<button type="button" data-tq="${n}" aria-pressed="${tq === n}">×${n}</button>`).join('')}<button type="button" data-tq="max" aria-pressed="${tq === 'max'}">${tl('max')}</button><button type="button" data-tq="amt" aria-pressed="${tq === 'amt'}">${tl('montant_2')}</button></div>
-      ${tq === 'amt' ? `<label class="inp"><span>${tl('montant')}</span><input id="amtIn" type="number" inputmode="decimal" min="0" step="any" value="${tAmt || ''}" placeholder="0"><span>€</span></label>` : ''}
+      ${tq === 'amt' ? `<label class="inp"><span>${tl('montant')}</span><input id="amtIn" type="number" inputmode="decimal" min="0" step="any" value="${tAmt || ''}" placeholder="0"><span>${CUR()}</span></label>` : ''}
       <div class="tsum" id="tSum">${tradeSummary(id)}</div>
       <div class="asset-actions"><button class="btn ghost" type="button" id="sellBtn" ${tradeQty(id, 'sell') > 0 ? '' : 'disabled'}>${tl('vendre')}</button><button class="btn go" type="button" id="buyBtn" ${qb > 0 && quote(id, 'buy', qb).total <= S.cash + 1e-9 ? '' : 'disabled'}>${tl('acheter_2')}</button></div></div>
 
@@ -4508,7 +4576,7 @@ function renderAsset(id) {
     <div class="card"><span class="label">${tl('ordre_a_cours_limite')}</span>
       <div class="qty" style="margin-top:10px">${Object.entries({ buy: tl('achat_si'), tp: tl('vente_si'), sl: tl('stop_si') }).map(([k, l]) => `<button type="button" data-olt="${k}" aria-pressed="${olt === k}">${l}</button>`).join('')}</div>
       <p class="muted" style="margin:8px 0">${OTYPES[olt]}…</p>
-      <div class="inp-row"><label class="inp"><span>${tl('prix')}</span><input id="limP" type="number" inputmode="decimal" min="0" step="any" value="${+(p * (olt === 'tp' ? 1.05 : .95)).toPrecision(4)}"><span>€</span></label>
+      <div class="inp-row"><label class="inp"><span>${tl('prix')}</span><input id="limP" type="number" inputmode="decimal" min="0" step="any" value="${+(p * (olt === 'tp' ? 1.05 : .95)).toPrecision(4)}"><span>${CUR()}</span></label>
         <label class="inp"><span>${tl('qte')}</span><input id="limQ" type="number" inputmode="decimal" min="0" step="${isC ? 'any' : 1}" value="${olt === 'buy' ? (isC ? 1 : 10) : (q || 1)}"></label></div>
       <button class="btn gold full" type="button" id="placeOrder" style="margin-top:10px">${tl('placer_lordre')}</button>
       ${ords.length ? `<div class="orders" style="margin-top:10px">${ords.map(orderRow).join('')}</div>` : ''}</div>
@@ -4533,7 +4601,7 @@ function doTrade(side) {
     const x = execTrade(id, side, q);
     if (!x.ok) return toast(tl('ordre_refuse', x.msg), 'crash');
     toast(tl('a_en_moyenne', buy ? tl('achat') : tl('vente'), qtyTxt(id, x.q), d.n, px(x.p), x.tax ? ` ${tl('impot_2', eur(x.tax))}` : ''), buy ? 'good' : '');
-    vibrate(10); afterAction();
+    buyFx(); afterAction();
   };
 }
 function placeOrder() {
@@ -4626,7 +4694,7 @@ function buyProp(tid, loan) {
   S.props.push(pr); delete S.listings[tid];
   invView = { k: 'prop', u: pr.u };
   toast(tl('felicitations_vous_etes_proprietaire_a', T.n, pr.city), 'good');
-  vibrate(14); afterAction(); window.scrollTo(0, 0);
+  winFx(); afterAction(); window.scrollTo(0, 0);
 }
 function loanModal(tid) {
   const T = RBY[tid], L = getListing(tid), price = listPrice(tid, L), notary = price * NOTARY;
@@ -4940,10 +5008,11 @@ function renderFound() {
 function foundModal(id) {
   const d = bizById(id), b = book(d, 1), full = S.firms.length >= FIRMS_MAX, miss = dc(d) - S.cash;
   modal(`<div class="mhead"><span class="bico lg" style="--cc:var(${d.c})">${d.ico}</span><div><h3>${d.n}</h3><span class="muted">${TIERS[d.tier]} · ${eur(dc(d))}</span></div></div>
-    <div class="pl">${plRows(b)}</div>
-    <p style="text-align:left">${tl('demarre_sans_employe_postes_a_pourvoir', d.roles.join(', '), d.solo ? tl('au_debut_vous_le_tenez_vous') : tl('rien_nest_produit_tant_que_vous'), OPS[d.id].a === 'veh' ? tl('achetez_vos_vehicules_et_recrutez_un') : stocked(OPS[d.id]) ? tl('vous_fixez_vos_prix_choisissez_vos') : tl('vous_fixez_vos_tarifs_votre_gamme'), nf1.format(d.pb))}</p>
+    <div class="kpis"><div><small>${tl('fm_profit')}</small><b class="num">${perH(netAt(d, 1))}</b></div><div><small>${tl('fm_payback')}</small><b>${tl('fm_hours', nf0.format(d.pb))}</b></div><div><small>${tl('fm_staff')}</small><b>${d.roles.length}</b></div></div>
+    <details class="more"><summary>${tl('fm_details')}</summary><div class="pl" style="margin-top:8px">${plRows(b)}</div>
+    <p style="text-align:left">${tl('demarre_sans_employe_postes_a_pourvoir', d.roles.join(', '), d.solo ? tl('au_debut_vous_le_tenez_vous') : tl('rien_nest_produit_tant_que_vous'), OPS[d.id].a === 'veh' ? tl('achetez_vos_vehicules_et_recrutez_un') : stocked(OPS[d.id]) ? tl('vous_fixez_vos_prix_choisissez_vos') : tl('vous_fixez_vos_tarifs_votre_gamme'), nf1.format(d.pb))}</p></details>
     ${full ? `<p class="need">${tl('vous_possedez_deja_entreprises', FIRMS_MAX)}</p>` : miss > 0 ? `<p class="need">${tl('il_vous_manque_2', eur(miss))}</p>` : ''}
-    <div class="modal-actions"><button class="btn ghost" id="mNo" type="button">${tl('fermer')}</button><button class="btn go" id="mYes" type="button" ${full || miss > 0 ? 'disabled' : ''}>${tl('fonder_2', eur(dc(d)))}</button></div>`);
+    <div class="modal-actions"><button class="btn ghost" id="mNo" type="button">${tl('fermer')}</button><button class="btn go" id="mYes" type="button" data-found-ok="${d.id}" ${full || miss > 0 ? 'disabled' : ''}>${tl('fonder_2', eur(dc(d)))}</button></div>`);
   $('mNo').onclick = closeModal;
   $('mYes').onclick = () => { closeModal(); foundBiz(id); };
 }
@@ -4958,7 +5027,7 @@ function foundBiz(id) {
   logF(f, d.solo ? tl('ouverture_vous_tenez_vous_meme_laffaire', d.roles.join(', ')) : tl('ouverture_poste_a_pourvoir_rien_ne', d.roles.length, d.roles.length > 1 ? 's' : '', d.roles.join(', ')), 'good', t);
   bizView = 'firm'; firmU = f.u;
   toast(tl('nouvelle_entreprise', firmName(f)), 'good');
-  vibrate(14); afterAction(); window.scrollTo(0, 0);
+  if (S.firms.length === 1) winFx(); else buyFx(); afterAction(); window.scrollTo(0, 0);
 }
 const findFirm = u => S.firms.find(x => x.u === +u);
 // Durée des travaux d'amélioration : 5 min au niveau 1, environ 2 h 15 au niveau 9.
@@ -4971,7 +5040,7 @@ function upFirm(u) {
   S.cash -= c; f.s += c; S.stats.ups++; f.upTo = f.l + 1; f.upEnd = t + upDur(f.l);
   logF(f, tl('travaux_lances', STEPS[f.upTo], dur(f.upEnd - t)), '', t);
   toast(tl('travaux_lances_fin_dans', STEPS[f.upTo], dur(f.upEnd - t)), 'good');
-  vibrate(14); afterAction();
+  buyFx(); afterAction();
 }
 function sellFirmAsk(u) {
   const f = findFirm(u);
@@ -5011,7 +5080,7 @@ function recruitModal(u, r) {
     f.staff.push(e); S.stats.hires++; list.splice(+b.dataset.hire, 1);
     logF(f, tl('vous_avez_recrute_etoile', e.n, roleOf(d, e.r, e.g), e.sk, e.sk > 1 ? 's' : ''), 'good', now);
     toast(tl('est_arrivee_dans', e.n, gx(e, tl('embauche'), tl('embauchee')), dur(hireDelay(d))), 'good');
-    closeModal(); afterAction();
+    buyFx(); closeModal(); afterAction();
   });
 }
 function empModal(u, id) {
@@ -5101,9 +5170,8 @@ function buyItem(id) {
   if (!it || S.owned[id] || S.cash < ipx(it)) return;
   S.cash -= ipx(it); S.owned[id] = true;
   const c = COLLECTIONS.find(c => c.items.some(i => i[0] === id));
-  if (c && c.items.every(i => S.owned[i[0]])) toast(tl('collection_complete_sur_tous_vos_revenus', c.n, c.bonus * 100), 'good');
-  else toast(tl('achete_2', it[1], it[4] === 'home' ? 'e' : ''), 'good');
-  vibrate(14); afterAction();
+  if (c && c.items.every(i => S.owned[i[0]])) { toast(tl('collection_complete_sur_tous_vos_revenus', c.n, c.bonus * 100), 'good'); winFx(); }
+  else { toast(tl('achete_2', it[1], it[4] === 'home' ? 'e' : ''), 'good'); buyFx(); } afterAction();
 }
 function sellItem(id) {
   const it = findItem(id);
@@ -5136,7 +5204,7 @@ function renderProfile() {
       <input class="name-input" id="nameInput" maxlength="22" value="${esc(S.name)}" aria-label="${tl('votre_nom')}">
       <span class="label" style="margin-top:6px">${tl('fortune_totale')}</span><b class="num">${eur(total)}</b>
       <span class="muted">${tl('du_classement_niveau', myPos + 1, tier(total))}</span></div>
-    <div class="card"><div class="row lang-row"><span class="label">${tl('ui_langue')}</span><div class="qty" role="group" aria-label="${tl('ui_langue')}">${LANGS.map(l => `<button type="button" data-lang="${l}" lang="${l}" aria-pressed="${LANG === l}">${l.toUpperCase()} · ${tl('ui_lang_' + l)}</button>`).join('')}</div></div></div>
+    <div class="card"><div class="row lang-row"><span class="label">${tl('ui_langue')}</span><div class="qty lang-sw" role="group" aria-label="${tl('ui_langue')}">${LANGS.map(l => `<button type="button" data-lang="${l}" lang="${l}" aria-pressed="${LANG === l}">${FLAGS[l]} ${l.toUpperCase()} · ${tl('ui_lang_' + l)}</button>`).join('')}</div></div></div>
     <div class="card"><div class="row" style="margin-bottom:12px"><span class="label">${tl('repartition')}</span></div>
       <div class="donut-wrap"><svg class="donut" viewBox="0 0 150 150" role="img" aria-label="${tl('repartition_de_la_fortune')}"><circle cx="75" cy="75" r="${R}" fill="none" stroke="var(--surface-2)" stroke-width="20"/>${arcs}</svg>
         <ul class="legend">${CATS.map(([k, n, c]) => `<li style="--c:var(${c})"><i></i><span>${n}</span><b class="num">${eur(parts[k])}</b></li>`).join('')}</ul></div></div>
@@ -5208,6 +5276,159 @@ async function watchAd() {
   render();
 }
 
+/* ================= Sons, effets et premiers pas ================= */
+// Sons courts générés en Web Audio (aucun fichier) ; coupés par le bouton 🔊 de l'en-tête et pendant les pubs.
+let AC = null;
+const soundOn = () => !S.mute && !(typeof CG !== 'undefined' && CG.muted);
+function audio() {
+  if (!AC) { const C = window.AudioContext || window.webkitAudioContext; if (!C) return null; AC = new C(); }
+  if (AC.state === 'suspended') AC.resume();
+  return AC;
+}
+function tone(f, at, len, type = 'triangle', vol = .06, to = 0) {
+  const a = audio(); if (!a) return;
+  const t = a.currentTime + at, o = a.createOscillator(), g = a.createGain();
+  o.type = type; o.frequency.setValueAtTime(f, t); if (to) o.frequency.exponentialRampToValueAtTime(to, t + len);
+  g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .008); g.gain.exponentialRampToValueAtTime(.0001, t + len);
+  o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + len + .03);
+}
+const SFX = {
+  click: () => { const f = rf(820, 980) * (boosted() ? 1.2 : 1); tone(f, 0, .06, 'triangle', .045, f * 1.5); },
+  buy: () => { tone(660, 0, .08, 'triangle', .06); tone(990, .07, .16, 'triangle', .06); tone(1320, .07, .16, 'sine', .025); },
+  win: () => [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, i * .07, .22, 'triangle', .055)),
+};
+function sfx(k) { try { if (soundOn()) SFX[k](); } catch (e) {} }
+function updSound() {
+  const b = $('sndBtn'); if (!b) return;
+  b.textContent = S.mute ? '🔇' : '🔊'; b.setAttribute('aria-pressed', String(!S.mute));
+  b.setAttribute('aria-label', tl(S.mute ? 'ui_sound_off' : 'ui_sound_on'));
+}
+function toggleSound() { S.mute = !S.mute; updSound(); save(); sfx('buy'); }
+
+const reduceMotion = () => !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+let fxLayer = null;
+function fxRoot() { if (!fxLayer) { fxLayer = document.createElement('div'); fxLayer.id = 'fx'; document.body.appendChild(fxLayer); } return fxLayer; }
+// Petites pièces qui jaillissent du point touché.
+function coinBurst(x, y, n) {
+  if (reduceMotion()) return;
+  const L = fxRoot(); if (L.childElementCount > 70) return;
+  for (let i = 0; i < n; i++) {
+    const p = document.createElement('i'), a = rf(-Math.PI * .95, -Math.PI * .05), d = rf(45, 110);
+    p.className = 'pt';
+    p.style.cssText = `left:${x}px;top:${y}px;--dx:${(Math.cos(a) * d).toFixed(0)}px;--dy:${(Math.sin(a) * d).toFixed(0)}px;--r:${rf(-220, 220).toFixed(0)}deg`;
+    L.appendChild(p); setTimeout(() => p.remove(), 750);
+  }
+}
+const CONF = ['#F2C45C', '#17935F', '#FF6F4F', '#3A7BEF', '#E9558F', '#8455E8'];
+function confetti(n) {
+  if (reduceMotion()) n = Math.min(n, 6);
+  const L = fxRoot(), W = innerWidth;
+  for (let i = 0; i < n; i++) {
+    const p = document.createElement('i');
+    p.className = 'cf';
+    p.style.cssText = `left:${(rf(.05, .95) * W).toFixed(0)}px;background:${pick(CONF)};--dx:${rf(-90, 90).toFixed(0)}px;--r:${rf(-560, 560).toFixed(0)}deg;--t:${rf(.9, 1.7).toFixed(2)}s;animation-delay:${rf(0, .25).toFixed(2)}s;width:${rf(6, 10).toFixed(0)}px;height:${rf(8, 15).toFixed(0)}px`;
+    L.appendChild(p); setTimeout(() => p.remove(), 2100);
+  }
+}
+function flash(gold) { const f = document.createElement('i'); f.className = 'flash' + (gold ? ' gold' : ''); fxRoot().appendChild(f); setTimeout(() => f.remove(), 450); }
+// Achat : petit flash, son et quelques confettis. Palier (succès, objectif, déblocage) : la grande fête.
+function buyFx() { vibrate(14); sfx('buy'); flash(false); confetti(16); }
+function winFx() { vibrate(30); sfx('win'); flash(true); confetti(80); }
+
+/* --- Tutoriel : 4 bulles qui montrent quoi toucher (pièce → stand → revenu passif → objectifs) --- */
+const COACH_DONE = 99;
+const COACH = [
+  () => ({ txt: tl('co_tap', eur(Math.min(S.cash, dc(BIZ[0]))), eur(dc(BIZ[0]))), sel: tab === 'gains' ? '#coin' : '.nav [data-tab="gains"]', pos: 'above', done: S.cash >= dc(BIZ[0]) || S.firms.length > 0 }),
+  () => S.firms.length ? { done: true } : { txt: tl('co_buy'), pos: $('modal').hidden ? '' : 'below', sel: !$('modal').hidden ? '#modal [data-found-ok="lemon"]' : tab !== 'biz' ? '.nav [data-tab="biz"]' : bizView !== 'found' ? '#openFound' : '[data-found="lemon"]' },
+  () => ({ txt: tl('co_income'), sel: '#hdrIncome', ok: true }),
+  () => ({ txt: tl('co_goals'), sel: tab === 'gains' ? '#starter' : '.nav [data-tab="gains"]', ok: true }),
+];
+let coachEl = null, coachHi = null, coachSel = '';
+function coachOff() { if (coachEl) coachEl.hidden = true; if (coachHi) { coachHi.classList.remove('coach-hi'); coachHi = null; } }
+function coachTick() {
+  if (S.coach >= COACH.length || splashOn) return coachOff();
+  let st = COACH[S.coach]();
+  while (st.done) {
+    S.coach++;
+    if (S.coach >= COACH.length) { S.coach = COACH_DONE; save(); return coachOff(); }
+    st = COACH[S.coach]();
+  }
+  const el = st.sel && [...document.querySelectorAll(st.sel)].find(x => x.getClientRects().length);
+  if (!el) return coachOff();
+  if (!coachEl) {
+    coachEl = document.createElement('div'); coachEl.className = 'coach'; coachEl.setAttribute('role', 'status');
+    document.body.appendChild(coachEl);
+    coachEl.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      S.coach = b.dataset.c === 'skip' ? COACH_DONE : S.coach + 1;
+      save(); coachTick(); if (tab === 'gains') render();
+    });
+  }
+  const html = `<p>${st.txt}</p><div class="coach-act"><button type="button" class="skip" data-c="skip">${tl('co_skip')}</button>${st.ok ? `<button type="button" data-c="ok">${tl('co_ok')}</button>` : ''}</div>`;
+  if (coachEl.dataset.h !== html) { coachEl.innerHTML = html; coachEl.dataset.h = html; }
+  coachEl.hidden = false;
+  if (coachHi !== el) { if (coachHi) coachHi.classList.remove('coach-hi'); el.classList.add('coach-hi'); coachHi = el; }
+  // Nouvelle cible hors de l'écran : on la ramène doucement, sauf si le joueur fait défiler la page.
+  if (coachSel !== st.sel) { coachSel = st.sel; const r0 = el.getBoundingClientRect(); if ((r0.bottom > innerHeight - 80 || r0.top < 60) && !scrolling() && $('modal').hidden) el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  const r = el.getBoundingClientRect(), w = coachEl.offsetWidth, h = coachEl.offsetHeight;
+  // Position imposée par l'étape si la place le permet, sinon du côté où il y a le plus d'espace.
+  const above = st.pos === 'above' && r.top - h - 12 > 56 ? true : st.pos === 'below' && r.bottom + h + 12 < innerHeight ? false : r.top > innerHeight * .5;
+  const left = clamp(r.left + r.width / 2 - w / 2, 12, innerWidth - w - 12);
+  coachEl.className = 'coach ' + (above ? 'above' : 'below');
+  coachEl.style.left = left + 'px';
+  coachEl.style.top = (above ? r.top - h - 12 : r.bottom + 12) + 'px';
+  coachEl.style.setProperty('--ax', clamp(r.left + r.width / 2 - left, 18, w - 18) + 'px');
+}
+
+/* --- Objectifs de démarrage : une suite de petits défis récompensés qui enchaîne les déblocages --- */
+const START = [
+  ['up', '⬆️', () => tl('st_up'), () => [Math.min(S.clickLvl - 1, 1), 1], 20],
+  ['hire', '🤝', () => tl('st_hire'), () => [Math.min(S.stats.hires, 1), 1], 40],
+  ['biz2', '👕', () => tl('st_biz2'), () => [Math.min(S.firms.length, 2), 2], 120],
+  ['stock', '📈', () => tl('st_stock'), () => [Object.values(S.stocks).some(q => q > 0) ? 1 : 0, 1], 150],
+  ['channel', '🎬', () => tl('st_channel'), () => [S.cr ? 1 : 0, 1], 250],
+  ['upbiz', '🏗️', () => tl('st_upbiz'), () => [Math.min(S.stats.ups, 1), 1], 350],
+  ['f2k', '🪙', () => tl('st_fortune', eur(UNL_AT.crypto * S.pi)), () => [Math.min(fortune(), UNL_AT.crypto * S.pi), UNL_AT.crypto * S.pi], 500],
+  ['crypto', '🪙', () => tl('st_crypto'), () => [Object.values(S.crypto).some(q => q > 0) ? 1 : 0, 1], 900],
+  ['f5k', '🏠', () => tl('st_fortune', eur(UNL_AT.realty * S.pi)), () => [Math.min(fortune(), UNL_AT.realty * S.pi), UNL_AT.realty * S.pi], 0, 15],
+];
+// « Y aller › » : emmène le joueur sur l'écran où l'objectif se réalise.
+const START_GO = {
+  hire: () => { const f = S.firms[0]; if (f) { tab = 'biz'; bizView = 'firm'; firmU = f.u; firmTab = 'team'; } },
+  biz2: () => { tab = 'biz'; bizView = 'found'; },
+  stock: () => { tab = 'invest'; invView = null; investTab = 'stocks'; },
+  channel: () => { tab = 'creator'; crView = 0; },
+  upbiz: () => { const f = S.firms[0]; if (f) { tab = 'biz'; bizView = 'firm'; firmU = f.u; firmTab = 'compta'; } },
+  crypto: () => { tab = 'invest'; invView = null; investTab = 'crypto'; },
+};
+function starterGo() { const g = START_GO[START[S.start][0]]; if (!g) return; g(); render(); window.scrollTo(0, 0); }
+const startReward = s => s[4] ? `+${eur(s[4] * S.pi)}` : `+${s[5]} ${TOK}`;
+function checkStarter() {
+  if (S.start >= START.length || S.coach < 3) return;
+  const s = START[S.start], [cur, n] = s[3]();
+  if (cur < n) { const b = $('stBar'); if (b) b.style.width = clamp(cur / n * 100, 0, 100) + '%'; return; }
+  const cash = s[4] * S.pi;
+  S.cash += cash; S.earned += cash; if (s[5]) giveTok(s[5], tl('st_title'));
+  S.start++;
+  toast(tl('st_done', s[1], startReward(s)), 'good'); winFx(); save();
+  if (tab === 'gains') softRender();
+}
+function renderStarter() {
+  if (S.start >= START.length || S.coach < 3) return '';
+  const s = START[S.start], [cur, n] = s[3]();
+  return `<div class="card goal starter" id="starter"><span class="ico">${s[1]}</span><div><span class="label">${tl('st_title')} ${S.start + 1}/${START.length} · <b class="rw">${startReward(s)}</b></span><b>${s[2]()}</b><div class="bar"><i id="stBar" style="width:${clamp(cur / n * 100, 0, 100)}%"></i></div></div>${START_GO[s[0]] ? `<button class="btn go sm" type="button" data-stgo>${tl('st_go')}</button>` : ''}</div>`;
+}
+
+/* --- iPhone : ne pas redessiner l'écran pendant un défilement (iOS couperait l'inertie et ferait sauter la page) --- */
+let touching = false, lastScrollT = 0, renderLater = false;
+document.addEventListener('touchstart', () => { touching = true; }, { passive: true });
+document.addEventListener('touchend', () => { touching = false; lastScrollT = Date.now(); }, { passive: true });
+document.addEventListener('touchcancel', () => { touching = false; lastScrollT = Date.now(); }, { passive: true });
+window.addEventListener('scroll', () => { lastScrollT = Date.now(); if (coachEl && !coachEl.hidden) coachTick(); }, { passive: true });
+window.addEventListener('resize', () => coachTick());
+const scrolling = () => touching || Date.now() - lastScrollT < 800;
+function softRender() { if (scrolling()) renderLater = true; else { renderLater = false; render(); } }
+
 /* ================= Rendu et boucle ================= */
 function render() {
   const main = $('main');
@@ -5215,7 +5436,9 @@ function render() {
   typoFix(main);
   applyLocks();
   document.querySelectorAll('.nav [data-tab]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === tab)));
+  updSound();
   refresh();
+  coachTick();
 }
 // Changement de langue immédiat : rien n'est rechargé, la partie continue.
 function setLang(l) {
@@ -5274,17 +5497,20 @@ function loop() {
     lastTick = now; marketTick(false); updateInvest(); maybeEvent(now); maybeInfo(now); checkDaily(); checkQuests(); checkAch(); checkUnlocks(); maybePending();
     if (tab === 'creator' && S.cr && $('modal').hidden) {
       const c = S.cr, cs = `${c.vids.length}:${c.n}:${c.offers.length}:${!!c.prod}:${c.log[0] ? c.log[0][0] : 0}:${c.burn > now}:${crView}:${crSort}:${crTab}:${crMet}:${Math.floor(now / (crView ? 1e4 : 2e4))}`;
-      if (cs !== renderCreator.sig) { renderCreator.sig = cs; render(); }
+      if (cs !== renderCreator.sig) { if (!scrolling()) { renderCreator.sig = cs; render(); } }
       else { const el = $('crSubs'); if (el) el.textContent = nf0.format(c.subs); if ($('cv-cr')) chartUpdate('cr', crSeries(c)); }
     }
-    if (tab === 'news' && S.info.length && S.info[0].id !== renderNews.last) { renderNews.last = S.info[0].id; render(); }
+    if (tab === 'news' && S.info.length && S.info[0].id !== renderNews.last && !scrolling()) { renderNews.last = S.info[0].id; render(); }
     // Les écrans Entreprises se redessinent quand il se passe quelque chose dans une équipe.
     const sig = S.firms.map(f => `${f.u}:${f.l}:${f.staff.length}:${f.log[0] ? f.log[0][0] : 0}:${f.strike > now}:${f.staff.filter(e => !isIn(e, now)).length}`).join('|');
     if (tab === 'biz' && bizView === 'firm' && firmTab === 'ops') updOps();
-    if (sig !== bizSig) { bizSig = sig; if (tab === 'biz' && bizView !== 'found' && $('modal').hidden) render(); }
+    if (sig !== bizSig && !scrolling()) { bizSig = sig; if (tab === 'biz' && bizView !== 'found' && $('modal').hidden) render(); }
   }
   if (now - lastSave >= 5000) { lastSave = now; save(); }
+  checkStarter();
+  if (renderLater && !scrolling()) { renderLater = false; render(); }
   refresh();
+  coachTick();
 }
 
 // Chiffres en direct de l'écran Gestion, sans tout redessiner.
@@ -5326,13 +5552,14 @@ $('main').addEventListener('keydown', e => { if (e.target.id === 'coin' && (e.ke
 $('main').addEventListener('click', e => {
   const t = e.target.closest('button');
   if (!t || t.disabled) return;
-  if (t.id === 'upClick') { const c = clickCost(S.clickLvl); if (S.cash >= c) { S.cash -= c; S.clickLvl++; toast(tl('productivite_niveau_par_clic', S.clickLvl, eur(clickBase(S.clickLvl))), 'good'); afterAction(); } return; }
+  if (t.id === 'upClick') { const c = clickCost(S.clickLvl); if (S.cash >= c) { S.cash -= c; S.clickLvl++; toast(tl('productivite_niveau_par_clic', S.clickLvl, eur(clickBase(S.clickLvl))), 'good'); buyFx(); afterAction(); } return; }
   if (t.id === 'adBtn') return watchAd();
   if (t.dataset.lang) return setLang(t.dataset.lang);
+  if (t.dataset.stgo != null) return starterGo();
   if (t.id === 'resetBtn') {
     modal(`<h3>${tl('recommencer')}</h3><p>${tl('toute_votre_progression_sera_effacee_cet')}</p><div class="modal-actions"><button class="btn ghost" id="mNo" type="button">${tl('annuler')}</button><button class="btn coral" id="mYes" type="button">${tl('tout_effacer')}</button></div>`);
     $('mNo').onclick = closeModal;
-    $('mYes').onclick = () => { S = defaultState(); S.pending.push({ k: 'tuto' }); invView = null; save(); closeModal(); tab = 'gains'; render(); toast(tl('nouvelle_partie_a_vous_de_jouer')); };
+    $('mYes').onclick = () => { S = defaultState(); invView = null; save(); closeModal(); tab = 'gains'; render(); toast(tl('nouvelle_partie_a_vous_de_jouer')); };
     return;
   }
   if (t.dataset.itab) { investTab = t.dataset.itab; return render(); }
@@ -5391,6 +5618,7 @@ document.addEventListener('click', e => {
   const key = b.dataset.skip || b.dataset.half, [k, a, id] = key.split(':');
   useTokens(key, !!b.dataset.half, k === 'emp' ? () => empModal(+a, id) : null);
 }, true);
+$('sndBtn').addEventListener('click', toggleSound);
 $('newsBtn').addEventListener('click', () => { if (tab !== 'news') prevTab = tab; tab = 'news'; render(); window.scrollTo(0, 0); });
 // Mode test caché : 5 appuis rapides sur l'avatar du Profil.
 let testTaps = 0, testT = 0;
@@ -5446,19 +5674,37 @@ window.addEventListener('pagehide', save);
 /* ================= Démarrage ================= */
 const VERSION = 'v1.0';
 let splashOn = true;
-function runSplash() {
+let splashEnd = null, gameReady = false;
+function runSplash(first) {
   $('spVer').textContent = VERSION;
   const msgs = [tl('ouverture_des_marches'), tl('calcul_de_vos_gains_hors_ligne'), tl('preparation_de_vos_entreprises')], el = $('spMsg');
   msgs.slice(1).forEach((m, i) => setTimeout(() => { el.classList.add('swap'); setTimeout(() => { el.textContent = m; el.classList.remove('swap'); }, 250); }, 800 * (i + 1)));
-  setTimeout(() => { $('splash').classList.add('gone'); splashOn = false; setTimeout(() => $('splash').remove(), 600); }, 2600);
+  const sl = $('spLang');
+  if (first) {
+    sl.hidden = false;
+    const mark = () => sl.querySelectorAll('[data-splang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.splang === LANG)));
+    mark();
+    sl.addEventListener('click', e => {
+      const b = e.target.closest('[data-splang]'); if (!b) return;
+      LANG = b.dataset.splang; applyStatic(); mark();
+      // La partie n'est enregistrée qu'une fois chargée (sur CrazyGames, la sauvegarde arrive après le SDK).
+      if (gameReady) { S.lang = LANG; render(); save(); }
+      setTimeout(() => splashEnd && splashEnd(), 450);
+    });
+  }
+  let done = false;
+  splashEnd = () => { if (done) return; done = true; $('splash').classList.add('gone'); splashOn = false; setTimeout(() => $('splash').remove(), 600); };
+  setTimeout(splashEnd, first ? 4500 : 2600);
 }
 function start() {
-  // Langue affichée dès l'écran de chargement : celle de la partie enregistrée, sinon celle du navigateur.
-  try { const d = JSON.parse(localStorage.getItem(KEY) || 'null'); LANG = d && d.v === 1 ? (LANGS.includes(d.lang) ? d.lang : 'fr') : browserLang(); } catch (e) { LANG = browserLang(); }
+  // Langue affichée dès l'écran de chargement : celle de la partie enregistrée, sinon l'anglais (choix possible sur cet écran).
+  let firstRun = false;
+  try { const d = JSON.parse(localStorage.getItem(KEY) || 'null'); firstRun = !(d && d.v === 1); LANG = firstRun ? 'en' : LANGS.includes(d.lang) ? d.lang : 'fr'; } catch (e) { LANG = 'en'; firstRun = true; }
   applyStatic();
-  runSplash();
-  if (!load()) { S = defaultState(); S.pending.push({ k: 'tuto' }); }
+  runSplash(firstRun);
+  if (!load()) S = defaultState();
   else offlineGains();
+  gameReady = true;
   LANG = S.lang;
   applyStatic();
   render();
