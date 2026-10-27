@@ -369,6 +369,21 @@ details.plbox[open] summary { margin-bottom: 8px; }
 .inp input { flex: 1; min-width: 0; border: 0; background: none; color: var(--ink); font: inherit; font-weight: 700; font-size: 15px; padding: 4px 0; outline: none; }
 .inp:focus-within { border-color: var(--money); }
 .inp-row { display: flex; gap: 8px; }
+.ach-list { display: flex; flex-direction: column; margin-top: 6px; }
+.ach { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); }
+.ach:first-child { border-top: 0; }
+.ach-ico { width: 40px; height: 40px; flex: none; display: grid; place-items: center; font-size: 20px; border-radius: 12px; background: color-mix(in srgb, var(--tc) 14%, var(--surface-2)); border: 2px solid color-mix(in srgb, var(--tc) 55%, transparent); }
+.ach:not(.on) .ach-ico { filter: grayscale(1); opacity: .55; border-color: var(--line); }
+.ach-ico.sm { width: 34px; height: 34px; font-size: 17px; border-radius: 10px; }
+.ach-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.ach-main b { font-size: 14px; }
+.ach-main small { font-size: 12px; color: var(--muted); }
+.ach-main .bar { height: 6px; margin-top: 2px; }
+.ach .tier { font-style: normal; font-weight: 800; color: var(--tc); }
+.ach-ok { color: var(--money); font-weight: 900; font-size: 18px; }
+.ach-last { display: flex; gap: 6px; margin-top: 10px; }
+.pills.ach-f button small { font-size: 10.5px; opacity: .75; }
+.pills.ach-f button { flex: 0 0 auto; }
 .pills { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .pills::-webkit-scrollbar { display: none; }
 .pills button { flex: 1 1 auto; min-width: 0; border: 1px solid var(--line); background: var(--surface); color: var(--muted); border-radius: 999px; padding: 7px 9px; font-size: 13px; font-weight: 700; white-space: nowrap; }
@@ -396,6 +411,8 @@ details.plbox[open] summary { margin-bottom: 8px; }
 .rest-btns .btn { flex-direction: column; gap: 2px; padding: 8px 4px; line-height: 1.15; white-space: normal; }
 .rest-btns small { display: block; font-size: 11px; font-weight: 600; opacity: .85; }
 .warn-note { margin: 6px 0 0; padding: 8px 10px; border-radius: 12px; background: color-mix(in srgb, var(--gold) 16%, transparent); font-size: 13px; }
+.file-btn { position: relative; overflow: hidden; }
+.file-btn input { position: absolute; inset: 0; opacity: 0; font-size: 16px; }
 .code-box { width: 100%; margin: 4px 0; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface-2); color: var(--ink); font-family: ui-monospace, Menlo, monospace; font-size: 16px; line-height: 1.35; word-break: break-all; resize: vertical; }
 @media (max-width: 359px) { .inp-row { flex-direction: column; } }
 .prow { width: 100%; text-align: left; color: var(--ink); }
@@ -2743,8 +2760,8 @@ const I18N = {
   sv_persist_no: ["Le navigateur peut effacer les données s’il manque de place : exportez votre partie de temps en temps.", "The browser may clear data if it runs low on space: export your game from time to time."],
   sv_export: ["Exporter ma partie", "Export my game"],
   sv_import: ["Importer une partie", "Import a game"],
-  sv_export_txt: ["Copiez ce code et gardez-le en lieu sûr (notes, e-mail…). Il permet de retrouver votre partie sur n’importe quel appareil.", "Copy this code and keep it somewhere safe (notes, email…). It restores your game on any device."],
-  sv_import_txt: ["Collez ici le code d’une partie exportée.", "Paste the code of an exported game here."],
+  sv_export_txt: ["Gardez ce code en lieu sûr (Notes, Messages, e-mail ou fichier) : il permet de retrouver votre partie sur n’importe quel appareil.", "Keep this code somewhere safe (Notes, Messages, email or a file): it restores your game on any device."],
+  sv_import_txt: ["Collez ici le code d’une partie exportée, ou choisissez le fichier de sauvegarde.", "Paste the code of an exported game here, or choose the save file."],
   sv_import_go: ["Importer", "Import"],
   sv_len: ["{0} caractères", "{0} characters"],
   sv_copy: ["Copier", "Copy"],
@@ -2822,6 +2839,108 @@ const I18N = {
   works_reno_s: ["Rénovation niv. {0}", "Renovation lvl {0}"],
   works_reno: ["Rénovation vers le niveau {0} : encore {1} (loyer suspendu).", "Renovation to level {0}: {1} left (rent on hold)."],
   works_cond: ["La rénovation monte le niveau du bien, pas son état.", "Renovation raises the property’s level, not its condition."],
+  t_bronze: ["Bronze", "Bronze"],
+  t_silver: ["Argent", "Silver"],
+  t_gold: ["Or", "Gold"],
+  t_plat: ["Platine", "Platinum"],
+  t_diam: ["Diamant", "Diamond"],
+  af_clic: ["Clics", "Taps"],
+  af_rich: ["Fortune", "Wealth"],
+  af_biz: ["Entreprises", "Business"],
+  af_bourse: ["Bourse", "Markets"],
+  af_immo: ["Immobilier", "Real estate"],
+  af_crea: ["Créateur", "Creator"],
+  af_luxe: ["Luxe", "Luxury"],
+  af_fidel: ["Fidélité", "Loyalty"],
+  af_secret: ["Secrets", "Secrets"],
+  ach_all: ["Tous", "All"],
+  ach_see: ["Voir tous les succès", "See all achievements"],
+  ach_total: ["Succès débloqués", "Achievements unlocked"],
+  ach_unlocked: ["Débloqués ({0})", "Unlocked ({0})"],
+  ach_next: ["Prochains paliers", "Next tiers"],
+  ach_alldone: ["Tout est débloqué ici. Bravo !", "Everything here is unlocked. Well done!"],
+  ach_step: ["palier {0}/{1}", "tier {0}/{1}"],
+  ach_secret: ["succès secret", "secret achievement"],
+  ach_n: ["{0} succès", "{0} achievements"],
+  ach_one: ["🏆 {0} {1} · {2} · +{3} {4}", "🏆 {0} {1} · {2} · +{3} {4}"],
+  ach_many: ["🏆 {0} succès débloqués · +{1} {2}", "🏆 {0} achievements unlocked · +{1} {2}"],
+  ach_retro: ["🏆 {0} succès débloqués d’après votre progression · +{1} {2}", "🏆 {0} achievements unlocked from your progress · +{1} {2}"],
+  h_x: ["{0}/h", "{0}/h"],
+  a_clicks: ["{0} clics", "{0} taps"],
+  a_clvl: ["Productivité niveau {0}", "Productivity level {0}"],
+  a_fortune: ["{0} de fortune", "{0} net worth"],
+  a_earned: ["{0} gagnés au total", "{0} earned in total"],
+  a_income: ["Revenu passif de {0}", "{0} passive income"],
+  a_tax: ["{0} d’impôts payés", "{0} paid in taxes"],
+  a_stars: ["{0} étoile(s) d’entrepreneur", "{0} entrepreneur star(s)"],
+  a_firms: ["{0} entreprise(s) en même temps", "{0} business(es) at once"],
+  a_found: ["Fonder : {0}", "Found: {0}"],
+  a_lvl5: ["Niveau 5 : {0}", "Level 5: {0}"],
+  a_lvl10: ["Niveau 10 : {0}", "Level 10: {0}"],
+  a_hires: ["{0} embauche(s)", "{0} hire(s)"],
+  a_mgrs: ["{0} manager(s) en poste", "{0} manager(s) in place"],
+  a_ups: ["{0} amélioration(s) lancée(s)", "{0} upgrade(s) started"],
+  a_first_buy: ["Premier achat : {0}", "First purchase: {0}"],
+  a_trades: ["{0} ordre(s) en bourse", "{0} market order(s)"],
+  a_realized: ["{0} de plus-values encaissées", "{0} in realized gains"],
+  a_divs: ["{0} de dividendes et intérêts reçus", "{0} in dividends and interest"],
+  a_crash: ["Garder ses placements pendant {0} krach(s)", "Hold your investments through {0} crash(es)"],
+  a_kinds: ["{0} types de placements en même temps", "{0} kinds of investments at once"],
+  a_titles: ["{0} titres différents en portefeuille", "{0} different holdings"],
+  a_pf: ["Portefeuille boursier de {0}", "{0} market portfolio"],
+  a_savings: ["{0} sur le livret", "{0} in savings"],
+  a_props: ["{0} bien(s) immobilier(s)", "Properties owned: {0}"],
+  a_buy: ["Acheter : {0}", "Buy: {0}"],
+  a_renos: ["{0} rénovation(s) terminée(s)", "{0} renovation(s) completed"],
+  a_rent: ["{0} de loyers encaissés", "{0} in rent collected"],
+  a_loans: ["{0} crédit(s) remboursé(s)", "{0} loan(s) paid off"],
+  a_cities: ["Des biens dans {0} villes", "Properties in {0} cities"],
+  a_subs: ["{0} abonnés", "{0} subscribers"],
+  a_views: ["{0} vues", "{0} views"],
+  a_vids: ["{0} vidéo(s) publiée(s)", "{0} video(s) published"],
+  a_viral: ["{0} vidéo(s) virale(s)", "{0} viral video(s)"],
+  a_spons: ["{0} sponsor(s) signé(s)", "{0} sponsor deal(s)"],
+  a_theme: ["Vidéo {0}", "{0} video"],
+  a_crrev: ["{0} gagnés comme créateur", "{0} earned as a creator"],
+  a_wh: ["{0} heures de visionnage", "{0} watch hours"],
+  a_lux_first: ["Premier achat : {0}", "First purchase: {0}"],
+  a_lux_all: ["Collection complète : {0}", "Full collection: {0}"],
+  a_lux_n: ["{0} article(s) de luxe", "{0} luxury item(s)"],
+  a_lux_item: ["Posséder : {0}", "Own: {0}"],
+  a_play: ["{0} de jeu", "{0} played"],
+  a_streak: ["{0} jours de connexion d’affilée", "{0}-day login streak"],
+  a_days: ["{0} jours de jeu", "{0} days played"],
+  a_offline: ["{0} gagnés pendant une absence", "{0} earned while away"],
+  a_ads: ["{0} pub(s) regardée(s)", "{0} ad(s) watched"],
+  a_toks: ["{0} jetons dépensés", "{0} tokens spent"],
+  a_quests: ["{0} objectif(s) du jour réussi(s)", "{0} daily goal(s) completed"],
+  ax_rug: ["Rien ne va plus", "Rug-pulled"],
+  ax_rug_d: ["détenir une crypto au moment de son rug pull", "hold a coin when it gets rug-pulled"],
+  ax_broke: ["Fin de mois difficile", "Tough month"],
+  ax_broke_d: ["tomber à zéro avec un revenu négatif", "hit zero with negative income"],
+  ax_night: ["Oiseau de nuit", "Night owl"],
+  ax_night_d: ["jouer entre 2 h et 5 h du matin", "play between 2 and 5 a.m."],
+  ax_lang: ["Bilingue", "Bilingual"],
+  ax_lang_d: ["changer la langue du jeu", "switch the game language"],
+  ax_mute: ["Silence, on compte", "Quiet, I’m counting"],
+  ax_mute_d: ["couper tout le son", "turn all sound off"],
+  ax_burn: ["Trop de contenu", "Content overload"],
+  ax_burn_d: ["faire un burn-out de créateur", "burn out as a creator"],
+  ax_name: ["Nouveau nom", "New name"],
+  ax_name_d: ["changer votre nom", "change your name"],
+  ax_tap: ["Doigts de feu", "Fire fingers"],
+  ax_tap_d: ["20 clics en moins de 3 secondes", "20 taps in under 3 seconds"],
+  ax_kbuy: ["Acheter quand ça saigne", "Buy the dip"],
+  ax_kbuy_d: ["acheter pendant un krach", "buy during a crash"],
+  ax_loss: ["Acheter haut, vendre bas", "Buy high, sell low"],
+  ax_loss_d: ["vendre un placement à perte", "sell an investment at a loss"],
+  ax_lemon: ["Empire du citron", "Lemon empire"],
+  ax_lemon_d: ["3 stands de limonade en même temps", "3 lemonade stands at once"],
+  ax_cash: ["Sous le matelas", "Under the mattress"],
+  ax_cash_d: ["10 M en liquide sur votre compte", "10M in cash in your account"],
+  sv_share: ["Partager", "Share"],
+  sv_download: ["Télécharger le fichier", "Download the file"],
+  sv_pick_file: ["Choisir un fichier de sauvegarde", "Choose a save file"],
 };
 const LANGS = ['en', 'fr'];
 const FLAGS = { en: '<svg class="flag" viewBox="0 0 19 10" aria-hidden="true"><rect width="19" height="10" fill="#B22234"/><path d="M0 1.15h19M0 2.7h19M0 4.23h19M0 5.77h19M0 7.3h19M0 8.85h19" stroke="#FFF" stroke-width=".77"/><rect width="7.6" height="5.4" fill="#3C3B6E"/></svg>', fr: '<svg class="flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="1" height="2" fill="#0055A4"/><rect x="1" width="1" height="2" fill="#FFF"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg>' };
@@ -3161,10 +3280,11 @@ function backup() {
   if (b1) local.set(BAK[1], b1);
   local.set(BAK[0], cur);
 }
+const statsDefault = () => ({ hires: 0, ups: 0, trades: 0, vids: 0, ads: 0, bt: {}, blv: {}, cls: {}, rtp: {}, th: {}, lux: {}, x: {}, rg: 0, div: 0, rent: 0, reno: 0, loans: 0, crash: 0, viral: 0, spons: 0, offMax: 0, days: 1, cur: 1, strk: 1, tokS: 0, quests: 0 });
 function defaultState() {
   return {
     v: 1, lang: LANG, name: tl('vous'), cash: 0, earned: 0, clicks: 0, clickLvl: 1, boostUntil: 0,
-    stocks: {}, crypto: {}, basis: {}, realized: 0, trades: [], orders: [], rug: {}, tok: 0, tokDay: null, tokAdNext: 0, tokLog: [], quests: null, stats: { hires: 0, ups: 0, trades: 0, vids: 0, ads: 0 }, stars: 0, prestiges: 0, unl: {}, wageV: 2, tuto: 0, coach: 0, start: 0, mute: false, daily: { d: '', s: 0 }, ach: {}, cr: null, pending: [], losses: [], ins: {}, opps: [], info: [], rumors: [], unread: 0, nextInfo: Date.now() + 3 * 60e3, infl: .02, pi: 1, taxPaid: 0, rt: {}, divPend: 0, divNext: 0, divTot: 0, divRec: {}, props: [], listings: {}, firms: [], uid: 0, owned: {}, fx: [], adNext: 0, nextEvent: Date.now() + 15 * 60000,
+    stocks: {}, crypto: {}, basis: {}, realized: 0, trades: [], orders: [], rug: {}, tok: 0, tokDay: null, tokAdNext: 0, tokLog: [], quests: null, stats: { ...statsDefault(), achV: 1 }, stars: 0, prestiges: 0, unl: {}, wageV: 2, tuto: 0, coach: 0, start: 0, mute: false, daily: { d: '', s: 0 }, ach: {}, cr: null, pending: [], losses: [], ins: {}, opps: [], info: [], rumors: [], unread: 0, nextInfo: Date.now() + 3 * 60e3, infl: .02, pi: 1, taxPaid: 0, rt: {}, divPend: 0, divNext: 0, divTot: 0, divRec: {}, props: [], listings: {}, firms: [], uid: 0, owned: {}, fx: [], adNext: 0, nextEvent: Date.now() + 15 * 60000,
     mk: freshMarket(), pfH: emptyHist(), last: Date.now(), started: Date.now(), seen: {}, playMs: 0,
   };
 }
@@ -3206,7 +3326,22 @@ function load() {
     // Joueurs déjà installés : pas de tutoriel ni d'objectifs de démarrage.
     if (d.coach == null) S.coach = COACH_DONE;
     if (d.start == null) S.start = START.length;
-    S.stats = Object.assign({ hires: 0, ups: 0, trades: 0, vids: 0, ads: 0 }, S.stats);
+    S.stats = Object.assign(statsDefault(), S.stats);
+    for (const k of ['bt', 'blv', 'cls', 'rtp', 'th', 'lux', 'x']) if (!S.stats[k] || typeof S.stats[k] !== 'object') S.stats[k] = {};
+    // Succès : reprise des anciens identifiants, puis compteurs reconstitués d'après la partie existante.
+    if (!S.stats.achV) {
+      const st = S.stats, t0 = Date.now();
+      for (const [o, n] of Object.entries(ACH_OLD)) if (S.ach[o] && !S.ach[n]) S.ach[n] = S.ach[o];
+      for (const f of S.firms) { st.bt[f.t] = 1; st.blv[f.t] = Math.max(st.blv[f.t] || 0, f.l); }
+      for (const tr of S.trades || []) if (tr[2] === 'buy' && (SBY[tr[1]] || CBY[tr[1]])) st.cls[clsOf(tr[1])] = 1;
+      for (const d of [...SECS, ...CRYPTO]) if (holdOf(d.id) > 0) st.cls[d.cls] = 1;
+      for (const pr of S.props) { st.rtp[pr.t] = 1; st.reno += pr.lvl || 0; }
+      for (const id in S.owned) if (S.owned[id]) st.lux[id] = 1;
+      if (S.cr) { for (const v of S.cr.vids) { st.th[v.th] = 1; if (v.vn) st.viral++; if (v.sp) st.spons++; } st.vids = Math.max(st.vids, S.cr.n || 0); }
+      st.div = Math.max(st.div, S.divTot || 0); st.rg = Math.max(st.rg, S.realized || 0);
+      st.days = Math.max(st.days, 1); st.strk = Math.max(st.strk, (S.daily && S.daily.s) || 1); st.cur = Math.max(st.cur, (S.daily && S.daily.s) || 1);
+      st.achV = 1; S.achRetro = t0;
+    }
     if (!d.unl) { S.unl = {}; checkUnlocks(true); }
     delete S.news;
     for (const f of S.firms) if (f.mgr) f.mgr.sal = Math.max(f.mgr.sal, mgrWage(f));
@@ -3263,20 +3398,115 @@ function save(force) {
 const b64enc = u8 => { let t = ''; for (let i = 0; i < u8.length; i += 32768) t += String.fromCharCode.apply(null, u8.subarray(i, i + 32768)); return btoa(t); };
 const b64dec = t => Uint8Array.from(atob(t), c => c.charCodeAt(0));
 const pipeBytes = (u8, tr) => new Response(new Blob([u8]).stream().pipeThrough(tr)).arrayBuffer().then(b => new Uint8Array(b));
+// Format 2 : on ne garde que ce qui ne se recalcule pas. Historiques de cours et de graphiques, fil d'infos, journaux,
+// annonces et candidats sont reconstruits au chargement ; les dates deviennent des minutes relatives, les nombres sont arrondis.
+const PK_DROP = ['mk', 'pfH', 'listings', 'losses', 'trades', 'rt', 'info', 'rumors', 'tokLog', 'fx', 'pending', 'opps', 'divRec', 'seen', 'realty', 'unread', 'ach', 'achRetro', 'v'];
+const PK_F0 = ['strike', 'unpaid', 'lossH', 'warned', 'mgr'], PK_O0 = ['eq', 'promoNext', 'veh', 'promo'], PK_P0 = ['vacant', 'works', 'wk', 'evict', 'wkFrom'], PK_SETS = ['bt', 'cls', 'rtp', 'th', 'lux', 'x'];
+const Z85 = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-:+=^!/*?&<>()[]{}@%$#';
+function z85enc(u8) {
+  const pad = (4 - u8.length % 4) % 4, b = new Uint8Array(u8.length + pad); b.set(u8);
+  let out = String(pad);
+  for (let i = 0; i < b.length; i += 4) {
+    let v = b[i] * 16777216 + (b[i + 1] << 16) + (b[i + 2] << 8) + b[i + 3], c = '';
+    for (let j = 0; j < 5; j++) { c = Z85[v % 85] + c; v = Math.floor(v / 85); }
+    out += c;
+  }
+  return out;
+}
+function z85dec(t) {
+  const pad = +t[0], body = t.slice(1); if (body.length % 5) throw new Error('z85');
+  const out = new Uint8Array(body.length / 5 * 4);
+  for (let i = 0, o = 0; i < body.length; i += 5) {
+    let v = 0; for (let j = 0; j < 5; j++) { const k = Z85.indexOf(body[i + j]); if (k < 0) throw new Error('z85'); v = v * 85 + k; }
+    out[o++] = Math.floor(v / 16777216) & 255; out[o++] = v >> 16 & 255; out[o++] = v >> 8 & 255; out[o++] = v & 255;
+  }
+  return out.subarray(0, out.length - pad);
+}
+const r5 = v => Number.isInteger(v) && Math.abs(v) < 1e7 ? v : +v.toPrecision(5), r3 = v => +(+v).toPrecision(3);
+// Dates → « @ » + minutes relatives en base 36 ; une chaîne qui commence par @ ou ~ est protégée par ~.
+function pkEnc(v, T0) {
+  if (typeof v === 'number') return v > 1.5e12 && v < 2.5e12 ? '@' + Math.round((v - T0) / 6e4).toString(36) : isFinite(v) ? r5(v) : 0;
+  if (typeof v === 'string') return /^[@~]/.test(v) ? '~' + v : v;
+  if (v === true) return 1;
+  if (Array.isArray(v)) return v.map(x => pkEnc(x, T0));
+  if (v && typeof v === 'object') { const o = {}; for (const k in v) if (v[k] !== null && v[k] !== false && v[k] !== undefined) o[k] = pkEnc(v[k], T0); return o; }
+  return v;
+}
+function pkDec(v, T0) {
+  if (typeof v === 'string') return v[0] === '@' ? T0 + parseInt(v.slice(1), 36) * 6e4 : v[0] === '~' ? v.slice(1) : v;
+  if (Array.isArray(v)) return v.map(x => pkDec(x, T0));
+  if (v && typeof v === 'object') { const o = {}; for (const k in v) o[k] = pkDec(v[k], T0); return o; }
+  return v;
+}
+function packSave() {
+  const d = JSON.parse(JSON.stringify(S)), T0 = Math.round(Date.now() / 6e4) * 6e4, tm = v => Math.round((v - T0) / 6e4);
+  const PN = NAMES.map(x => x[0]), PT = Object.keys(TRAITS);
+  for (const k of PK_DROP) delete d[k];
+  d.last = Date.now();
+  // Prix du jour des seuls actifs détenus (le reste du marché est recréé).
+  d.P = {}; for (const id in S.mk) if (holdOf(id) > 0 || S.props.some(p => p.t === id)) d.P[id] = r5(S.mk[id].p);
+  // Succès : un bit par succès, dans l'ordre de la liste.
+  const bits = new Uint8Array(Math.ceil(ACH.length / 8)); ACH.forEach((a, i) => { if (S.ach[a.id]) bits[i >> 3] |= 1 << (i & 7); }); d.A = b64enc(bits);
+  d.firms = d.firms.map(f => {
+    delete f.log; delete f.cands; if (f.ops) { delete f.ops.ema; delete f.ops.rev; }
+    f.staff = f.staff.map(e => [PN.includes(e.n) ? PN.indexOf(e.n) : e.n, e.r, e.sk, PT.includes(e.tr) ? PT.indexOf(e.tr) : e.tr, r3(e.sal), Math.round(e.mood), Math.round(e.fat), tm(e.hired), tm(e.raise), tm(e.rest), e.away ? [e.away.k, tm(e.away.until)] : 0, e.ask ? 1 : 0, e.tired ? 1 : 0]);
+    return f;
+  });
+  // Valeurs par défaut (0, vide) omises : elles sont remises à l'import.
+  const strip0 = (o, keys) => { for (const k of keys) if (!o[k] || (Array.isArray(o[k]) && !o[k].length) || (typeof o[k] === 'object' && !Object.keys(o[k]).length)) delete o[k]; };
+  for (const f of d.firms) { strip0(f, PK_F0); if (f.ops) strip0(f.ops, PK_O0); }
+  for (const p of d.props) { delete p.log; strip0(p, PK_P0); if (p.tenant) p.tenant.rm = r3(p.tenant.rm); }
+  // Ensembles de drapeaux {a: 1, b: 1} → « a,b ».
+  for (const k of PK_SETS) if (d.stats[k]) d.stats[k] = Object.keys(d.stats[k]).filter(x => d.stats[k][x]).join(',');
+  d.owned = Object.keys(d.owned || {}).filter(x => d.owned[x]).join(',');
+  if (d.cr) {
+    for (const k of ['H', 'HV', 'HR', 'log', 'offers']) delete d.cr[k];
+    d.cr.vids = d.cr.vids.slice(0, 3).map(v => [tm(v.t), v.th, Math.round(v.q), r3(v.V0), r3(v.Vx || 0), r3(v.vd || 0), r3(v.vw || 1), Math.round(v.del), Math.round(v.gain || 0), v.du || 0, v.tag || 0, v.title, v.ico || 0, v.sp || 0]);
+  }
+  const out = pkEnc(d, T0); out.T = T0 / 6e4;   // ajouté après l'arrondi : la date de référence reste exacte
+  return out;
+}
+function unpackSave(o) {
+  const T0 = o.T * 6e4, d = pkDec(o, T0), PN = NAMES, PT = Object.keys(TRAITS), ut = m => T0 + m * 6e4;
+  let uid = d.uid || 1000;
+  d.v = 1;
+  for (const f of d.firms || []) {
+    f.log = []; f.cands = null; if (f.ops) { f.ops.rev = []; f.ops.ema = null; }
+    f.staff = (f.staff || []).map(a => { const nm = typeof a[0] === 'number' ? PN[a[0]] : [a[0], 'm']; return { id: ++uid, n: nm[0], g: nm[1], r: a[1], sk: a[2], tr: typeof a[3] === 'number' ? PT[a[3]] : a[3], sal: a[4], mood: a[5], fat: a[6], hired: ut(a[7]), raise: ut(a[8]), rest: ut(a[9]), away: a[10] ? { k: a[10][0], until: ut(a[10][1]) } : null, ask: !!a[11], tired: !!a[12] }; });
+  }
+  for (const p of d.props || []) Object.assign(p, { vacant: 0, works: 0, wk: '', evict: 0 }, p, { log: [] });
+  for (const f of d.firms || []) { for (const k of PK_F0) if (f[k] === undefined) f[k] = k === 'mgr' ? null : 0; if (f.ops) { const O = opsOf(bizById(f.t)); f.ops = Object.assign({ pr: O.prod.map(() => null), on: O.prod.map(() => true), q: 1, eq: {}, stock: O.prod.map(() => 0), auto: false, rating: 3, promo: null, promoNext: 0, veh: [], mgrPrice: false }, f.ops); } }
+  if (d.stats) for (const k of PK_SETS) if (typeof d.stats[k] === 'string') d.stats[k] = Object.fromEntries(d.stats[k].split(',').filter(Boolean).map(x => [x, 1]));
+  if (typeof d.owned === 'string') d.owned = Object.fromEntries(d.owned.split(',').filter(Boolean).map(x => [x, true]));
+  if (d.cr) {
+    Object.assign(d.cr, { H: emptyHist(), HV: emptyHist(), HR: emptyHist(), log: [], offers: [] });
+    d.cr.vids = (d.cr.vids || []).map(a => { const t = ut(a[0]), v = { id: ++uid, t, th: a[1], q: a[2], V0: a[3], Vx: a[4], vd: a[5], vw: a[6], V: a[3] + a[4], del: a[7], gain: a[8], du: a[9], tag: a[10] || '', title: a[11], ico: a[12] || '', sp: a[13] || '', rev: 0, lost: 0, hv: [], ra: 0, rd: 0, rs: 0, qe: a[2], qx: [], rnd: [1, 1, 1, 1], cm: [] };
+      v.ms = VID_MS.filter(x => v.del >= x).length; if (v.Vx && (Date.now() - t) / H >= v.vd) v.vn = 1; return v; });
+  }
+  d.ach = {}; try { const bits = b64dec(d.A || ''); ACH.forEach((a, i) => { if (bits[i >> 3] & (1 << (i & 7))) d.ach[a.id] = T0; }); } catch (e) {}
+  // Marché recréé, puis chaque actif détenu remis à son prix du jour (son historique suit).
+  d.mk = freshMarket();
+  for (const id in d.P || {}) { const m = d.mk[id]; if (!m) continue; const k = d.P[id] / m.p; m.a *= k; m.p = d.P[id]; for (const h in m.H) m.H[h].forEach(pt => pt[1] = +(pt[1] * k).toPrecision(6)); }
+  delete d.P; delete d.A; delete d.T; d.uid = uid;
+  return d;
+}
+// Compression : deflate brut si possible, sinon deflate ou gzip ; sans compression en dernier recours.
+const ZFMT = [['r', 'deflate-raw'], ['d', 'deflate'], ['g', 'gzip']];
 async function exportCode() {
-  const d = JSON.parse(JSON.stringify(S));
-  for (const id in d.mk) d.mk[id].H = undefined;
-  d.pfH = undefined; d.last = Date.now();
-  let u8 = new TextEncoder().encode(JSON.stringify(d)), pre = 'NWT1.';
-  if (window.CompressionStream) try { u8 = await pipeBytes(u8, new CompressionStream('gzip')); pre = 'NWT1z.'; } catch (e) {}
-  return pre + b64enc(u8);
+  const u8 = new TextEncoder().encode(JSON.stringify(packSave()));
+  if (window.CompressionStream) for (const [k, f] of ZFMT) try { return `NW2${k}.` + z85enc(await pipeBytes(u8, new CompressionStream(f))); } catch (e) {}
+  return 'NW2j.' + z85enc(u8);
 }
 async function importCode(code) {
   const c = String(code || '').replace(/\s+/g, '');
-  const m = /^NWT1(z?)\.([A-Za-z0-9+/=]+)$/.exec(c);
   let json = null;
   try {
-    if (m) { let u8 = b64dec(m[2]); if (m[1]) u8 = await pipeBytes(u8, new DecompressionStream('gzip')); json = new TextDecoder().decode(u8); }
+    const m2 = /^NW2([rdgj])\.(\d.*)$/.exec(c), m1 = /^NWT1(z?)\.([A-Za-z0-9+/=]+)$/.exec(c);
+    if (m2) {
+      let u8 = z85dec(m2[2]); const f = ZFMT.find(x => x[0] === m2[1]);
+      if (f) u8 = await pipeBytes(u8, new DecompressionStream(f[1]));
+      json = JSON.stringify(unpackSave(JSON.parse(new TextDecoder().decode(u8))));
+    } else if (m1) { let u8 = b64dec(m1[2]); if (m1[1]) u8 = await pipeBytes(u8, new DecompressionStream('gzip')); json = new TextDecoder().decode(u8); }   // anciens codes (format 1)
     else if (c.startsWith('{')) json = c;   // sauvegarde brute collée telle quelle
   } catch (e) { json = null; }
   const d = parseSave(json);
@@ -3287,19 +3517,41 @@ function copyText(t, ta) {
   const old = () => { try { if (ta) { ta.focus(); ta.select(); ta.setSelectionRange(0, t.length); } if (document.execCommand('copy')) return ok(); } catch (e) {} manual(); };
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, old); else old();
 }
+const codeFile = () => `net-worth-tycoon-${new Date().toISOString().slice(0, 10)}.txt`;
+function downloadCode(code) {
+  try {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([code], { type: 'text/plain' })); a.download = codeFile();
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+  } catch (e) { toast(tl('sv_copy_fail')); }
+}
+// Menu de partage de l'iPhone (Notes, Messages, Mail…) : le code en texte, ou en fichier si le texte n'est pas accepté.
+async function shareCode(code) {
+  try { await navigator.share({ title: 'Net Worth: Tycoon', text: code }); }
+  catch (e) {
+    if (e && e.name === 'AbortError') return;
+    try { const f = new File([code], codeFile(), { type: 'text/plain' }); if (navigator.canShare && navigator.canShare({ files: [f] })) return await navigator.share({ files: [f], title: 'Net Worth: Tycoon' }); } catch (e2) { if (e2 && e2.name === 'AbortError') return; }
+    copyText(code, $('exCode'));
+  }
+}
 async function openExport() {
   const code = await exportCode();
   modal(`<h3>${tl('sv_export')}</h3><p>${tl('sv_export_txt')}</p>
-    <textarea class="code-box" id="exCode" readonly rows="6" spellcheck="false">${code}</textarea><small class="muted">${tl('sv_len', nf0.format(code.length))}</small>
-    <div class="modal-actions"><button class="btn ghost" id="mNo" type="button">${tl('fermer')}</button><button class="btn go" id="mYes" type="button">${tl('sv_copy')}</button></div>`);
+    <textarea class="code-box" id="exCode" readonly rows="5" spellcheck="false">${esc(code)}</textarea><small class="muted">${tl('sv_len', nf0.format(code.length))}</small>
+    <div class="sv-btns"><button class="btn go full" id="exCopy" type="button">📋 ${tl('sv_copy')}</button>${navigator.share ? `<button class="btn ghost full" id="exShare" type="button">📤 ${tl('sv_share')}</button>` : ''}<button class="btn ghost full" id="exFile" type="button">💾 ${tl('sv_download')}</button>
+    <button class="btn ghost full" id="mNo" type="button">${tl('fermer')}</button></div>`);
   $('mNo').onclick = closeModal;
-  $('mYes').onclick = () => copyText(code, $('exCode'));
+  $('exCopy').onclick = () => copyText(code, $('exCode'));
+  if ($('exShare')) $('exShare').onclick = () => shareCode(code);
+  $('exFile').onclick = () => downloadCode(code);
 }
 function openImport() {
   modal(`<h3>${tl('sv_import')}</h3><p>${tl('sv_import_txt')}</p>
-    <textarea class="code-box" id="imCode" rows="6" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="NWT1z.…"></textarea>
+    <textarea class="code-box" id="imCode" rows="5" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="NW2r.…"></textarea>
+    <label class="btn ghost full file-btn">📂 ${tl('sv_pick_file')}<input type="file" id="imFile" accept=".txt,text/plain"></label>
     <div class="modal-actions"><button class="btn ghost" id="mNo" type="button">${tl('annuler')}</button><button class="btn go" id="mYes" type="button">${tl('sv_import_go')}</button></div>`);
   $('mNo').onclick = closeModal;
+  // Fichier choisi : son contenu remplit la zone de texte, puis l'import se lance comme pour un code collé.
+  $('imFile').onchange = e => { const f = e.target.files && e.target.files[0]; if (!f) return; const rd = new FileReader(); rd.onload = () => { $('imCode').value = String(rd.result || '').trim(); $('mYes').click(); }; rd.readAsText(f); };
   $('mYes').onclick = async () => {
     const r = await importCode($('imCode').value);
     if (!r) return toast(tl('sv_bad'), 'crash');
@@ -3474,7 +3726,7 @@ function publish(tp, c, t, prefix) {
   if (r.inflSet != null) return setInfl(S.infl + r.inflSet, t, r.inflSet > 0 ? tl('les_prix_des_services_et_de') : tl('la_consommation_ralentit_les_prix_se'));
   const until = t + r.dur * H;
   for (const x of r.fx) S.fx.push({ ...x, from: t, until });
-  if (r.shock) for (const d of [...SECS, ...CRYPTO]) if (d.beta) S.mk[d.id].a *= Math.pow(r.shock, d.beta);
+  if (r.shock) { if (pfParts().stocks + pfParts().crypto > 0) S.stats.crash++; for (const d of [...SECS, ...CRYPTO]) if (d.beta) S.mk[d.id].a *= Math.pow(r.shock, d.beta); }
   let opp = 0;
   if (r.opp) { opp = ++S.uid; S.opps.push({ ...r.opp, id: opp, until }); }
   addInfo({ cat: tp.cat, title: (prefix || '') + r.title, text: r.text, eff: r.opp ? r.eff : tl('pendant', r.eff, hTxt(r.dur)), until: r.opp ? 0 : until, opp }, t);
@@ -3714,7 +3966,7 @@ function publishVid(c, p, t) {
     hv: [], ra: 0, rd: 0, rs: 0, ms: 0, qe, qx, rnd: [rf(.8, 1.2), rf(.8, 1.2), rf(.8, 1.2), rf(.8, 1.2)] };
   v.cm = genComments(v);
   c.vids.unshift(v); if (c.vids.length > 100) c.vids.length = 100;
-  c.n++; c.last = t; S.stats.vids++;
+  c.n++; c.last = t; S.stats.vids++; S.stats.th[th[0]] = 1;
   c.fat = Math.min(100, c.fat + fatGain(c, p.pr, p.du));
   crLog(tl('publiee_qualite_100_estimee', v.ico, v.title, Math.round(q), Math.round(qe), qx.length ? ` ; ${qTxt(qx)}` : ''), '', t, true);
   // Contrat de sponsor : le solde est versé à la publication, la confiance baisse.
@@ -3735,7 +3987,7 @@ function publishVid(c, p, t) {
   if (c.subs >= 1000 && Math.random() < .02 + (th[0] === 'humour' ? .02 : 0)) { c.demon = t + 3 * H; crLog(tl('chaine_demonetisee_pendant_3_h_la'), 'bad', t, true); lossLog(t, '📵', tl('chaine_demonetisee_3_h'), 0, tl('les_themes_plus_sages_cuisine_tech')); }
   if (c.subs >= 500 && Math.random() < .012) S.pending.push({ k: 'polemic' });
   // Burn-out seulement à 100 % de fatigue : pause forcée, la fatigue redescend plus vite pendant ce temps.
-  if (c.fat >= 100) { c.burn = t + 3 * H; c.rest = null; crLog(tl('burn_out_vous_etes_a_bout'), 'bad', t, true); lossLog(t, '🥵', tl('burn_out_du_createur'), 0, tl('surveillez_la_fatigue_au_dela_de')); }
+  if (c.fat >= 100) { c.burn = t + 3 * H; c.rest = null; S.stats.x.burn = 1; crLog(tl('burn_out_vous_etes_a_bout'), 'bad', t, true); lossLog(t, '🥵', tl('burn_out_du_createur'), 0, tl('surveillez_la_fatigue_au_dela_de')); }
 }
 function badBuzz(c, t, why, tip) {
   const lost = c.subs * rf(.02, .08) * (c.st.cm ? .5 : 1);
@@ -3757,7 +4009,7 @@ function simCreator(dtH, t) {
     if (!(dv > 0)) continue;
     v.del += dv; c.views += dv;
     const hi = Math.min(167, Math.floor(age)); while (v.hv.length <= hi) v.hv.push(0); v.hv[hi] += dv;
-    if (v.Vx && !v.vn && age >= v.vd) { v.vn = 1; crLog(tl('est_en_train_de_devenir_virale', v.title), 'good', t, true); }
+    if (v.Vx && !v.vn && age >= v.vd) { v.vn = 1; S.stats.viral++; crLog(tl('est_en_train_de_devenir_virale', v.title), 'good', t, true); }
     while (v.ms < VID_MS.length && v.del >= VID_MS[v.ms]) { crLog(tl('depasse_vues', v.ico || '🎬', v.title, ['1 k', '10 k', '100 k', '1 M', '10 M'][v.ms]), 'good', t, true); v.ms++; } c.wh += dv * du[1] / 60 * retOf(v);
     const ns = dv * (.012 + v.q / 4000) * (1 + 6 / (1 + c.subs / 100)) * P.conv * (c.st.cm ? 1.15 : 1) * (.5 + c.trust / 100) / 1.3;
     c.subs += ns; v.gain += ns;
@@ -3891,7 +4143,7 @@ function crAction(el) {
   }
   else if (ds.creq) { const e = CR_EQ.find(x => x[0] === ds.creq), p = e[3] * S.pi; if (S.cash < p) return; S.cash -= p; c.eq[e[0]] = 1; crLog(tl('nouveau_materiel', e[1], eur(p)), 'good', t); fxBuy(); }
   else if (ds.crst) { const s = CR_STAFF.find(x => x[0] === ds.crst); c.st[s[0]] = !c.st[s[0]]; crLog(c.st[s[0]] ? tl('recrute', s[1]) : tl('vous_vous_separez_de_votre', s[1].toLowerCase()), '', t); }
-  else if (ds.spok) { const o = c.offers.find(x => x.id === +ds.spok); if (!o || c.spon) return; const adv = o.pay / 2 * (c.st.agent ? .9 : 1); S.cash += adv; S.earned += adv; c.rev.spons += adv; c.spon = o; c.offers = c.offers.filter(x => x !== o); crLog(tl('contrat_signe_avec_davance_le_reste', o.brand, eur(adv)), 'good', t); }
+  else if (ds.spok) { const o = c.offers.find(x => x.id === +ds.spok); if (!o || c.spon) return; S.stats.spons++; const adv = o.pay / 2 * (c.st.agent ? .9 : 1); S.cash += adv; S.earned += adv; c.rev.spons += adv; c.spon = o; c.offers = c.offers.filter(x => x !== o); crLog(tl('contrat_signe_avec_davance_le_reste', o.brand, eur(adv)), 'good', t); }
   else if (ds.spno) c.offers = c.offers.filter(x => x.id !== +ds.spno);
   else if (ds.crpromo) c.promoU = c.promoU === +ds.crpromo ? 0 : +ds.crpromo;
   else if (el.id === 'crMerch') { const p = 5000 * S.pi; if (S.cash < p) return; S.cash -= p; c.merch = 1; crLog(tl('merch_lance_vos_abonnes_peuvent_acheter'), 'good', t); }
@@ -4039,7 +4291,7 @@ function useTokens(key, half, after) {
   const [o, fld] = r, ms = o[fld] - t; if (ms <= 0) return;
   const c = half ? halfCost(ms) : tokCost(ms);
   if (S.tok < c) return tokModal(tl('il_vous_faut_jetons_regardez_une', c));
-  const go = () => { S.tok -= c; o[fld] = half ? Date.now() + ms / 2 : Date.now(); closeModal(); toast(half ? tl('attente_divisee_par_deux', c, TOK) : tl('termine_2', c, TOK), 'good'); afterAction(); if (after) after(); };
+  const go = () => { S.tok -= c; S.stats.tokS += c; o[fld] = half ? Date.now() + ms / 2 : Date.now(); closeModal(); toast(half ? tl('attente_divisee_par_deux', c, TOK) : tl('termine_2', c, TOK), 'good'); afterAction(); if (after) after(); };
   if (c <= 5) return go();
   modal(`<h3>${tl('depenser_jetons', c)}</h3><p>${tl('vous_avez', half ? tl('le_temps_restant_passera_de_a', dur(ms), dur(ms / 2)) : tl('il_restait', dur(ms)), S.tok, TOK)}</p>
     <div class="modal-actions"><button class="btn ghost" id="mNo" type="button">${tl('annuler')}</button><button class="btn tok" id="mYes" type="button">${tl('confirmer', c, TOK)}</button></div>`);
@@ -4088,6 +4340,7 @@ function checkDaily() {
   if (S.coach < COACH_DONE) return;
   const d = today(); if (S.daily.d === d) return;
   const y = new Date(Date.now() - 864e5).toDateString(), streak = S.daily.d === y ? Math.min(7, S.daily.s + 1) : 1;
+  const st = S.stats; st.days++; st.cur = S.daily.d === y ? st.cur + 1 : 1; st.strk = Math.max(st.strk, st.cur);
   S.daily = { d, s: streak };
   const cash = Math.max(100 * S.pi, Math.max(0, incomeH()) * .5) * streak, tok = 4 + streak;
   S.pending.splice(S.pending[0] && S.pending[0].k === 'tuto' ? 1 : 0, 0, { k: 'daily', cash, tok, streak });   // après le tutoriel
@@ -4099,18 +4352,149 @@ function dailyModal(x) {
   $('mYes').onclick = () => { S.cash += x.cash; S.earned += x.cash; giveTok(x.tok, tl('bonus_quotidien_jour', x.streak)); closeModal(); fxBuy(); afterAction(); };
 }
 // Succès : quelques jetons pour les grandes étapes.
-const ACH = [
-  ['firstBiz', tl('premier_business'), '🏪', 5, () => S.firms.length >= 1], ['team', tl('premiere_embauche'), '🤝', 3, () => S.firms.some(f => f.staff.length)],
-  ['five', tl('cinq_business'), '🏢', 10, () => S.firms.length >= 5], ['stock', tl('premier_placement_en_bourse'), '📈', 3, () => Object.values(S.stocks).some(q => q > 0)],
-  ['home', tl('premier_bien_immobilier'), '🔑', 5, () => S.props.length > 0], ['video', tl('premiere_video'), '🎬', 3, () => S.cr && S.cr.n > 0],
-  ['lux', tl('premier_article_de_luxe'), '💎', 3, () => Object.keys(S.owned).length > 0], ['k100', tl('t_100_000_de_fortune'), CASH_ICO, 5, () => fortune() >= 1e5],
-  ['m1', tl('millionnaire'), '💰', 10, () => fortune() >= 1e6], ['md1', tl('milliardaire'), '👑', 25, () => fortune() >= 1e9],
-];
-function checkAch() {
-  for (const [id, n, ico, tok, ok] of ACH) if (!S.ach[id] && ok()) { S.ach[id] = Date.now(); giveTok(tok, tl('succes', n)); toast(tl('succes_2', ico, n, tok, TOK), 'good'); if (['k100', 'm1', 'md1'].includes(id)) fxBig(); else fxGoal(); }
+/* ================= Succès ================= */
+// Paliers Bronze → Diamant : la récompense en jetons grandit avec le palier (secrets : 3 jetons).
+const ATIERS = [['t_bronze', '#C27C3A', 1], ['t_silver', '#8E9BA8', 2], ['t_gold', '#E0A21F', 3], ['t_plat', '#3FA9B8', 5], ['t_diam', '#6C8CFF', 8]];
+const AFAM = [['clic', '👆'], ['rich', '💰'], ['biz', '🏢'], ['bourse', '📈'], ['immo', '🏠'], ['crea', '🎬'], ['luxe', '💎'], ['fidel', '📅'], ['secret', '🎭']];
+// Nombres courts pour les paliers (10 k, 2,5 M, 1 000 Md…).
+const cnt = v => v >= 1e9 ? nfx(v % 1e9 ? 1 : 0, v / 1e9) + (LANG === 'en' ? 'B' : ' Md') : v >= 1e6 ? nfx(v % 1e6 ? 1 : 0, v / 1e6) + (LANG === 'en' ? 'M' : ' M') : nf0.format(Math.floor(v));
+const eurR = v => String(eur(v)).replace(/[,.]00(?=\D|$)/, '');
+const ACH = [];
+// Une série : un compteur et des seuils croissants ; le palier dépend du rang du seuil dans la série.
+function achSeries(id, fam, ico, lbl, goals, cur, fmt = cnt) {
+  goals.forEach((g, i) => ACH.push({ id: id + i, fam, ico, tier: Math.min(4, Math.floor(i * 5 / goals.length)), title: () => tl(lbl, fmt(g)), goal: g, cur, fmt, s: id, i, of: goals.length }));
 }
-const renderAch = () => `<div class="card"><div class="row"><span class="label">${tl('succes_3')}</span><span class="muted">${Object.keys(S.ach).length}/${ACH.length}</span></div>
-  <div class="trophies" style="margin-top:10px">${ACH.map(([id, n, ico, tok]) => `<div class="trophy${S.ach[id] ? ' on' : ''}"><span>${ico}</span><b>${n}</b><small>+${tok} ${TOK}</small></div>`).join('')}</div></div>`;
+// Un succès par élément d'une liste (chaque type d'entreprise, chaque thème…).
+function achEach(id, fam, tier, list, lbl, ok) {
+  for (const [k, n, ico] of list) ACH.push({ id: id + k, fam, ico, tier, title: () => tl(lbl, n), ok: C => ok(k, C) });
+}
+const ST = () => S.stats;
+const pw = (a, b) => { const o = []; for (const m of a) for (let e = b[0]; e <= b[1]; e++) o.push(m * 10 ** e); return o.sort((x, y) => x - y); };
+// Clics
+achSeries('cl', 'clic', '👆', 'a_clicks', [10, 50, 100, 250, 500, 1e3, 2500, 5e3, 1e4, 25e3, 5e4, 1e5, 25e4, 5e5, 1e6], () => S.clicks);
+achSeries('lv', 'clic', '⚡', 'a_clvl', [5, 10, 15, 20, 25, 30, 40, 50], () => S.clickLvl, nf0.format);
+// Fortune et revenus
+achSeries('fo', 'rich', '💰', 'a_fortune', pw([1, 2.5, 5], [3, 11]).filter(v => v <= 1e12).concat([1e12]).filter((v, i, a) => a.indexOf(v) === i), C => C.fortune, eurR);
+achSeries('ea', 'rich', '🪙', 'a_earned', pw([1], [3, 13]), () => S.earned, eurR);
+achSeries('in', 'rich', '📈', 'a_income', [10, 50, 100, 500, 1e3, 5e3, 1e4, 5e4, 1e5, 5e5, 1e6, 1e7, 1e8], C => C.inc, v => tl('h_x', eurR(v)));
+achSeries('tx', 'rich', '🧾', 'a_tax', [1e3, 1e5, 1e7, 1e9], () => S.taxPaid, eurR);
+achSeries('pr', 'rich', '⭐', 'a_stars', [1, 2, 3, 5, 10, 25], () => S.stars || 0, nf0.format);
+// Entreprises
+achSeries('bn', 'biz', '🏢', 'a_firms', [1, 2, 3, 5, 7, 10], () => S.firms.length, nf0.format);
+achEach('bt_', 'biz', 0, BIZ.map(d => [d.id, d.n, d.ico]), 'a_found', (k, C) => ST().bt[k]);
+achEach('b5_', 'biz', 1, BIZ.map(d => [d.id, d.n, d.ico]), 'a_lvl5', (k, C) => (ST().blv[k] || 0) >= 5);
+achEach('bx_', 'biz', 3, BIZ.map(d => [d.id, d.n, d.ico]), 'a_lvl10', (k, C) => (ST().blv[k] || 0) >= 10);
+achSeries('hi', 'biz', '🤝', 'a_hires', [1, 5, 10, 25, 50, 100, 250, 500], () => ST().hires);
+achSeries('mg', 'biz', '👔', 'a_mgrs', [1, 3, 5, 10], () => S.firms.filter(f => f.mgr).length);
+achSeries('up', 'biz', '🛠️', 'a_ups', [1, 5, 10, 25, 50, 100, 250], () => ST().ups);
+// Bourse
+achEach('bc_', 'bourse', 0, [['stock', tl('cls_stock'), '📈'], ['etf', tl('cls_etf'), '🌍'], ['bond', tl('cls_bond'), '📜'], ['cash', tl('cls_cash'), '🐷'], ['crypto', tl('cls_crypto'), '🪙']], 'a_first_buy', (k, C) => ST().cls[k]);
+achSeries('tr', 'bourse', '🔁', 'a_trades', [1, 10, 50, 100, 500, 1000], () => ST().trades);
+achSeries('rg', 'bourse', '💹', 'a_realized', pw([1], [2, 9]), () => ST().rg, eurR);
+achSeries('dv', 'bourse', '💸', 'a_divs', pw([1], [1, 8]), () => ST().div, eurR);
+achSeries('kr', 'bourse', '🛡️', 'a_crash', [1, 3, 5], () => ST().crash, nf0.format);
+achSeries('di', 'bourse', '🧺', 'a_kinds', [3, 4, 5, 6], C => C.kinds, nf0.format);
+achSeries('dt', 'bourse', '🧩', 'a_titles', [5, 10, 20], C => C.titles, nf0.format);
+achSeries('pv', 'bourse', '💼', 'a_pf', pw([1], [3, 9]), C => C.pf.stocks + C.pf.crypto, eurR);
+achSeries('sv', 'bourse', '🐷', 'a_savings', [1e3, 1e4, 1e5], () => holdOf('LIVA'), eurR);
+// Immobilier
+achSeries('rn', 'immo', '🔑', 'a_props', [1, 2, 3, 5, 10, 15, 20], () => S.props.length, nf0.format);
+achEach('rt_', 'immo', 1, REALTY.map(T => [T.id, T.n, T.ico]), 'a_buy', (k, C) => ST().rtp[k]);
+achSeries('rr', 'immo', '🏗️', 'a_renos', [1, 5, 10, 25], () => ST().reno, nf0.format);
+achSeries('rl', 'immo', '🏦', 'a_rent', pw([1], [3, 8]), () => ST().rent, eurR);
+achSeries('rp', 'immo', '📄', 'a_loans', [1, 3, 5, 10], () => ST().loans, nf0.format);
+achSeries('rc', 'immo', '🗺️', 'a_cities', [3, 5, 10], () => new Set(S.props.map(p => p.city)).size, nf0.format);
+// Créateur
+achSeries('cs', 'crea', '👥', 'a_subs', [100, 500, 1e3, 5e3, 1e4, 5e4, 1e5, 5e5, 1e6, 5e6, 1e7], () => S.cr ? S.cr.subs : 0);
+achSeries('cv', 'crea', '👁️', 'a_views', pw([1], [3, 9]), () => S.cr ? S.cr.views : 0);
+achSeries('cn', 'crea', '🎬', 'a_vids', [1, 10, 25, 50, 100, 250, 500], () => ST().vids, nf0.format);
+achSeries('cx', 'crea', '🚀', 'a_viral', [1, 5, 10, 25], () => ST().viral, nf0.format);
+achSeries('cp', 'crea', '🤝', 'a_spons', [1, 5, 10, 25], () => ST().spons, nf0.format);
+achEach('ct_', 'crea', 0, THEMES.map(th => [th[0], th[1], th[2]]), 'a_theme', (k, C) => ST().th[k]);
+achSeries('cr', 'crea', '💵', 'a_crrev', pw([1], [3, 7]), () => S.cr ? crRevTot(S.cr) : 0, eurR);
+achSeries('cw', 'crea', '⏱️', 'a_wh', pw([1], [2, 6]), () => S.cr ? S.cr.wh : 0);
+// Articles de luxe
+const LUXG = [...VEHICLES.map((g, i) => ['v' + i, g.g, g.items[0][2], g.items.map(x => x[0])]), ['home', tl('residence'), '🏠', HOMES.map(x => x[0])], ...COLLECTIONS.map(c => [c.id, c.n, c.items[0][2], c.items.map(x => x[0])])];
+achEach('lg_', 'luxe', 0, LUXG, 'a_lux_first', (k, C) => LUXG.find(g => g[0] === k)[3].some(id => ST().lux[id]));
+achEach('lc_', 'luxe', 3, LUXG, 'a_lux_all', (k, C) => LUXG.find(g => g[0] === k)[3].every(id => ST().lux[id]));
+achSeries('ln', 'luxe', '🛍️', 'a_lux_n', [1, 5, 10, 20, 30], () => Object.keys(ST().lux).length, nf0.format);
+achEach('li_', 'luxe', 1, [...VEHICLES.flatMap(g => g.items), ...HOMES, ...COLLECTIONS.flatMap(c => c.items)].map(it => [it[0], it[1], it[2]]), 'a_lux_item', (k, C) => ST().lux[k]);
+// Fidélité
+achSeries('pt', 'fidel', '⏳', 'a_play', [1 / 6, 1, 5, 10, 24, 50, 100, 250, 500], () => S.playMs / H, v => v < 1 ? tl('min', Math.round(v * 60)) : tl('n_h', nf0.format(v)));
+achSeries('sk', 'fidel', '🔥', 'a_streak', [2, 3, 5, 7, 14, 30, 60, 100, 365], () => ST().strk, nf0.format);
+achSeries('dy', 'fidel', '📅', 'a_days', [7, 30, 100, 365], () => ST().days, nf0.format);
+achSeries('of', 'fidel', '🌙', 'a_offline', [100, 1e4, 1e6, 1e8], () => ST().offMax, eurR);
+achSeries('ad', 'fidel', '📺', 'a_ads', [1, 10, 50, 100], () => ST().ads, nf0.format);
+achSeries('tk', 'fidel', '💠', 'a_toks', [10, 100, 500], () => ST().tokS, nf0.format);
+achSeries('qu', 'fidel', '🎯', 'a_quests', [1, 10, 50, 100, 365], () => ST().quests, nf0.format);
+// Secrets (affichés « ??? » tant qu'ils ne sont pas débloqués)
+for (const [k, ico] of [['rug', '🫠'], ['broke', '🪫'], ['night', '🦉'], ['lang', '🌐'], ['mute', '🤫'], ['burn', '🥵'], ['name', '🪪'], ['tap', '🤯'], ['kbuy', '🛒'], ['loss', '📉'], ['lemon', '🍋'], ['cash', '🛏️']])
+  ACH.push({ id: 'x_' + k, fam: 'secret', ico, tier: 2, sec: 1, tok: 3, title: () => tl('ax_' + k), desc: () => tl('ax_' + k + '_d'), ok: () => ST().x[k] });
+ACH.forEach(a => { if (!a.tok) a.tok = ATIERS[a.tier][2]; });
+const ACH_BY = Object.fromEntries(ACH.map(a => [a.id, a]));
+// Anciens succès (version à 10 succès) → nouveaux identifiants.
+const ACH_OLD = { firstBiz: 'bn0', team: 'hi0', five: 'bn3', stock: 'bc_stock', home: 'rn0', video: 'cn0', lux: 'ln0', k100: 'fo' + ACH.filter(a => a.s === 'fo').findIndex(a => a.goal === 1e5), m1: 'fo' + ACH.filter(a => a.s === 'fo').findIndex(a => a.goal === 1e6), md1: 'fo' + ACH.filter(a => a.s === 'fo').findIndex(a => a.goal === 1e9) };
+// Valeurs coûteuses calculées une seule fois par vérification.
+function achCtx() {
+  const pf = pfParts(), held = [...SECS, ...CRYPTO].filter(d => holdOf(d.id) > 0);
+  for (const f of S.firms) ST().blv[f.t] = Math.max(ST().blv[f.t] || 0, f.l);
+  const h = new Date().getHours(); if (h >= 2 && h < 5) ST().x.night = 1;
+  if (S.mute || (!snd().mOn && !snd().fOn)) ST().x.mute = 1;
+  if (S.firms.filter(f => f.t === 'lemon').length >= 3) ST().x.lemon = 1;
+  if (S.cash >= 1e7) ST().x.cash = 1;
+  return { pf, fortune: fortune(), inc: incomeH(), titles: held.length, kinds: new Set(held.map(d => d.cls)).size + (S.props.length ? 1 : 0) };
+}
+const achDone = a => a.ok ? !!a.ok(achDone.C) : a.cur(achDone.C) >= a.goal;
+// Vérifie tous les succès ; les nouveaux sont signalés par une petite notification (regroupée s'il y en a plusieurs).
+function checkAch(silent) {
+  achDone.C = achCtx();
+  const t = Date.now(), got = [];
+  for (const a of ACH) if (!S.ach[a.id] && achDone(a)) { S.ach[a.id] = t; got.push(a); }
+  if (!got.length) return;
+  const tok = got.reduce((x, a) => x + a.tok, 0);
+  if (silent) return got;
+  giveTok(tok, got.length > 1 ? tl('ach_n', got.length) : tl('succes', got[0].title()));
+  toast(got.length > 1 ? tl('ach_many', got.length, tok, TOK) : tl('ach_one', got[0].ico, got[0].title(), tl(ATIERS[got[0].tier][0]), tok, TOK), 'good');
+  sfx('notify');
+  if (got.some(a => a.tier === 4)) fxGoal();
+}
+const achCount = () => ACH.reduce((n, a) => n + (S.ach[a.id] ? 1 : 0), 0);
+// Carte du Profil : compteur, barre et derniers succès.
+function renderAch() {
+  const n = achCount(), last = ACH.filter(a => S.ach[a.id]).sort((a, b) => S.ach[b.id] - S.ach[a.id]).slice(0, 4);
+  return `<div class="card"><div class="row"><span class="label">${tl('succes_3')}</span><b class="num">${n} / ${ACH.length}</b></div>
+    <div class="bar" style="margin-top:8px"><i style="width:${n / ACH.length * 100}%"></i></div>
+    ${last.length ? `<div class="ach-last">${last.map(a => `<span class="ach-ico sm" style="--tc:${ATIERS[a.tier][1]}" title="${esc(String(a.title()))}">${a.ico}</span>`).join('')}</div>` : ''}
+    <button class="btn ghost full" type="button" id="achOpen" style="margin-top:10px">${tl('ach_see')}</button></div>`;
+}
+let achFam = 'all', profView = 0;
+function achRow(a) {
+  const on = !!S.ach[a.id], T = ATIERS[a.tier], hide = a.sec && !on;
+  let prog = '';
+  if (!on && a.cur) { const c = Math.max(0, a.cur(achDone.C)); prog = `<span class="bar"><i style="width:${Math.min(100, c / a.goal * 100)}%"></i></span><small class="num">${a.fmt(Math.min(c, a.goal))} / ${a.fmt(a.goal)}</small>`; }
+  return `<div class="ach${on ? ' on' : ''}"><span class="ach-ico" style="--tc:${T[1]}">${hide ? '❓' : a.ico}</span><span class="ach-main"><b>${hide ? '???' : a.title()}</b>
+    <small><i class="tier" style="--tc:${T[1]}">${tl(T[0])}</i> · +${a.tok} ${TOK}${a.s ? ` · ${tl('ach_step', a.i + 1, a.of)}` : ''}${a.sec ? ` · ${hide ? tl('ach_secret') : a.desc()}` : ''}</small>${prog}</span>${on ? '<span class="ach-ok">✓</span>' : ''}</div>`;
+}
+// Page des succès : filtres par famille, débloqués d'abord, puis le prochain palier de chaque série avec sa progression.
+function renderAchPage() {
+  achDone.C = achCtx();
+  const n = achCount(), list = ACH.filter(a => achFam === 'all' || a.fam === achFam);
+  // Débloqués : pour une série, seul le plus haut palier atteint est affiché (avec « palier 12/28 »).
+  const all = list.filter(a => S.ach[a.id]), top = {};
+  for (const a of all) if (a.s && (!top[a.s] || a.i > top[a.s].i)) top[a.s] = a;
+  const on = all.filter(a => !a.s || top[a.s] === a).sort((a, b) => b.tier - a.tier || S.ach[b.id] - S.ach[a.id]);
+  const seen = new Set(), next = [];
+  for (const a of list) if (!S.ach[a.id]) { if (a.s) { if (seen.has(a.s)) continue; seen.add(a.s); } next.push(a); }
+  const ratio = a => a.cur ? Math.min(1, Math.max(0, a.cur(achDone.C)) / a.goal) : 0;
+  next.sort((a, b) => (a.sec || 0) - (b.sec || 0) || ratio(b) - ratio(a));
+  const famN = f => ACH.filter(a => a.fam === f).length, famOn = f => ACH.filter(a => a.fam === f && S.ach[a.id]).length;
+  return `<section class="screen" id="scr"><div class="screen-title with-back"><button class="back" id="achBack" type="button" aria-label="${tl('retour')}">←</button><h1>${tl('succes_3')}</h1></div>
+    <div class="card"><div class="row"><span class="label">${tl('ach_total')}</span><b class="num">${n} / ${ACH.length}</b></div><div class="bar" style="margin-top:8px"><i style="width:${n / ACH.length * 100}%"></i></div></div>
+    <div class="pills ach-f">${[['all', '🏆'], ...AFAM].map(([k, ico]) => `<button type="button" data-achf="${k}" aria-selected="${achFam === k}">${ico} ${k === 'all' ? tl('ach_all') : tl('af_' + k)}${k === 'all' ? '' : ` <small>${famOn(k)}/${famN(k)}</small>`}</button>`).join('')}</div>
+    ${on.length ? `<div class="card"><span class="label">${tl('ach_unlocked', all.length)}</span><div class="ach-list">${on.map(achRow).join('')}</div></div>` : ''}
+    <div class="card"><span class="label">${tl('ach_next')}</span><div class="ach-list">${next.map(achRow).join('') || `<p class="muted">${tl('ach_alldone')}</p>`}</div></div>
+  </section>`;
+}
 
 /* ================= Fidélisation et progression ================= */
 // Objectifs du jour : 3 défis tirés parmi ceux qui ont du sens à ce stade de la partie.
@@ -4141,7 +4525,7 @@ function renderQuests() {
 }
 function claimQuest(i) {
   const q = S.quests.list[i]; if (!q || q.claimed || questProg(q) < q.n) return;
-  const [cash, tk] = questReward(); q.claimed = true; S.cash += cash; S.earned += cash; giveTok(tk, tl('objectif_du_jour'));
+  const [cash, tk] = questReward(); q.claimed = true; S.stats.quests++; S.cash += cash; S.earned += cash; giveTok(tk, tl('objectif_du_jour'));
   toast(tl('objectif_reussi_et', eur(cash), tk, TOK), 'good'); fxGoal(); afterAction();
 }
 
@@ -4683,7 +5067,7 @@ function marketTick(silent, n = 1, t = Date.now()) {
   else if (pr(.07)) { mv(Math.log(1 + rf(.03, .07))); msg = ['good', tl('euphorie_boursiere_les_actions_senvolent'), 1]; }
   if (pr(.05)) { const v = Math.log(1 - rf(.25, .55)); CRYPTO.forEach(d => add(d.id, v * rf(.8, 1.2))); msg = ['crash', tl('krach_des_cryptomonnaies_environ', Math.round((1 - Math.exp(v)) * 100)), -1, 'crypto']; }
   for (const d of CRYPTO) if (d.risk === 2 && !S.rug[d.id] && pr(.015)) {
-    add(d.id, Math.log(rf(.02, .06))); S.rug[d.id] = t;
+    add(d.id, Math.log(rf(.02, .06))); S.rug[d.id] = t; if (holdOf(d.id) > 0) S.stats.x.rug = 1;
     addInfo({ cat: 'crypto', title: tl('rug_pull_seffondre', d.n), text: tl('les_createurs_anonymes_ont_disparu_avec'), eff: tl('t_95_environ_de_facon_durable', d.n) }, t);
   }
   const ih = inflH();
@@ -4725,6 +5109,8 @@ function execTrade(id, side, q, t = Date.now(), auto = false) {
   const after = feeRate(id, t);
   if (after > r.rate && !simQuiet) setTimeout(() => toast(tl('trading_trop_frequent_sur_courtage_porte', (SBY[id] || CBY[id]).n, nf1.format(after * 100), nf1.format(baseFee(id) * 100)), 'crash'), 1800);
   S.trades.unshift([t, id, side, q, r.avg, r.fee, auto ? 1 : 0, r.tax || 0]);
+  if (side === 'buy') { S.stats.cls[clsOf(id)] = 1; if (S.fx.some(x => x.until > t && x.label && String(x.label) === String(tl('krach')))) S.stats.x.kbuy = 1; }
+  else if (r.gain > 0) S.stats.rg += r.gain; else if (r.gain < -1) S.stats.x.loss = 1;
   if (!auto) S.stats.trades++;
   if (S.trades.length > 200) S.trades.length = 200;
   return { ok: true, q, p: r.avg, fee: r.fee, gross: r.gross, tax: r.tax || 0, gain: r.gain };
@@ -4746,7 +5132,7 @@ const px = lzf('px', v => v >= 100 ? String(eur(v)) : money('', v >= 1 ? nfx(2, 
 /* --- Dividendes, coupons et intérêts (versés chaque heure = chaque mois de jeu) --- */
 function divH() { let d = 0; for (const s of SECS) if (s.y) d += (S.stocks[s.id] || 0) * S.mk[s.id].p * s.y / 12; return d * (1 + collBonus()); }
 function payDividends(dtH, t) {
-  for (const s of SECS) if (s.y) { const q = S.stocks[s.id]; if (q) { const v = q * S.mk[s.id].p * s.y / 12 * (1 + collBonus()) * dtH; S.divPend += v; S.divRec[s.id] = (S.divRec[s.id] || 0) + v; } }
+  for (const s of SECS) if (s.y) { const q = S.stocks[s.id]; if (q) { const v = q * S.mk[s.id].p * s.y / 12 * (1 + collBonus()) * dtH; S.divPend += v; S.stats.div += v; S.divRec[s.id] = (S.divRec[s.id] || 0) + v; } }
   if (!S.divNext) S.divNext = t + H;
   if (t >= S.divNext) {
     S.divNext = t + H;
@@ -4791,17 +5177,17 @@ function simProps(dtH, t) {
   for (const pr of S.props) {
     const a = propAcc(pr, t);
     S.cash += a.cf * dtH;
-    if (a.rent > 0) S.earned += a.rent * dtH;
+    if (a.rent > 0) { S.earned += a.rent * dtH; S.stats.rent += a.rent * dtH; }
     if (pr.loan) {
       const L = pr.loan, interest = L.rem * L.rate / 12 * dtH;
       L.rem -= L.pay * dtH - interest;
-      if (L.rem <= .01) { pr.loan = null; logP(pr, tl('credit_entierement_rembourse'), 'good', t, true); }
+      if (L.rem <= .01) { pr.loan = null; S.stats.loans++; logP(pr, tl('credit_entierement_rembourse'), 'good', t, true); }
     }
     const ten = pr.tenant;
     pr.cond = Math.max(0, pr.cond - dtH * (ten ? TPROF[ten.prof].wear : .05));
     if (pr.works && pr.works <= t) {
       pr.works = 0;
-      if (pr.wk === 'reno') { pr.lvl++; pr.cond = 100; logP(pr, tl('renovation_terminee_niveau_valeur_et_loy', pr.lvl), 'good', t, true); }
+      if (pr.wk === 'reno') { pr.lvl++; pr.cond = 100; S.stats.reno++; logP(pr, tl('renovation_terminee_niveau_valeur_et_loy', pr.lvl), 'good', t, true); }
     }
     if (pr.evict && pr.evict <= t) { pr.evict = 0; logP(pr, tl('expulsion_prononcee_quitte_les_lieux', pr.tenant ? pr.tenant.n : tl('le_locataire')), '', t, true); pr.tenant = null; pr.vacant = t; continue; }
     if (!ten) continue;
@@ -4914,7 +5300,9 @@ function renderGains() {
     </div>`}
   </section>`;
 }
+const tapT = [];
 function doClick(e) {
+  tapT.push(Date.now()); if (tapT.length > 20) tapT.shift(); if (tapT.length === 20 && tapT[19] - tapT[0] < 3000) S.stats.x.tap = 1;
   const v = clickValue();
   S.cash += v; S.earned += v; S.clicks++;
   const zone = $('clickzone'), coin = $('coin');
@@ -5308,6 +5696,7 @@ function buyProp(tid, loan) {
   if (S.cash < need) return toast(tl('solde_insuffisant_2'), 'crash');
   S.cash -= need;
   const pr = { u: ++S.uid, t: tid, city: L.city, surf: L.surf, cond: L.cond, lvl: 0, paid: price, fees, bought: t, tenant: L.occ, vacant: L.occ ? 0 : t, works: 0, wk: '', evict: 0, loan: lo, log: [] };
+  S.stats.rtp[tid] = 1;
   if (pr.tenant) pr.tenant.since = t;
   logP(pr, tl('achat_signe_chez_le_notaire_de', eur(price), eur(notary), lo ? tl('credit_de_sur_ans', eur(lo.amt), loan.yrs) : ''), 'good', t);
   S.props.push(pr); delete S.listings[tid];
@@ -5364,7 +5753,7 @@ function propAction(id) {
   if (id === 'evictBtn') { const c = a.base * 2; if (S.cash < c) return toast(tl('solde_insuffisant_2'), 'crash'); S.cash -= c; pr.evict = t + 2 * H; logP(pr, tl('procedure_dexpulsion_lancee_de_frais_dav', eur(c)), 'warn', t); }
   if (id === 'fixBtn') { const c = a.v * (100 - pr.cond) / 100 * .12; if (S.cash < c) return; S.cash -= c; pr.fees += c; pr.cond = 100; logP(pr, tl('remise_en_etat', eur(c)), 'good', t); }
   if (id === 'renoBtn') { const c = a.v * (.08 + .04 * pr.lvl); if (S.cash < c) return; S.cash -= c; pr.fees += c; pr.works = t + 3 * H; pr.wkFrom = t; pr.wk = 'reno'; logP(pr, tl('chantier_de_renovation_lance_3_h', eur(c)), '', t); }
-  if (id === 'repayBtn') { const c = pr.loan.rem * 1.03; if (S.cash < c) return; S.cash -= c; logP(pr, tl('credit_solde_par_anticipation', eur(c)), 'good', t); pr.loan = null; }
+  if (id === 'repayBtn') { const c = pr.loan.rem * 1.03; if (S.cash < c) return; S.cash -= c; logP(pr, tl('credit_solde_par_anticipation', eur(c)), 'good', t); pr.loan = null; S.stats.loans++; }
   if (id === 'sellProp') {
     const sale = a.v * (1 - AGENCY), ira = pr.loan ? pr.loan.rem * 1.03 : 0, gain = sale - pr.paid - pr.fees, tax = Math.max(0, gain) * TAX, net = sale - ira - tax;
     modal(`<h3>${tl('vendre_ce_bien')}</h3><div class="pl"><div><span>${tl('prix_de_vente_estime')}</span><b class="num">${eur(a.v)}</b></div><div class="minus"><span>${tl('frais_dagence_5')}</span><b class="num">−${eur(a.v * AGENCY)}</b></div>
@@ -5664,6 +6053,7 @@ function foundBiz(id) {
   if (S.firms.length >= FIRMS_MAX || S.cash < cost) return;
   S.cash -= cost;
   const f = { u: ++S.uid, t: id, l: 1, s: cost, bought: t, staff: [], log: [], mgr: null, strike: 0 };
+  S.stats.bt[id] = 1;
   opsInit(f, false);
   S.firms.push(f);
   logF(f, d.solo ? tl('ouverture_vous_tenez_vous_meme_laffaire', d.roles.join(', ')) : tl('ouverture_poste_a_pourvoir_rien_ne', d.roles.length, d.roles.length > 1 ? 's' : '', d.roles.join(', ')), 'good', t);
@@ -5810,7 +6200,7 @@ function findItem(id) { return allItems().find(i => i[0] === id); }
 function buyItem(id) {
   const it = findItem(id);
   if (!it || S.owned[id] || S.cash < ipx(it)) return;
-  S.cash -= ipx(it); S.owned[id] = true;
+  S.cash -= ipx(it); S.owned[id] = true; S.stats.lux[id] = 1;
   const c = COLLECTIONS.find(c => c.items.some(i => i[0] === id));
   if (c && c.items.every(i => S.owned[i[0]])) { toast(tl('collection_complete_sur_tous_vos_revenus', c.n, c.bonus * 100), 'good'); fxGoal(); }
   else { toast(tl('achete_2', it[1], it[4] === 'home' ? 'e' : ''), 'good'); fxBuy(); } afterAction();
@@ -5827,6 +6217,7 @@ const CATS = [['cash', tl('solde'), '--money'], ['stocks', tl('cat_mk'), '--sky'
 function rivals() { const hrs = (Date.now() - S.started) / 36e5; return RIVALS.map(([n, f]) => [n, f * (1 + .0004 * hrs)]); }
 function tier(f) { return f < 50000 ? tl('quartier') : f < 5e6 ? tl('ville') : f < 1e9 ? tl('region') : f < 50e9 ? tl('pays') : tl('monde'); }
 function renderProfile() {
+  if (profView === 'ach') return renderAchPage();
   const parts = fortuneParts(), total = Object.values(parts).reduce((a, b) => a + b, 0);
   let acc = 0;
   const R = 54, C = 2 * Math.PI * R;
@@ -6280,7 +6671,7 @@ function render() {
 // Changement de langue immédiat : rien n'est rechargé, la partie continue.
 function setLang(l) {
   if (!LANGS.includes(l) || l === LANG) return;
-  LANG = S.lang = l;
+  LANG = S.lang = l; S.stats.x.lang = 1;
   applyStatic(); render(); save();
 }
 function afterAction() { save(); render(); }
@@ -6300,6 +6691,7 @@ function refresh() {
   if (broke) al.textContent = tl('votre_entreprise_perd_de_largent_solde', perH(inc));
   if (broke && !refresh.broke) toast(tl('votre_entreprise_perd_de_largent'), 'crash');
   refresh.broke = broke;
+  if (broke) S.stats.x.broke = 1;
   const nbg = $('newsBadge'); nbg.hidden = !S.unread || tab === 'news'; nbg.textContent = S.unread;
   const gn = $('gClicks'); if (gn) gn.textContent = nf0.format(S.clicks);
   const gc = $('gCash'); if (gc) gc.textContent = eur(S.cash);
@@ -6371,7 +6763,8 @@ function offlineGains() {
   for (let i = 1; i <= steps; i++) simAll(dtH, t0 + i * dtH * H);
   simQuiet = false;
   lastFrame = now;
-  const g = S.cash - cash0, news = S.firms.reduce((a, f) => a + f.log.filter(l => l[0] > S.last).length, 0) - logs0;
+  const g = S.cash - cash0; S.stats.offMax = Math.max(S.stats.offMax || 0, g);
+  const news = S.firms.reduce((a, f) => a + f.log.filter(l => l[0] > S.last).length, 0) - logs0;
   if (Math.abs(g) < .01 && !news) return;
   const who = S.name && !isDefaultName(S.name) ? `, ${esc(S.name)}` : '';
   modal(`<div class="welcome"><span class="ev-ico">👋</span><h3>${tl('bon_retour', who)}</h3><p>${tl('pendant_votre_absence_vous_avez', dur(away), away / H > OFFLINE_CAP_H ? tl('dont_h_comptees', OFFLINE_CAP_H) : '', g >= 0 ? tl('gagne') : tl('w_perdu'))}</p>
@@ -6383,7 +6776,7 @@ function offlineGains() {
 document.querySelector('.nav').addEventListener('click', e => {
   const b = e.target.closest('[data-tab]');
   if (!b || b.dataset.tab === tab) return;
-  tab = b.dataset.tab; bizView = 'list'; invView = null; crView = 0; render(); window.scrollTo(0, 0);
+  tab = b.dataset.tab; bizView = 'list'; invView = null; crView = 0; profView = 0; render(); window.scrollTo(0, 0);
   $('scr').classList.add('enter');
 });
 $('main').addEventListener('pointerdown', e => {
@@ -6406,6 +6799,9 @@ $('main').addEventListener('click', e => {
     return;
   }
   if (t.dataset.itab) { investTab = t.dataset.itab; return render(); }
+  if (t.id === 'achOpen') { profView = 'ach'; render(); window.scrollTo(0, 0); return; }
+  if (t.id === 'achBack') { profView = 0; render(); window.scrollTo(0, 0); return; }
+  if (t.dataset.achf) { achFam = t.dataset.achf; return render(); }
   if (t.dataset.invmode) { invMode = t.dataset.invmode; render(); window.scrollTo(0, 0); return; }
   if (t.dataset.sheet) return openSheet(t.dataset.sheet);
   if (t.dataset.info) return infoModal(t.dataset.info);
@@ -6496,7 +6892,7 @@ $('main').addEventListener('pointerleave', () => document.querySelectorAll('.cha
 $('main').addEventListener('change', e => {
   if (e.target.dataset.ins) { S.ins[e.target.dataset.ins] = e.target.checked; toast(e.target.checked ? tl('assurance_souscrite', INS[e.target.dataset.ins][0].toLowerCase()) : tl('assurance_resiliee')); return afterAction(); }
   if (e.target.dataset.auto != null) { const f = findFirm(firmU); if (f) { f.ops.auto = e.target.checked; afterAction(); } return; }
-  if (e.target.id === 'nameInput') { S.name = e.target.value.trim().slice(0, 22) || tl('vous'); afterAction(); }
+  if (e.target.id === 'nameInput') { S.name = e.target.value.trim().slice(0, 22) || tl('vous'); S.stats.x.name = 1; afterAction(); }
 });
 // Hauteurs réelles de l'en-tête et des onglets (zones de la barre d'état et de l'indicateur d'accueil comprises) :
 // le contenu commence juste sous l'en-tête, la barre de titre des sous-pages s'y colle, et la fin de page reste au-dessus des onglets.
@@ -6573,6 +6969,12 @@ function start() {
   render();
   save();
   // Après les éventuelles notifications du démarrage, pour qu'elle ne soit pas recouverte.
+  if (S.achRetro) {
+    const got = checkAch(true) || [], tok = Math.min(50, got.reduce((x, a) => x + a.tok, 0));
+    delete S.achRetro;
+    if (got.length) { giveTok(tok, tl('ach_n', got.length)); setTimeout(() => toast(tl('ach_retro', got.length, tok, TOK), 'good'), 4200); }
+    save();
+  }
   if (loadedFrom !== KEY) setTimeout(() => toast(BAK.includes(loadedFrom) ? tl('sv_rec_bak') : tl('sv_rec_old'), 'good'), 3500);
   setInterval(loop, 250);
 }
