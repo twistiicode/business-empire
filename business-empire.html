@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -364,6 +364,7 @@ details.plbox[open] summary { margin-bottom: 8px; }
 .inp input { flex: 1; min-width: 0; border: 0; background: none; color: var(--ink); font: inherit; font-weight: 700; font-size: 15px; padding: 4px 0; outline: none; }
 .inp:focus-within { border-color: var(--money); }
 .inp-row { display: flex; gap: 8px; }
+@media (max-width: 359px) { .inp-row { flex-direction: column; } }
 .prow { width: 100%; text-align: left; color: var(--ink); }
 .tenant { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 16px; background: var(--surface-2); margin-top: 10px; }
 .lbl { font-size: 12px; font-weight: 700; color: var(--muted); text-align: left; margin-bottom: -6px; }
@@ -476,6 +477,26 @@ details.plbox[open] summary { margin-bottom: 8px; }
 .prestige { border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); }
 .tuto-dots { justify-content: center; }
 .seg button:disabled { opacity: .6; font-size: 12.5px; line-height: 1.2; }
+.seg.scroll { display: flex; flex-wrap: wrap; }   /* 5 onglets : deux lignes sur petit écran, tous visibles */
+.seg.scroll button { flex: 1 0 auto; white-space: nowrap; padding: 10px 12px; }
+.seg.scroll button small { display: block; }
+.tab-intro, .list-note { margin: 0 4px; font-size: 13px; }
+.srri-b { display: inline-block; min-width: 17px; padding: 0 4px; border-radius: 5px; font-style: normal; font-weight: 800; font-size: 11px; line-height: 17px; text-align: center; color: #fff; background: var(--rk); vertical-align: 1px; }
+.srri { display: flex; gap: 3px; margin: 5px 0 4px; }
+.srri i { flex: 1; text-align: center; font-style: normal; font-weight: 800; font-size: 12px; padding: 5px 0; border-radius: 6px; background: var(--surface-2); color: var(--muted); }
+.srri i.on { background: var(--rk); color: #fff; transform: scale(1.08); }
+.stats .wide { grid-column: 1 / -1; }
+.alloc { margin-top: 14px; }
+.alloc-bar { display: flex; height: 10px; border-radius: 6px; overflow: hidden; background: var(--surface-2); }
+.alloc-leg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; margin-top: 10px; font-size: 12.5px; }
+.alloc-leg span { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; min-width: 0; }
+.alloc-leg span > i { width: 9px; height: 9px; border-radius: 3px; flex: none; }
+.alloc-leg small { width: 100%; padding-left: 14px; color: var(--muted); }
+.list.pos { margin-top: 8px; gap: 0; }
+.prow-s { display: flex; align-items: center; gap: 10px; padding: 10px 2px; border: 0; border-top: 1px solid var(--line); background: none; color: var(--ink); text-align: left; width: 100%; }
+.prow-s:first-child { border-top: 0; }
+.prow-s .arow-p small { font-size: 12px; }
+.prow-s .arow-p small b { font-size: 12px; }
 .lock-at { display: block; font-size: 10.5px; font-weight: 600; }
 /* Écran de chargement : toujours sombre, quel que soit le thème */
 .splash { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 24px max(16px, env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); background: radial-gradient(120% 80% at 50% 38%, #12331F 0%, #0A1A11 55%, #060E09 100%); color: #EAF2EC; transition: opacity .5s ease, visibility .5s; }
@@ -590,17 +611,17 @@ details.plbox[open] summary { margin-bottom: 8px; }
 
 /* Effets : particules de pièces, confettis, flash, rebond de la pièce */
 #fx { position: fixed; inset: 0; pointer-events: none; z-index: 40; overflow: hidden; }
-#fx .pt { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #FFF1BF, #F2B640 55%, #B57D24); box-shadow: 0 1px 2px rgba(0, 0, 0, .25); animation: pt .7s cubic-bezier(.2, .7, .3, 1) forwards; }
-@keyframes pt { 0% { transform: translate(0, 0) scale(.6); opacity: 1; } 55% { transform: translate(var(--dx), var(--dy)) rotate(calc(var(--r) * .6)) scale(1); opacity: 1; } 100% { transform: translate(calc(var(--dx) * 1.25), calc(var(--dy) + 70px)) rotate(var(--r)) scale(.8); opacity: 0; } }
+#fx .tapfx { position: absolute; transform: translate(-50%, -100%); font-family: var(--f-display); font-weight: 800; font-size: 17px; color: var(--money); text-shadow: 0 1px 0 var(--surface); pointer-events: none; animation: tapfx .65s ease-out forwards; }
+@keyframes tapfx { from { opacity: 0; transform: translate(-50%, -80%); } 25% { opacity: 1; } to { opacity: 0; transform: translate(-50%, -100%) translateY(-26px); } }
 #fx .cf { position: absolute; top: -16px; border-radius: 2px; animation: cf var(--t) cubic-bezier(.25, .6, .4, 1) forwards; }
 @keyframes cf { to { transform: translate(var(--dx), 108vh) rotate(var(--r)); } }
 #fx .flash { position: absolute; inset: 0; background: #FFFFFF; opacity: 0; animation: flash .4s ease-out; }
 #fx .flash.gold { background: radial-gradient(circle at 50% 40%, rgba(255, 220, 120, .85), rgba(255, 200, 80, .2) 60%, transparent); }
 @keyframes flash { 0% { opacity: .35; } 100% { opacity: 0; } }
 .flash.gold { animation-name: flashGold; }
-@keyframes flashGold { 0% { opacity: .9; } 100% { opacity: 0; } }
-.coin.bounce { animation: bounce .32s cubic-bezier(.3, 1.6, .5, 1); }
-@keyframes bounce { 0% { transform: scale(.86); } 55% { transform: scale(1.08); } 100% { transform: scale(1); } }
+@keyframes flashGold { 0% { opacity: .55; } 100% { opacity: 0; } }
+.coin.bounce { animation: bounce .22s cubic-bezier(.3, 1.4, .5, 1); }
+@keyframes bounce { 0% { transform: scale(.93); } 60% { transform: scale(1.03); } 100% { transform: scale(1); } }
 .fly { font-size: 24px; }
 .fly.big { font-size: 30px; }
 .snd-btn { flex: none; width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--surface); font-size: 16px; display: grid; place-items: center; padding: 0; }
@@ -623,7 +644,24 @@ details.more summary { cursor: pointer; color: var(--muted); font-size: 13px; fo
 .kpis div { background: var(--surface-2); border-radius: 12px; padding: 8px; text-align: center; min-width: 0; }
 .kpis small { display: block; color: var(--muted); font-size: 11.5px; }
 .kpis b { font-family: var(--f-display); font-size: 15px; }
-@media (prefers-reduced-motion: reduce) { #fx .pt, #fx .cf { animation-duration: .01s; } .coin.bounce, .coach-hi { animation: none; } }
+.nobody { border: 1.5px solid color-mix(in srgb, var(--coral) 45%, var(--line)); }
+.nobody p { margin: 0 0 10px; font-weight: 600; }
+.nobody-act { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+/* iOS zoome sur un champ dont le texte fait moins de 16 px : on l'en empêche. */
+body input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), body select, body textarea { font-size: 16px !important; }
+html { touch-action: manipulation; }
+.snd-row { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+.snd-row .sw { flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0; font-weight: 600; }
+.snd-row .sw input { width: 20px; height: 20px; accent-color: var(--money); flex: none; }
+.snd-row input[type="range"] { width: 38%; flex: none; accent-color: var(--money); }
+/* Réglage « Réduire les animations » du téléphone : pas de mouvement, juste des fondus. */
+@media (prefers-reduced-motion: reduce) {
+  #fx .cf, #fx .flash { display: none; }
+  .coin.bounce, .coach-hi, .coach { animation: none; }
+  .fly, #fx .tapfx { animation: fadeOut .6s ease-out forwards; }
+  .ring { display: none; }
+}
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 </style>
 
 <div id="splash" class="splash" role="status" aria-label="Chargement de Net Worth: Tycoon" data-i18n-aria="ui_loading">
@@ -2269,7 +2307,7 @@ const I18N = {
   humeur: ["Humeur", "Mood"],
   fatigue_2: ["Fatigue", "Fatigue"],
   h_4: ["/h", "/h"],
-  personne_pour_linstant_vous_tenez_laffai: ["Personne pour l’instant : vous tenez l’affaire vous-même, à 60 % de sa capacité.", "Nobody yet: you're running the place yourself, at 60% capacity."],
+  personne_pour_linstant_vous_tenez_laffai: ["Personne pour l’instant : vous tenez l’affaire vous-même, à 35 % de sa capacité.", "Nobody yet: you’re running the place yourself, at 35% capacity."],
   personne_pour_linstant_lentreprise_ne_pr: ["Personne pour l’instant : l’entreprise ne produit rien. Recrutez pour démarrer.", "Nobody yet: the business produces nothing. Hire someone to get started."],
   manager_2: ["👔 <b>{0}</b>, manager ·", "👔 <b>{0}</b>, manager ·"],
   h_5: ["{0}/h", "{0}/h"],
@@ -2371,7 +2409,7 @@ const I18N = {
   place: ["{0} place{1}", "{0} slot{1}"],
   du_moins_cher_au_plus_cher: ["Du moins cher au plus cher. Touchez une carte pour voir ses comptes.", "From cheapest to most expensive. Tap a card to see its accounts."],
   a_partir_de: ["À partir de<b class=\"num\">{0}</b>", "From<b class=\"num\">{0}</b>"],
-  au_debut_vous_le_tenez_vous: ["Au début, vous le tenez vous-même (60 % de sa capacité).", "At first, you run it yourself (60% capacity)."],
+  au_debut_vous_le_tenez_vous: ["Au début, vous le tenez vous-même (35 % de sa capacité).", "At first, you run it yourself (35% capacity)."],
   rien_nest_produit_tant_que_vous: ["Rien n’est produit tant que vous n’avez recruté personne.", "Nothing gets made until you've hired someone."],
   achetez_vos_vehicules_et_recrutez_un: ["Achetez vos véhicules et recrutez un conducteur pour chacun.", "Buy your vehicles and hire a driver for each one."],
   vous_fixez_vos_prix_choisissez_vos: ["Vous fixez vos prix, choisissez vos fournisseurs et gérez votre stock.", "You set your prices, choose your suppliers and manage your stock."],
@@ -2559,6 +2597,112 @@ const I18N = {
   per_24h: ["24 h", "24h"],
   per_7d: ["7 j", "7d"],
   per_30d: ["30 j", "30d"],
+  ui_audio: ["Son", "Sound"],
+  ui_music: ["Musique", "Music"],
+  ui_sfx: ["Effets sonores", "Sound effects"],
+  ui_vol_music: ["Volume de la musique", "Music volume"],
+  ui_vol_sfx: ["Volume des effets sonores", "Sound effects volume"],
+  st_enroute: ["🚶 {0} en route · {2}", "🚶 {0} on the way · {2}"],
+  st_enroute_open: ["⏳ Équipe en route : ouverture dans {0}", "⏳ Team on the way: opening in {0}"],
+  st_nobody_here: ["⛔ À l’arrêt : toute l’équipe est absente", "⛔ Shut down: the whole team is away"],
+  emp_at_work: ["👥 <b>{0}/{1}</b> au travail{2}", "👥 <b>{0}/{1}</b> at work{2}"],
+  at_work: ["Au travail", "At work"],
+  enroute_paid: ["{0} en route : payé{1} dès l’arrivée", "{0} on the way: paid from arrival"],
+  aw_start: ["🚶 En route · arrive dans {0}", "🚶 On the way · arrives in {0}"],
+  aw_sick: ["🤒 Malade · retour vers {0}", "🤒 Sick · back around {0}"],
+  aw_leave: ["🌴 En congés · retour à {0}", "🌴 On vacation · back at {0}"],
+  aw_train: ["🎓 En formation · retour à {0}", "🎓 In training · back at {0}"],
+  why_start: ["Premier jour : arrive dans {0}. Aucun salaire n’est versé avant son arrivée.", "First day: arrives in {0}. No wages are paid before arrival."],
+  why_sick: ["Arrêt maladie : une forte fatigue (et le trait « fragile ») augmente ce risque. Retour prévu vers {0}. Pas de salaire pendant l’arrêt.", "Sick leave: high fatigue (and the \"fragile\" trait) makes this more likely. Expected back around {0}. No wages during sick leave."],
+  why_leave: ["Congés payés pour se reposer : la fatigue retombe à zéro. Retour à {0}.", "Paid vacation to rest: fatigue drops back to zero. Back at {0}."],
+  why_train: ["Formation : gagne une étoile à la fin. Retour à {0}.", "Training: gains a star at the end. Back at {0}."],
+  why_tired: ["Épuisement : risque d’arrêt maladie, accordez des congés.", "Exhausted: risk of sick leave, give them some time off."],
+  team_of: ["Équipe de {0} · {1}/h par personne", "Team of {0} · {1}/h per person"],
+  nobody_none: ["Personne ne travaille ici : recrutez au moins un employé pour ouvrir.", "Nobody works here yet: hire at least one employee to open."],
+  nobody_arriving: ["⏳ Votre équipe arrive : ouverture dans {0}. Aucun salaire n’est versé avant.", "⏳ Your team is on the way: opening in {0}. No wages are paid until then."],
+  nobody_away: ["Toute l’équipe est absente ({0}). Recrutez un remplaçant ou faites revenir quelqu’un plus tôt.", "The whole team is away ({0}). Hire a replacement or bring someone back early."],
+  btn_replace: ["Recruter un remplaçant", "Hire a replacement"],
+  btn_team: ["Voir l’équipe", "See the team"],
+  pl_cogs: ["Achats des produits vendus", "Cost of goods sold"],
+  pl_waste: ["Pertes de stock (produits périmés)", "Spoiled stock"],
+  pl_veh: ["Véhicules (carburant, assurance, entretien)", "Vehicles (fuel, insurance, upkeep)"],
+  pl_shut: ["Entreprise à l’arrêt : aucun salaire, il ne reste que les charges fixes (loyer, véhicules, stock qui se périme).", "Business shut down: no wages, only fixed costs remain (rent, vehicles, stock going bad)."],
+  sec_auto: ["Automobile", "Automotive"],
+  sec_semis: ["Semi-conducteurs", "Semiconductors"],
+  sec_ecom: ["Commerce en ligne", "E-commerce"],
+  sec_aero: ["Aéronautique", "Aerospace"],
+  d_danova: ["Produits laitiers frais, eaux minérales et nutrition infantile vendus dans 120 pays. Croissance lente mais régulière.", "Fresh dairy, bottled water and baby food sold in 120 countries. Slow but steady growth."],
+  d_voltara: ["Constructeur de voitures électriques et de batteries. Croissance rapide, aucun dividende, titre extrêmement volatil.", "Maker of electric cars and batteries. Fast growth, no dividend, an extremely volatile stock."],
+  d_shopzon: ["Géant du commerce en ligne et du cloud. Ne verse pas de dividende : tous les bénéfices sont réinvestis.", "E-commerce and cloud giant. Pays no dividend: all profits are reinvested."],
+  e_wrld: ["Amplio Monde", "Amplio World"],
+  e_emrg: ["Amplio Émergents", "Amplio Emerging Markets"],
+  d_wrld: ["Environ 1 500 grandes entreprises de 23 pays développés. Le placement de base des investisseurs à long terme.", "About 1,500 large companies from 23 developed countries. The core holding of long-term investors."],
+  d_us500: ["Les 500 plus grandes entreprises américaines, dont Nvantis, Aplix, Microvia et Shopzon.", "The 500 largest US companies, including Nvantis, Aplix, Microvia and Shopzon."],
+  d_eu600: ["600 entreprises européennes : luxe, banques, énergie, santé… Des dividendes plus élevés qu’aux États-Unis.", "600 European companies: luxury, banks, energy, healthcare… Higher dividends than in the US."],
+  d_tech: ["Les 100 plus grosses valeurs technologiques. Plus de croissance, mais plus de secousses.", "The 100 largest tech stocks. More growth, but a bumpier ride."],
+  d_emrg: ["Chine, Inde, Brésil, Taïwan… Fort potentiel de croissance, mais risques politiques et monétaires.", "China, India, Brazil, Taiwan… Strong growth potential, but political and currency risks."],
+  b_oat: ["Trésor français 10 ans", "French Treasury 10-year"],
+  b_corp: ["Obligations d’entreprises", "Corporate bonds"],
+  b_hy: ["Obligations haut rendement", "High-yield bonds"],
+  d_oat: ["Un prêt à l’État pour 10 ans. Coupon fixe, risque très faible. Le prix baisse un peu quand les taux montent, et monte quand ils baissent.", "A 10-year loan to the government. Fixed coupon, very low risk. The price dips when interest rates rise and climbs when they fall."],
+  d_corp: ["Fonds d’obligations de grandes entreprises solides. Un peu plus de rendement que l’État pour un risque modéré.", "A fund of bonds from large, solid companies. A little more yield than government bonds for moderate risk."],
+  d_hy: ["Obligations d’entreprises fragiles : gros coupon, mais quelques faillites chaque année et une baisse plus forte en cas de krach.", "Bonds from fragile companies: big coupons, but a few defaults every year and a steeper fall in a crash."],
+  s_liva: ["Livret d’épargne", "Savings account"],
+  d_liva: ["Argent disponible à tout moment et garanti, sans frais ni impôt. Intérêts de 3 %/an versés chaque heure (1 mois de jeu).", "Money available at any time and guaranteed, with no fees or tax. 3%/yr interest paid every hour (1 game month)."],
+  inv_etf: ["ETF", "ETFs"],
+  inv_bonds: ["Obligations & épargne", "Bonds & savings"],
+  in_stocks: ["Actions d’une seule entreprise : plus de potentiel, mais plus de risque.", "Shares of a single company: more upside, but more risk."],
+  in_etf: ["Un ETF achète des centaines d’actions d’un coup : diversifié, moins volatil, frais annuels faibles.", "An ETF buys hundreds of stocks at once: diversified, less volatile, low annual fees."],
+  in_bond: ["Placements peu risqués : rendement faible mais régulier, versé chaque heure (1 mois de jeu).", "Low-risk investments: small but steady income, paid every hour (1 game month)."],
+  in_crypto: ["Très risqué : les cours peuvent doubler ou s’effondrer en quelques minutes.", "Very risky: prices can double or collapse within minutes."],
+  per_1d: ["1 J", "1D"],
+  per_1w: ["1 S", "1W"],
+  per_1m: ["1 M", "1M"],
+  per_1y: ["1 A", "1Y"],
+  chg_day: ["Variation sur 1 jour de bourse (2 min)", "Change over 1 trading day (2 min)"],
+  k_risk: ["Risque", "Risk"],
+  risk_scale: ["Échelle européenne (SRRI) : 1 = très faible, 7 = très élevé", "European SRRI scale: 1 = very low, 7 = very high"],
+  k_coupon: ["Coupon", "Coupon"],
+  k_rate: ["Taux", "Rate"],
+  k_none: ["Aucun", "None"],
+  k_fees: ["Frais", "Fees"],
+  k_type: ["Type", "Type"],
+  k_cap: ["Encours", "Assets"],
+  k_bonds_s: ["Obligations", "Bonds"],
+  fee_brk: ["Courtage {0} %", "Commission {0}%"],
+  fee_ter: ["Frais courants {0} %/an", "Ongoing charges {0}%/yr"],
+  fee_none: ["Aucun frais", "No fees"],
+  cls_stock: ["Action", "Stock"],
+  cls_etf: ["ETF", "ETF"],
+  cls_bond: ["Obligation", "Bond"],
+  cls_cash: ["Épargne", "Savings"],
+  cls_crypto: ["Crypto", "Crypto"],
+  cat_mk: ["Bourse et épargne", "Markets & savings"],
+  paid_month: ["Versé chaque heure (1 mois)", "Paid every hour (1 month)"],
+  per_unit: ["<b class=\"num\">{0}/part</b>", "<b class=\"num\">{0}/unit</b>"],
+  per_k: ["{0} pour {1}", "{0} per {1}"],
+  yr_pct: ["{0} %/an", "{0}%/yr"],
+  ter_s: ["ETF · frais {0} %/an", "ETF · fees {0}%/yr"],
+  yld_s: ["rendement {0} %/an", "yield {0}%/yr"],
+  my_pos: ["Mes positions", "My positions"],
+  pos_line: ["{0} · PRU {1}", "{0} · avg cost {1}"],
+  interest_rec: ["Intérêts perçus", "Interest received"],
+  k_fund: ["Le fonds", "The fund"],
+  k_product: ["Le placement", "The investment"],
+  ce_placement: ["ce placement", "this investment"],
+  deposit: ["Verser", "Deposit"],
+  withdraw: ["Retirer", "Withdraw"],
+  sv_in: ["Versement", "Deposit"],
+  sv_out: ["Retrait", "Withdrawal"],
+  sv_note: ["Sans frais ni risque · intérêts {0} %/an", "No fees, no risk · {0}%/yr interest"],
+  sv_sub: ["garanti, sans frais ni impôt", "guaranteed, no fees or tax"],
+  sv_head: ["Verser ou retirer", "Deposit or withdraw"],
+  sv_note2: ["Aucun impôt sur les retraits", "No tax on withdrawals"],
+  sv_toast_in: ["{0} versés sur le livret", "{0} deposited into savings"],
+  sv_toast_out: ["{0} retirés du livret", "{0} withdrawn from savings"],
+  eff_krach: ["actions −12 % durablement et −15 % de plus, ETF un peu moins, cryptos aussi ; obligations d’État en hausse", "stocks −12% for the long haul plus another −15%, ETFs a bit less, crypto too; government bonds up"],
+  eff_rateup: ["actions −5 %, obligations −2 à −3 %, crédits +0,5 point", "stocks −5%, bonds −2 to −3%, loans +0.5 point"],
+  eff_ratedown: ["immobilier +3 %, obligations +2 à +3 %, crédits −0,4 point", "real estate +3%, bonds +2 to +3%, loans −0.4 point"],
 };
 const LANGS = ['en', 'fr'];
 const FLAGS = { en: '<svg class="flag" viewBox="0 0 19 10" aria-hidden="true"><rect width="19" height="10" fill="#B22234"/><path d="M0 1.15h19M0 2.7h19M0 4.23h19M0 5.77h19M0 7.3h19M0 8.85h19" stroke="#FFF" stroke-width=".77"/><rect width="7.6" height="5.4" fill="#3C3B6E"/></svg>', fr: '<svg class="flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="1" height="2" fill="#0055A4"/><rect x="1" width="1" height="2" fill="#FFF"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg>' };
@@ -2594,6 +2738,9 @@ function applyStatic() {
   document.documentElement.lang = LANG;
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = tl(el.dataset.i18n); });
   document.querySelectorAll('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', tl(el.dataset.i18nAria)));
+  // Icône de l'onglet Gains : symbole de la monnaie de la langue ($ ou €).
+  const gi = document.querySelector('.nav [data-tab="gains"] path');
+  if (gi) gi.setAttribute('d', LANG === 'en' ? 'M14.6 9.4c-.4-.9-1.4-1.5-2.6-1.5-1.5 0-2.6.8-2.6 2s1.1 1.6 2.6 2 2.6.8 2.6 2-1.1 2-2.6 2c-1.2 0-2.2-.6-2.6-1.5M12 6.6v10.8' : 'M14.8 9.2a3.3 3.3 0 1 0 0 5.6M8 11h5M8 13.5h5');
 }
 
 /* ================= Données du jeu ================= */
@@ -2645,43 +2792,74 @@ const SITES = [0, 1, 1, 1, 2, 2, 2, 3, 3, 6, 12];
 /* ================= Investir : données ================= */
 const H = 36e5;   // une heure en millisecondes
 // Calendrier financier : 1 h de jeu = 1 mois pour les dividendes, loyers et crédits (taux annuels ÷ 12 par heure).
-// Actions : y = rendement annuel du dividende ; s = écart de court terme ; hv = volatilité horaire de la tendance ; dr = dérive horaire.
+// Titres cotés (tous détenus dans S.stocks). Paramètres annuels, comme chez un vrai courtier :
+// y = dividende ou coupon ; vol = volatilité ; g = croissance médiane du cours ; rho = lien avec le marché global ;
+// beta = sensibilité aux krachs ; brk = courtage ; ter = frais courants des fonds ; z = zone (us/eu) ; tk = valeur tech.
 const STOCKS = [
-  { id: 'DLRM', n: tl('boulangeries_delorme'), sec: tl('alimentation'), ico: '🥐', p: 12, y: .045, s: .012, hv: 0.003, dr: 0.0004, desc: tl('reseau_de_1_400_boulangeries_franchisees') },
-  { id: 'FRMR', n: tl('fromageries_mercier'), sec: tl('alimentation'), ico: '🧀', p: 34, y: .038, s: .012, hv: 0.003, dr: 0.0004, desc: tl('leader_europeen_des_fromages_aop_present') },
-  { id: 'SOLR', n: tl('solaria_energie'), sec: tl('energie'), ico: '☀️', p: 88, y: .03, s: .022, hv: 0.0063, dr: 0.0007, desc: tl('developpe_et_exploite_des_parcs_solaires') },
-  { id: 'PTRA', n: tl('petrolia'), sec: tl('energie'), ico: '🛢️', p: 62, y: .058, s: .018, hv: 0.005, dr: 0.0003, desc: tl('major_petroliere_integree_extraction_raf') },
-  { id: 'LUMN', n: tl('lumen_tech'), sec: tl('tech'), ico: '💡', p: 320, y: .02, s: .028, hv: 0.0075, dr: 0.0009, desc: tl('fabricant_de_smartphones_et_dobjets_conn') },
-  { id: 'NMBS', n: tl('nimbus_cloud'), sec: tl('tech'), ico: '☁️', p: 145, y: .02, s: .03, hv: 0.008, dr: 0.001, desc: tl('hebergement_cloud_et_intelligence_artifi') },
-  { id: 'QBIT', n: tl('qubit_semiconducteurs'), sec: tl('tech'), ico: '🔬', p: 520, y: .02, s: .032, hv: 0.0088, dr: 0.0009, desc: tl('concoit_des_puces_pour_lia_et') },
-  { id: 'ATLX', n: tl('atlas_luxe'), sec: tl('luxe'), ico: '👜', p: 2800, y: .025, s: .016, hv: 0.0045, dr: 0.0007, desc: tl('maroquinerie_et_haute_couture_marges_tre') },
-  { id: 'MSVG', n: tl('maison_sauvageot'), sec: tl('luxe'), ico: '🥂', p: 760, y: .028, s: .016, hv: 0.0045, dr: 0.0006, desc: tl('champagnes_et_spiritueux_de_prestige_sen') },
-  { id: 'BORS', n: tl('banque_orsay'), sec: tl('banque'), ico: '🏦', p: 58, y: .055, s: .018, hv: 0.0055, dr: 0.0004, desc: tl('banque_de_detail_et_dinvestissement_prof') },
-  { id: 'LFND', n: tl('assurances_lafond'), sec: tl('assurance'), ico: '🛡️', p: 41, y: .05, s: .013, hv: 0.0035, dr: 0.0004, desc: tl('assureur_habitation_auto_et_sante_valeur') },
-  { id: 'VCTS', n: tl('vectis_pharma'), sec: tl('sante'), ico: '💊', p: 610, y: .035, s: .014, hv: 0.004, dr: 0.0005, desc: tl('laboratoire_pharmaceutique_vaccins_oncol') },
-  { id: 'MDXA', n: tl('medixa_biotech'), sec: tl('sante'), ico: '🧬', p: 95, y: .02, s: .035, hv: 0.01, dr: 0.0008, desc: tl('biotech_en_phase_clinique_un_essai') },
-  { id: 'RLEX', n: tl('rail_express'), sec: tl('transport'), ico: '🚆', p: 46, y: .04, s: .014, hv: 0.004, dr: 0.0004, desc: tl('operateur_ferroviaire_prive_trains_a_gra') },
-  { id: 'ORBE', n: tl('orbe_aeronautique'), sec: tl('transport'), ico: '✈️', p: 1250, y: .028, s: .02, hv: 0.0055, dr: 0.0006, desc: tl('constructeur_davions_de_ligne_et_dhelico') },
-  { id: 'NRDS', n: tl('nordis_telecom'), sec: tl('telecom'), ico: '📡', p: 140, y: .055, s: .012, hv: 0.0032, dr: 0.0003, desc: tl('operateur_mobile_et_fibre_revenus_recurr') },
-  { id: 'BTRC', n: tl('batir_cie'), sec: tl('construction'), ico: '🏗️', p: 72, y: .042, s: .016, hv: 0.0045, dr: 0.0005, desc: tl('travaux_publics_autoroutes_et_batiments') },
-  { id: 'PXFG', n: tl('pixel_forge'), sec: tl('jeux_video'), ico: '🎮', p: 210, y: .02, s: .03, hv: 0.008, dr: 0.0008, desc: tl('editeur_de_jeux_video_a_succes') },
+  { id: 'DLRM', n: tl('boulangeries_delorme'), sec: tl('alimentation'), ico: '🥐', p: 12, y: .045, vol: .22, g: .05, beta: .7, z: 'eu', desc: tl('reseau_de_1_400_boulangeries_franchisees') },
+  { id: 'FRMR', n: 'Danova', sec: tl('alimentation'), ico: '🥛', p: 34, y: .035, vol: .17, g: .05, beta: .6, z: 'eu', desc: tl('d_danova') },
+  { id: 'SOLR', n: tl('solaria_energie'), sec: tl('energie'), ico: '☀️', p: 88, y: .02, vol: .4, g: .08, beta: 1.2, z: 'eu', desc: tl('developpe_et_exploite_des_parcs_solaires') },
+  { id: 'PTRA', n: 'Totalis Energy', sec: tl('energie'), ico: '🛢️', p: 62, y: .055, vol: .25, g: .04, beta: .9, z: 'eu', desc: tl('major_petroliere_integree_extraction_raf') },
+  { id: 'VOLT', n: 'Voltara Motors', sec: tl('sec_auto'), ico: '🚗', p: 240, y: 0, vol: .6, g: .08, beta: 1.6, z: 'us', tk: 1, desc: tl('d_voltara') },
+  { id: 'LUMN', n: 'Aplix', sec: tl('tech'), ico: '📱', p: 320, y: .005, vol: .28, g: .1, beta: 1.15, z: 'us', tk: 1, desc: tl('fabricant_de_smartphones_et_dobjets_conn') },
+  { id: 'NMBS', n: 'Microvia', sec: tl('tech'), ico: '☁️', p: 145, y: .008, vol: .27, g: .1, beta: 1.1, z: 'us', tk: 1, desc: tl('hebergement_cloud_et_intelligence_artifi') },
+  { id: 'QBIT', n: 'Nvantis', sec: tl('sec_semis'), ico: '🔬', p: 520, y: .002, vol: .5, g: .13, beta: 1.6, z: 'us', tk: 1, desc: tl('concoit_des_puces_pour_lia_et') },
+  { id: 'SHPZ', n: 'Shopzon', sec: tl('sec_ecom'), ico: '📦', p: 180, y: 0, vol: .33, g: .1, beta: 1.25, z: 'us', tk: 1, desc: tl('d_shopzon') },
+  { id: 'PXFG', n: 'Ubiforge', sec: tl('jeux_video'), ico: '🎮', p: 210, y: 0, vol: .45, g: .04, beta: 1.3, z: 'eu', tk: 1, desc: tl('editeur_de_jeux_video_a_succes') },
+  { id: 'ATLX', n: 'Luxéa Group', sec: tl('luxe'), ico: '👜', p: 2800, y: .02, vol: .28, g: .08, beta: 1.1, z: 'eu', desc: tl('maroquinerie_et_haute_couture_marges_tre') },
+  { id: 'MSVG', n: tl('maison_sauvageot'), sec: tl('luxe'), ico: '🥂', p: 760, y: .028, vol: .25, g: .06, beta: 1, z: 'eu', desc: tl('champagnes_et_spiritueux_de_prestige_sen') },
+  { id: 'BORS', n: tl('banque_orsay'), sec: tl('banque'), ico: '🏦', p: 58, y: .06, vol: .3, g: .03, beta: 1.3, z: 'eu', desc: tl('banque_de_detail_et_dinvestissement_prof') },
+  { id: 'LFND', n: 'Axium Assurances', sec: tl('assurance'), ico: '🛡️', p: 41, y: .055, vol: .2, g: .04, beta: .8, z: 'eu', desc: tl('assureur_habitation_auto_et_sante_valeur') },
+  { id: 'VCTS', n: 'Sanova Pharma', sec: tl('sante'), ico: '💊', p: 610, y: .038, vol: .19, g: .04, beta: .6, z: 'eu', desc: tl('laboratoire_pharmaceutique_vaccins_oncol') },
+  { id: 'MDXA', n: tl('medixa_biotech'), sec: tl('sante'), ico: '🧬', p: 95, y: 0, vol: .65, g: .04, beta: 1.3, z: 'us', desc: tl('biotech_en_phase_clinique_un_essai') },
+  { id: 'RLEX', n: tl('rail_express'), sec: tl('transport'), ico: '🚆', p: 46, y: .04, vol: .24, g: .03, beta: .9, z: 'eu', desc: tl('operateur_ferroviaire_prive_trains_a_gra') },
+  { id: 'ORBE', n: 'Aerovia', sec: tl('sec_aero'), ico: '✈️', p: 1250, y: .015, vol: .3, g: .08, beta: 1.2, z: 'eu', desc: tl('constructeur_davions_de_ligne_et_dhelico') },
+  { id: 'NRDS', n: tl('nordis_telecom'), sec: tl('telecom'), ico: '📡', p: 140, y: .06, vol: .18, g: .01, beta: .6, z: 'eu', desc: tl('operateur_mobile_et_fibre_revenus_recurr') },
+  { id: 'BTRC', n: 'Vincis Construction', sec: tl('construction'), ico: '🏗️', p: 72, y: .045, vol: .23, g: .05, beta: 1, z: 'eu', desc: tl('travaux_publics_autoroutes_et_batiments') },
 ];
+// ETF : des centaines d'actions d'un coup. Très liés au marché (rho), peu de bruit propre, frais courants faibles (ter).
+const ETFS = [
+  { id: 'WRLD', n: tl('e_wrld'), ico: '🌍', p: 100, y: .017, vol: .145, g: .065, rho: .97, beta: .85, ter: .002, has: d => 1, w: .04, desc: tl('d_wrld') },
+  { id: 'US500', n: 'Amplio US 500', ico: '🗽', p: 120, y: .013, vol: .16, g: .075, rho: .95, beta: .9, ter: .0007, has: d => d.z === 'us', w: .06, desc: tl('d_us500') },
+  { id: 'EU600', n: 'Amplio Europe 600', ico: '🏛️', p: 60, y: .03, vol: .148, g: .055, rho: .9, beta: .85, ter: .0015, has: d => d.z === 'eu', w: .06, desc: tl('d_eu600') },
+  { id: 'TECH', n: 'Amplio Tech 100', ico: '💻', p: 200, y: .006, vol: .23, g: .1, rho: .85, beta: 1.1, ter: .002, has: d => d.tk, w: .12, desc: tl('d_tech') },
+  { id: 'EMRG', n: tl('e_emrg'), ico: '🌏', p: 30, y: .025, vol: .19, g: .06, rho: .75, beta: .95, ter: .0018, has: d => 0, w: 0, desc: tl('d_emrg') },
+];
+// Obligations : coupon fixe, prix qui revient vers le pair (pull) ; le livret ne bouge jamais (fix).
+const BONDS = [
+  { id: 'OAT10', n: tl('b_oat'), ico: '📜', p: 100, y: .031, vol: .06, g: 0, rho: -.2, beta: -.15, rs: .03, pull: .05, desc: tl('d_oat') },
+  { id: 'CORP', n: tl('b_corp'), ico: '🏢', p: 100, y: .038, vol: .045, g: 0, rho: .3, beta: .2, rs: .025, pull: .05, ter: .0012, desc: tl('d_corp') },
+  { id: 'HYLD', n: tl('b_hy'), ico: '⚡', p: 100, y: .062, vol: .09, g: -.01, rho: .55, beta: .5, rs: .02, pull: .04, ter: .004, desc: tl('d_hy') },
+  { id: 'LIVA', n: tl('s_liva'), ico: '🐷', p: 1, y: .03, vol: 0, g: 0, rho: 0, beta: 0, fix: 1, brk: 0, risk7: 1, desc: tl('d_liva') },
+];
+STOCKS.forEach(d => { d.cls = 'stock'; d.rho = d.tk ? .6 : .55; });
+ETFS.forEach(d => { d.cls = 'etf'; d.sec = 'ETF'; d.brk = .002; });
+BONDS.forEach(d => { d.cls = d.fix ? 'cash' : 'bond'; d.sec = d.fix ? tl('cls_cash') : tl('cls_bond'); if (d.brk == null) d.brk = .002; });
+const SECS = [...STOCKS, ...ETFS, ...BONDS];
 // Cryptos : sup = offre en circulation ; risk 0 établie, 1 spéculative, 2 très douteuse (risque de rug pull).
 const CRYPTO = [
-  { id: 'BNV', n: 'BitNova', ico: '🪙', p: 38000, sup: 19.6e6, risk: 0, s: .04, hv: 0.015, dr: 0.00075, desc: tl('la_premiere_et_la_plus_grosse') },
-  { id: 'ETR', n: tl('ethera'), ico: '💠', p: 2200, sup: 120e6, risk: 0, s: .05, hv: 0.018, dr: 0.00075, desc: tl('blockchain_programmable_qui_fait_tourner') },
-  { id: 'SLC', n: tl('solace'), ico: '🌊', p: 95, sup: 450e6, risk: 0, s: .065, hv: 0.0225, dr: 0.00075, desc: tl('blockchain_ultra_rapide_prisee_des_jeux') },
-  { id: 'GRN', n: 'GreenChain', ico: '🌱', p: 3.4, sup: 800e6, risk: 1, s: .07, hv: 0.024, dr: 0.0005, desc: tl('promet_une_blockchain_neutre_en_carbone') },
-  { id: 'LMN', n: tl('lumina'), ico: '✨', p: 1.2, sup: 35e9, risk: 1, s: .07, hv: 0.024, dr: 0.0005, desc: tl('reseau_de_paiements_internationaux_soute') },
-  { id: 'PXL', n: tl('pixelcoin'), ico: '👾', p: .45, sup: 2e9, risk: 1, s: .08, hv: 0.027, dr: 0.0005, desc: tl('monnaie_des_jeux_video_play_to') },
-  { id: 'DGS', n: 'DogeStar', ico: '🐶', p: .08, sup: 140e9, risk: 1, s: .09, hv: 0.03, dr: 0.0004, desc: tl('cryptomonnaie_meme_nee_dune_blague_porte') },
-  { id: 'YLD', n: tl('yieldfarm_pro'), ico: '🌾', p: 7.8, sup: 50e6, risk: 2, s: .1, hv: 0.033, dr: 0.00025, desc: tl('promet_400_de_rendement_par_an') },
-  { id: 'MOON', n: 'MoonRocket', ico: '🚀', p: .0042, sup: 900e9, risk: 2, s: .12, hv: 0.039, dr: 0.00025, desc: tl('jeton_meme_lance_il_y_a') },
-  { id: 'SAFU', n: 'SafuMax', ico: '🔒', p: .012, sup: 500e9, risk: 2, s: .12, hv: 0.039, dr: 0.00025, desc: tl('t_100_sur_selon_ses_createurs_anonymes') },
+  { id: 'BNV', n: 'BitNova', ico: '🪙', p: 38000, sup: 19.6e6, risk: 0, vol: .65, g: .2, desc: tl('la_premiere_et_la_plus_grosse') },
+  { id: 'ETR', n: tl('ethera'), ico: '💠', p: 2200, sup: 120e6, risk: 0, vol: .75, g: .15, desc: tl('blockchain_programmable_qui_fait_tourner') },
+  { id: 'SLC', n: tl('solace'), ico: '🌊', p: 95, sup: 450e6, risk: 0, vol: .9, g: .12, desc: tl('blockchain_ultra_rapide_prisee_des_jeux') },
+  { id: 'GRN', n: 'GreenChain', ico: '🌱', p: 3.4, sup: 800e6, risk: 1, vol: 1, g: 0, desc: tl('promet_une_blockchain_neutre_en_carbone') },
+  { id: 'LMN', n: tl('lumina'), ico: '✨', p: 1.2, sup: 35e9, risk: 1, vol: .95, g: .02, desc: tl('reseau_de_paiements_internationaux_soute') },
+  { id: 'PXL', n: tl('pixelcoin'), ico: '👾', p: .45, sup: 2e9, risk: 1, vol: 1.1, g: -.05, desc: tl('monnaie_des_jeux_video_play_to') },
+  { id: 'DGS', n: 'DogeStar', ico: '🐶', p: .08, sup: 140e9, risk: 1, vol: 1.2, g: -.05, desc: tl('cryptomonnaie_meme_nee_dune_blague_porte') },
+  { id: 'YLD', n: tl('yieldfarm_pro'), ico: '🌾', p: 7.8, sup: 50e6, risk: 2, vol: 1.3, g: -.2, desc: tl('promet_400_de_rendement_par_an') },
+  { id: 'MOON', n: 'MoonRocket', ico: '🚀', p: .0042, sup: 900e9, risk: 2, vol: 1.4, g: -.25, desc: tl('jeton_meme_lance_il_y_a') },
+  { id: 'SAFU', n: 'SafuMax', ico: '🔒', p: .012, sup: 500e9, risk: 2, vol: 1.4, g: -.25, desc: tl('t_100_sur_selon_ses_createurs_anonymes') },
 ];
-// Capitalisation boursière (Md€) : plus elle est grosse, moins vos ordres font bouger le cours.
-const CAPS = { DLRM: 5, FRMR: 8, SOLR: 12, PTRA: 120, LUMN: 300, NMBS: 90, QBIT: 140, ATLX: 350, MSVG: 40, BORS: 60, LFND: 30, VCTS: 150, MDXA: 3, RLEX: 15, ORBE: 110, NRDS: 45, BTRC: 20, PXFG: 10 };
-STOCKS.forEach(d => d.cap = CAPS[d.id]);
+CRYPTO.forEach(d => { d.cls = 'crypto'; d.rho = .3; d.beta = 1.3; });
+// Capitalisation boursière ou encours (Md€) : plus elle est grosse, moins vos ordres font bouger le cours.
+const CAPS = { DLRM: 5, FRMR: 40, SOLR: 12, PTRA: 140, VOLT: 700, LUMN: 3000, NMBS: 2800, QBIT: 3000, SHPZ: 1800, PXFG: 3, ATLX: 350, MSVG: 40, BORS: 60, LFND: 30, VCTS: 120, MDXA: 3, RLEX: 15, ORBE: 130, NRDS: 45, BTRC: 60,
+  WRLD: 900, US500: 1200, EU600: 300, TECH: 400, EMRG: 200, OAT10: 2000, CORP: 500, HYLD: 150 };
+SECS.forEach(d => d.cap = CAPS[d.id] || Infinity);
+// Échelle de risque européenne (SRRI) d'après la volatilité annuelle : 1 très faible … 7 très élevé.
+const srriOf = d => d.risk7 || (v => v < .005 ? 1 : v < .02 ? 2 : v < .05 ? 3 : v < .1 ? 4 : v < .15 ? 5 : v < .25 ? 6 : 7)(d.vol);
+const srriCol = r => `hsl(${140 - (r - 1) * 23} 62% 42%)`;
+const srriBadge = d => { const r = srriOf(d); return `<i class="srri-b" style="--rk:${srriCol(r)}" title="${tl('k_risk')} ${r}/7">${r}</i>`; };
+const srriScale = d => { const r = srriOf(d); return `<div class="srri">${[1, 2, 3, 4, 5, 6, 7].map(i => `<i${i === r ? ` class="on" style="--rk:${srriCol(r)}"` : ''}>${i}</i>`).join('')}</div>`; };
+const clsOf = id => CBY[id] ? 'crypto' : SBY[id] ? SBY[id].cls : 'realty';
 const RISK = [[tl('etablie'), 'good'], [tl('speculative'), 'warn'], [tl('tres_douteuse'), 'bad']];
 // Immobilier : prix au m² de référence (ville moyenne), surface, rendement locatif brut annuel, résidentiel ou commercial.
 const CITY_STD = ['Paris', 'Lyon', 'Bordeaux', 'Nantes', 'Rennes', 'Toulouse', 'Montpellier', 'Strasbourg', 'Lille', 'Marseille', 'Saint-Étienne'];
@@ -2698,45 +2876,51 @@ const REALTY = [
   { id: 'hotel', n: tl('hotel'), ico: '🏨', ppm: 6500, surf: [2500, 6000], gy: .09, cat: 'com', cities: ['Paris', 'Nice', 'Lyon', 'Courchevel', 'Bordeaux', 'Cannes'], desc: tl('hotel_de_60_a_150_chambres') },
   { id: 'mall', n: tl('centre_commercial'), ico: '🛍️', ppm: 5000, surf: [20000, 40000], gy: .085, cat: 'com', cities: ['Lyon', 'Marseille', 'Lille', 'Toulouse', 'Nantes', 'Bordeaux'], desc: tl('galerie_de_80_boutiques_autour_dun') },
 ];
-const SBY = Object.fromEntries(STOCKS.map(d => [d.id, d])), CBY = Object.fromEntries(CRYPTO.map(d => [d.id, d])), RBY = Object.fromEntries(REALTY.map(d => [d.id, d]));
+const SBY = Object.fromEntries(SECS.map(d => [d.id, d])), CBY = Object.fromEntries(CRYPTO.map(d => [d.id, d])), RBY = Object.fromEntries(REALTY.map(d => [d.id, d]));
 const FEE_S = .005, FEE_C = .003, NOTARY = .07, AGENCY = .05;
 
 /* ================= Marchés : moteur ================= */
 // Le prix = tendance de fond (marche aléatoire lente avec dérive) × écart de court terme qui revient vers 0.
 // k : force du rappel par cotation (20 min pour les actions, 10 min pour les cryptos, 1 h pour l'immobilier).
 // ih : inflation horaire ; actions et immobilier la suivent, plus une petite prime.
+// Tendance : croissance médiane g et volatilité vol annuelles ramenées à l'heure (1 h = 1 mois) ;
+// rho : part du mouvement qui vient du marché global (les ETF y sont très liés, leur bruit propre est faible) ; rc : lien entre cryptos.
 function PAR(id, rugged, ih = Math.log(1.02) / 24) {
   const d = SBY[id] || CBY[id];
   if (d) {
-    if (rugged) return { k: 1 / 300, s: .15, hv: .1, dr: -.003, p0: d.p };
-    return { k: CBY[id] ? 1 / 300 : 1 / 600, s: d.s, hv: d.hv, dr: d.dr + (CBY[id] ? 0 : ih), p0: d.p };
+    if (rugged) return { k: 1 / 300, s: .15, hv: .1, dr: -.003, p0: d.p, rho: 0, rc: 0 };
+    const C = !!CBY[id];
+    return { k: C ? 1 / 300 : 1 / 600, s: d.vol * (C ? .03 : .02), hv: d.vol / Math.sqrt(12), dr: (d.g - (d.ter || 0)) / 12 + (d.cls === 'stock' || d.cls === 'etf' ? ih : 0), p0: d.p, rho: d.rho, rc: C ? .7 : 0, fix: d.fix, pull: d.pull || 0 };
   }
   const r = RBY[id];
-  return { k: 1 / 1800, s: .002, hv: .0015, dr: ih + (r.dr ? .0003 : .0001), p0: r.ppm };
+  return { k: 1 / 1800, s: .002, hv: .0015, dr: ih + (r.dr ? .0003 : .0001), p0: r.ppm, rho: 0, rc: 0 };
 }
-// imp : impact des gros ordres du joueur, qui s'efface en quelques minutes ; afx : effets des actualités.
-function step(m, P, n, sh = 0, t = 0, id = '') {
-  const nh = n * TICK_MS / H, a = Math.pow(1 - P.k, n);
-  m.a *= Math.exp(P.dr * nh + P.hv * Math.sqrt(nh) * gauss() + sh * .65);
+// imp : impact des gros ordres du joueur, qui s'efface en quelques minutes ; afx : effets des actualités ; z : chocs communs [marché, crypto].
+function step(m, P, n, sh = 0, t = 0, id = '', z = null) {
+  if (P.fix) { m.a = m.p = P.p0; m.x = m.imp = 0; return; }
+  const nh = n * TICK_MS / H, a = Math.pow(1 - P.k, n), ri = Math.sqrt(Math.max(0, 1 - P.rho * P.rho - P.rc * P.rc));
+  const zz = (z ? P.rho * z[0] + P.rc * z[1] : P.rho * gauss() + P.rc * gauss()) + ri * gauss();
+  m.a *= Math.exp(P.dr * nh + P.hv * Math.sqrt(nh) * zz + sh * .65);
+  if (P.pull) m.a *= Math.exp(-Math.min(1, P.pull * nh) * Math.log(m.a / P.p0));   // une obligation revient vers son prix d'émission
   if (m.a < P.p0 * .2 && P.dr > 0) m.a *= Math.exp(.02 * nh);   // un plancher : les bonnes valeurs finissent par rebondir
   m.x = m.x * a + P.s * Math.sqrt(1 - a * a) * gauss() + sh * .35;
   m.imp = (m.imp || 0) * Math.exp(-n * TICK_MS / 18e4);
   m.p = Math.max(1e-7, m.a * Math.exp(m.x + m.imp) * (t ? afx(id, t) : 1));
 }
-// Historique à plusieurs résolutions : 1 point/min sur 1 h, /15 min sur 24 h, /2 h sur 7 j, /8 h sur 30 j, /jour au-delà.
-const HT = [['h', 60e3, 62], ['d', 15 * 60e3, 98], ['w', 2 * H, 86], ['m', 8 * H, 92], ['a', 24 * H, 400]];
-const emptyHist = () => ({ h: [], d: [], w: [], m: [], a: [] });
+// Historique à plusieurs résolutions : 1 point/4 s sur ~3 min (1 jour de bourse), /30 s sur 1 h, /15 min sur 24 h, /2 h sur 7 j, /8 h sur 30 j, /jour au-delà.
+const HT = [['s', 4e3, 42], ['h', 30e3, 125], ['d', 15 * 60e3, 98], ['w', 2 * H, 86], ['m', 8 * H, 92], ['a', 24 * H, 400]];
+const emptyHist = () => Object.fromEntries(HT.map(([k]) => [k, []]));
 function rec(hs, t, v) {
   const ts = Math.round(t / 1000), val = +(+v).toPrecision(6);
   for (const [k, iv, mx] of HT) {
-    const arr = hs[k];
+    const arr = hs[k] || (hs[k] = []);   // anciennes sauvegardes : résolutions ajoutées depuis
     if (!arr.length || ts - arr[arr.length - 1][0] >= iv / 1000) { arr.push([ts, val]); if (arr.length > mx) arr.shift(); }
   }
 }
-// Nouveau marché : 30 jours d'historique simulé, de plus en plus fin vers aujourd'hui, qui aboutit au prix de départ.
+// Nouveau marché : 5 jours d'historique simulé (10 ans de bourse), de plus en plus fin vers aujourd'hui, qui aboutit au prix de départ.
 function seedAsset(id, now) {
   const P = PAR(id), m = { p: P.p0, a: P.p0, x: 0, H: emptyHist() };
-  const segs = [[30 * 24 * H, H], [24 * H, 5 * 60e3], [H, 60e3]];
+  const segs = [[5 * 24 * H, H], [24 * H, 5 * 60e3], [H, 30e3], [4 * 60e3, 4e3]];
   let t = now - segs[0][0];
   for (let i = 0; i < segs.length; i++) {
     const end = i + 1 < segs.length ? now - segs[i + 1][0] : now, st = segs[i][1];
@@ -2749,7 +2933,7 @@ function seedAsset(id, now) {
 }
 function freshMarket() {
   const now = Date.now(), mk = {};
-  for (const d of [...STOCKS, ...CRYPTO, ...REALTY]) mk[d.id] = seedAsset(d.id, now);
+  for (const d of [...SECS, ...CRYPTO, ...REALTY]) mk[d.id] = seedAsset(d.id, now);
   return mk;
 }
 const VEHICLES = [
@@ -2816,7 +3000,7 @@ const KEY = 'business-empire.v1';
 function defaultState() {
   return {
     v: 1, lang: LANG, name: tl('vous'), cash: 0, earned: 0, clicks: 0, clickLvl: 1, boostUntil: 0,
-    stocks: {}, crypto: {}, basis: {}, realized: 0, trades: [], orders: [], rug: {}, tok: 0, tokDay: null, tokAdNext: 0, tokLog: [], quests: null, stats: { hires: 0, ups: 0, trades: 0, vids: 0, ads: 0 }, stars: 0, prestiges: 0, unl: {}, tuto: 0, coach: 0, start: 0, mute: false, daily: { d: '', s: 0 }, ach: {}, cr: null, pending: [], losses: [], ins: {}, opps: [], info: [], rumors: [], unread: 0, nextInfo: Date.now() + 3 * 60e3, infl: .02, pi: 1, taxPaid: 0, rt: {}, divPend: 0, divNext: 0, divTot: 0, divRec: {}, props: [], listings: {}, firms: [], uid: 0, owned: {}, fx: [], adNext: 0, nextEvent: Date.now() + 15 * 60000,
+    stocks: {}, crypto: {}, basis: {}, realized: 0, trades: [], orders: [], rug: {}, tok: 0, tokDay: null, tokAdNext: 0, tokLog: [], quests: null, stats: { hires: 0, ups: 0, trades: 0, vids: 0, ads: 0 }, stars: 0, prestiges: 0, unl: {}, wageV: 2, tuto: 0, coach: 0, start: 0, mute: false, daily: { d: '', s: 0 }, ach: {}, cr: null, pending: [], losses: [], ins: {}, opps: [], info: [], rumors: [], unread: 0, nextInfo: Date.now() + 3 * 60e3, infl: .02, pi: 1, taxPaid: 0, rt: {}, divPend: 0, divNext: 0, divTot: 0, divRec: {}, props: [], listings: {}, firms: [], uid: 0, owned: {}, fx: [], adNext: 0, nextEvent: Date.now() + 15 * 60000,
     mk: freshMarket(), pfH: emptyHist(), last: Date.now(), started: Date.now(), seen: {}, playMs: 0,
   };
 }
@@ -2844,7 +3028,8 @@ function load() {
       }
       delete S.market; S.realty = {};
     }
-    for (const id of [...STOCKS, ...CRYPTO, ...REALTY].map(x => x.id)) if (!S.mk[id]) S.mk[id] = seedAsset(id, Date.now());
+    // Nouveaux titres (ETF, obligations, livret…) ajoutés au marché ; les positions et prix de revient existants restent intacts.
+    for (const id of [...SECS, ...CRYPTO, ...REALTY].map(x => x.id)) if (!S.mk[id]) S.mk[id] = seedAsset(id, Date.now());
     if (!S.pfH || !S.pfH.h) S.pfH = emptyHist();
     // Parties déjà commencées : pas de tutoriel, et les fonctionnalités déjà atteintes restent ouvertes sans bulle.
     if (d.tuto == null) S.tuto = 1;
@@ -2874,6 +3059,21 @@ function load() {
       f.log = f.log || []; f.bought = f.bought || now; f.strike = f.strike || 0; f.mgr = f.mgr || null;
     }
     if (!Array.isArray(S.fx)) S.fx = [];
+    // Salaires v2 (réels) : chaque employé garde son écart au marché (augmentations, primes de départ…).
+    if (!d.wageV) {
+      const old0 = d => dc(d) / d.pb / d.m * (1 - d.m) * d.split[0] / d.roles.length;
+      for (const f of S.firms) {
+        const d = bizById(f.t);
+        for (const e of f.staff) {
+          const ratio = clamp(e.sal / (old0(d) * (.7 + .15 * e.sk)), .5, 3);
+          e.sal = mktWage(d, e.sk, e.r) * (Number.isFinite(ratio) ? ratio : 1);
+          if (e.away && e.away.k === 'start') e.away.until = Math.min(e.away.until, now + hireDelay(d));
+        }
+        f.cands = null;
+        if (f.mgr) f.mgr.sal = mgrWage(f);
+      }
+      S.wageV = 2;
+    }
     delete S.biz; delete S.spentBiz;
     return true;
   } catch (e) { return false; }
@@ -2915,12 +3115,14 @@ function setInfl(v, t, why) {
 /* ================= Impact sur le marché et fiscalité ================= */
 const TAX = .15;
 // Liquidité : montant en € qui fait bouger le cours de 1 %. Faible pour les petites cryptos, forte pour les grosses capitalisations.
-const liq1 = id => SBY[id] ? SBY[id].cap * 1000 : S.mk[id].p * CBY[id].sup * 3e-6;
+const liq1 = id => SBY[id] ? SBY[id].cap * 1000 : S.mk[id].p * CBY[id].sup * 3e-6;   // livret : liquidité infinie, aucun impact
 const impactOf = (id, v) => Math.min(.5, v / liq1(id) / 100);
 // Courtage : 0,5 % (0,3 % en crypto), puis 1 % et 2 % si l'on achète et revend sans arrêt ; retour au tarif normal après 30 min sans transaction.
+// ETF et obligations : 0,2 % ; livret : aucun frais.
+const baseFee = id => CBY[id] ? FEE_C : SBY[id].brk ?? FEE_S;
 function feeRate(id, t = Date.now()) {
-  const base = CBY[id] ? FEE_C : FEE_S, r = S.rt[id];
-  if (!r || t - r.last > 30 * 60e3) return base;
+  const base = baseFee(id), r = S.rt[id];
+  if (!base || !r || t - r.last > 30 * 60e3) return base;
   return r.n >= 3 ? .02 : r.n >= 2 ? .01 : base;
 }
 function quote(id, side, q, t = Date.now()) {
@@ -2933,6 +3135,7 @@ function quote(id, side, q, t = Date.now()) {
 // Quantité achetable avec un montant A, impact compris : x + x²/(200 L) = A / (1 + frais).
 function qtyFor(id, A) {
   const p = S.mk[id].p, L = liq1(id), B = A / (1 + feeRate(id));
+  if (!isFinite(L)) return Math.max(0, B / p);
   let x = 100 * L * (Math.sqrt(1 + B / (50 * L)) - 1);
   if (x > 50 * L) x = B / 1.25;
   return Math.max(0, x / p);
@@ -2953,9 +3156,19 @@ const hTxt = lzf('hTxt', h => String(h >= 1 ? tl('n_h', nfx(1, h).replace(/[.,]0
 const SCAMS = [['CryptoMiracle', tl('t_300_garantis_en_7_jours')], [tl('elysium_trading_bot'), tl('t_40_par_semaine_sans_aucun_risque')], ['NovaYield', tl('de_doubler_votre_mise_en_48')], [tl('wine_capital_plus'), tl('t_25_par_mois_garantis_sur_des')]];
 const SCAM_CLUES = [tl('rendement_garanti_tres_au_dela_de'), tl('offre_reservee_aux_100_premiers_inscrits'), tl('bonus_si_vous_parrainez_vos_amis'), tl('plateforme_absente_de_la_liste_des'), tl('temoignages_de_millionnaires_impossibles')];
 const IPOS = [tl('verdane_energie'), tl('helio_robotics'), tl('maison_lacombe'), tl('orion_sante')];
+// Choc de marché m (ex. 0,85) réparti selon la sensibilité de chaque titre : les ETF bougent un peu moins, les obligations d'État montent.
+function mktFx(m, label, withC) {
+  const g = {};
+  for (const d of [...SECS, ...(withC ? CRYPTO : [])]) if (d.beta) { const k = Math.max(.3, 1 + (m - 1) * d.beta).toFixed(3); (g[k] = g[k] || []).push(d.id); }
+  return Object.entries(g).map(([k, ids]) => ({ ids, m: +k, label }));
+}
+// Taux : les obligations baissent quand les taux montent (rs = sensibilité pour 0,5 point).
+const bondFx = (up, label) => BONDS.filter(d => d.rs).map(d => ({ ids: [d.id], m: up ? 1 - d.rs : 1 + d.rs, label }));
+// Une nouvelle sur une grande valeur entraîne un peu les ETF qui la contiennent.
+const withEtf = (id, m, label) => [{ ids: [id], m, label }, ...ETFS.filter(e => e.w && e.has(SBY[id])).map(e => ({ ids: [e.id], m: 1 + (m - 1) * e.w, label }))];
 const ITPL = [
   { k: 'krach', cat: 'bourse', w: .4, force: 1, ctx: () => ({}), rumor: () => tl('des_analystes_redoutent_un_krach_boursie'),
-    make: () => ({ title: tl('krach_boursier_les_marches_seffondrent'), text: tl('vague_de_panique_mondiale_les_investisse'), dur: 6, shock: .88, fx: [{ ids: STOCKS.map(d => d.id), m: .85, label: tl('krach') }], eff: tl('actions_12_durablement_et_15_de') }) },
+    make: () => ({ title: tl('krach_boursier_les_marches_seffondrent'), text: tl('vague_de_panique_mondiale_les_investisse'), dur: 6, shock: .88, fx: mktFx(.85, tl('krach'), 1), eff: tl('eff_krach') }) },
   { k: 'scam', cat: 'crypto', w: 1, ctx: () => ({ s: pick(SCAMS) }),
     make: c => ({ title: tl('opportunite_promet', c.s[0], c.s[1]), text: tl('une_publicite_envahit_les_reseaux_sociau'), dur: 1, fx: [], eff: tl('offre_visible_1_h'),
       opp: { scam: 1, name: c.s[0], pitch: tl('promet_des_milliers_de_personnes_auraien', c.s[0], c.s[1]), clues: [...SCAM_CLUES].sort(() => Math.random() - .5).slice(0, 3), ret: -1 } }) },
@@ -2969,20 +3182,20 @@ const ITPL = [
   { k: 'cold', cat: 'meteo', w: 2, ctx: () => ({}), rumor: () => tl('un_coup_de_froid_precoce_serait'),
     make: () => ({ title: tl('hiver_glacial'), text: tl('le_thermometre_plonge_tout_le_monde'), dur: 3, fx: [{ bt: CLOTHES, m: 1.2, label: tl('grand_froid') }], eff: tl('ventes_de_vetements_20') }) },
   { k: 'rateUp', cat: 'eco', w: 2, ctx: () => ({}), rumor: () => tl('la_banque_centrale_pourrait_relever_ses'),
-    make: () => ({ title: tl('la_banque_centrale_releve_ses_taux'), text: tl('pour_freiner_les_prix_largent_coute'), dur: 3, fx: [{ ids: STOCKS.map(d => d.id), m: .95, label: tl('hausse_des_taux') }, { rate: .005, label: tl('hausse_des_taux') }], eff: tl('actions_5_credits_0_5_point'), infl: -.004 }) },
+    make: () => ({ title: tl('la_banque_centrale_releve_ses_taux'), text: tl('pour_freiner_les_prix_largent_coute'), dur: 3, fx: [...mktFx(.95, tl('hausse_des_taux')).filter(x => x.m < 1), ...bondFx(1, tl('hausse_des_taux')), { rate: .005, label: tl('hausse_des_taux') }], eff: tl('eff_rateup'), infl: -.004 }) },
   { k: 'rateDown', cat: 'eco', w: 2, ctx: () => ({}), rumor: () => tl('une_baisse_des_taux_est_evoquee'),
-    make: () => ({ title: tl('la_banque_centrale_baisse_ses_taux'), text: tl('credit_moins_cher_les_acheteurs_revienne'), dur: 4, fx: [{ ids: REALTY.map(d => d.id), m: 1.03, label: tl('baisse_des_taux') }, { rate: -.004, label: tl('baisse_des_taux') }], eff: tl('immobilier_3_credits_0_4_point'), infl: .003 }) },
+    make: () => ({ title: tl('la_banque_centrale_baisse_ses_taux'), text: tl('credit_moins_cher_les_acheteurs_revienne'), dur: 4, fx: [{ ids: REALTY.map(d => d.id), m: 1.03, label: tl('baisse_des_taux') }, ...bondFx(0, tl('baisse_des_taux')), { rate: -.004, label: tl('baisse_des_taux') }], eff: tl('eff_ratedown'), infl: .003 }) },
   { k: 'cpi', cat: 'eco', w: 1, ctx: () => ({ dv: rf(-.004, .004) }), make: c => ({ inflSet: c.dv }) },
   { k: 'product', cat: 'ent', w: 3, ctx: () => ({ id: pick(STOCKS).id, v: rf(5, 12) }), rumor: c => tl('preparerait_un_lancement_surprise', SBY[c.id].n),
-    make: c => ({ title: tl('lance_un_nouveau_produit', SBY[c.id].n), text: tl('les_precommandes_depassent_les_attentes'), dur: rf(1, 3), fx: [{ ids: [c.id], m: 1 + c.v / 100, label: tl('nouveau_produit') }], eff: tl('action', SBY[c.id].n, sgn(c.v)) }) },
+    make: c => ({ title: tl('lance_un_nouveau_produit', SBY[c.id].n), text: tl('les_precommandes_depassent_les_attentes'), dur: rf(1, 3), fx: withEtf(c.id, 1 + c.v / 100, tl('nouveau_produit')), eff: tl('action', SBY[c.id].n, sgn(c.v)) }) },
   { k: 'scandal', cat: 'ent', w: 2, ctx: () => ({ id: pick(STOCKS).id, v: rf(10, 20) }), rumor: c => tl('des_documents_compromettants_circuleraie', SBY[c.id].n),
-    make: c => ({ title: tl('scandale_chez', SBY[c.id].n), text: tl('une_enquete_de_presse_revele_des'), dur: rf(2, 4), fx: [{ ids: [c.id], m: 1 - c.v / 100, label: tl('scandale') }], eff: tl('action', SBY[c.id].n, sgn(-c.v)) }) },
+    make: c => ({ title: tl('scandale_chez', SBY[c.id].n), text: tl('une_enquete_de_presse_revele_des'), dur: rf(2, 4), fx: withEtf(c.id, 1 - c.v / 100, tl('scandale')), eff: tl('action', SBY[c.id].n, sgn(-c.v)) }) },
   { k: 'takeover', cat: 'ent', w: 1, ctx: () => ({ id: pick(STOCKS).id, v: rf(15, 20) }), rumor: c => tl('rumeur_de_rachat_de_par_un', SBY[c.id].n),
-    make: c => ({ title: tl('offre_de_rachat_sur', SBY[c.id].n), text: tl('un_grand_groupe_propose_de_racheter'), dur: 2, fx: [{ ids: [c.id], m: 1 + c.v / 100, label: tl('offre_de_rachat') }], eff: tl('action', SBY[c.id].n, sgn(c.v)) }) },
+    make: c => ({ title: tl('offre_de_rachat_sur', SBY[c.id].n), text: tl('un_grand_groupe_propose_de_racheter'), dur: 2, fx: withEtf(c.id, 1 + c.v / 100, tl('offre_de_rachat')), eff: tl('action', SBY[c.id].n, sgn(c.v)) }) },
   { k: 'results', cat: 'ent', w: 3, ctx: () => ({ id: pick(STOCKS).id, v: rf(3, 12) * (Math.random() < .55 ? 1 : -1) }),
-    make: c => ({ title: tl('resultats_que_prevu', SBY[c.id].n, c.v > 0 ? tl('meilleurs') : tl('moins_bons')), text: c.v > 0 ? tl('chiffre_daffaires_et_marges_en_hausse') : tl('les_ventes_decoivent_la_direction_revoit'), dur: rf(1, 2), fx: [{ ids: [c.id], m: 1 + c.v / 100, label: tl('resultats') }], eff: tl('action', SBY[c.id].n, sgn(c.v)) }) },
+    make: c => ({ title: tl('resultats_que_prevu', SBY[c.id].n, c.v > 0 ? tl('meilleurs') : tl('moins_bons')), text: c.v > 0 ? tl('chiffre_daffaires_et_marges_en_hausse') : tl('les_ventes_decoivent_la_direction_revoit'), dur: rf(1, 2), fx: withEtf(c.id, 1 + c.v / 100, tl('resultats')), eff: tl('action', SBY[c.id].n, sgn(c.v)) }) },
   { k: 'euphoria', cat: 'bourse', w: 1, ctx: () => ({ up: Math.random() < .5 }),
-    make: c => ({ title: c.up ? tl('seance_euphorique_a_la_bourse') : tl('vent_de_panique_sur_les_marches'), text: c.up ? tl('les_investisseurs_se_ruent_sur_les') : tl('les_ventes_senchainent_sans_raison_clair'), dur: 1, fx: [{ ids: STOCKS.map(d => d.id), m: c.up ? 1.03 : .96, label: c.up ? tl('euphorie') : tl('panique') }], eff: tl('toutes_les_actions', c.up ? '+3 %' : '−4 %') }) },
+    make: c => ({ title: c.up ? tl('seance_euphorique_a_la_bourse') : tl('vent_de_panique_sur_les_marches'), text: c.up ? tl('les_investisseurs_se_ruent_sur_les') : tl('les_ventes_senchainent_sans_raison_clair'), dur: 1, fx: mktFx(c.up ? 1.03 : .96, c.up ? tl('euphorie') : tl('panique')), eff: tl('toutes_les_actions', c.up ? '+3 %' : '−4 %') }) },
   { k: 'adopt', cat: 'crypto', w: 2, ctx: () => ({ id: pick(CRYPTO.filter(d => d.risk === 0)).id, c: pick(COUNTRIES) }), rumor: c => tl('envisagerait_dadopter', c.c[0].toUpperCase() + c.c.slice(1), CBY[c.id].n),
     make: c => ({ title: tl('adopte', c.c[0].toUpperCase() + c.c.slice(1), CBY[c.id].n), text: tl('devient_monnaie_legale_une_premiere_pour', CBY[c.id].n), dur: 3, fx: [{ ids: [c.id], m: 1.3, label: tl('adoption') }], eff: `${CBY[c.id].n} +30 %` }) },
   { k: 'hack', cat: 'crypto', w: 2, ctx: () => ({ id: pick(CRYPTO.filter(d => !S.rug[d.id])).id }), rumor: c => tl('des_transactions_suspectes_sont_signalee', CBY[c.id].n),
@@ -3017,7 +3230,7 @@ function publish(tp, c, t, prefix) {
   if (r.inflSet != null) return setInfl(S.infl + r.inflSet, t, r.inflSet > 0 ? tl('les_prix_des_services_et_de') : tl('la_consommation_ralentit_les_prix_se'));
   const until = t + r.dur * H;
   for (const x of r.fx) S.fx.push({ ...x, from: t, until });
-  if (r.shock) for (const d of STOCKS) S.mk[d.id].a *= r.shock;
+  if (r.shock) for (const d of [...SECS, ...CRYPTO]) if (d.beta) S.mk[d.id].a *= Math.pow(r.shock, d.beta);
   let opp = 0;
   if (r.opp) { opp = ++S.uid; S.opps.push({ ...r.opp, id: opp, until }); }
   addInfo({ cat: tp.cat, title: (prefix || '') + r.title, text: r.text, eff: r.opp ? r.eff : tl('pendant', r.eff, hTxt(r.dur)), until: r.opp ? 0 : until, opp }, t);
@@ -3388,7 +3601,7 @@ function renderCreator() {
 }
 function crAction(el) {
   const c = S.cr, t = Date.now(), ds = el.dataset;
-  if (el.id === 'crCreate') { const n = (newName || '').trim().slice(0, 24) || tl('ma_chaine'); S.cr = newChannel(n, newPlat, t); crLog(tl('chaine_creee_sur_achetez_du_materiel', n, PLATS[newPlat].n), 'good', t); winFx(); return afterAction(); }
+  if (el.id === 'crCreate') { const n = (newName || '').trim().slice(0, 24) || tl('ma_chaine'); S.cr = newChannel(n, newPlat, t); crLog(tl('chaine_creee_sur_achetez_du_materiel', n, PLATS[newPlat].n), 'good', t); fxGoal(); return afterAction(); }
   if (ds.newplat) { newPlat = ds.newplat; return render(); }
   if (!c) return;
   if (ds.percr != null) perCr = +ds.percr;
@@ -3396,7 +3609,7 @@ function crAction(el) {
   else if (ds.crdu != null) c.sel.du = +ds.crdu;
   else if (ds.crpr != null) c.sel.pr = +ds.crpr;
   else if (el.id === 'crPost') { if (!canFilm(c) || c.prod || c.burn > t) return; startProd(c, t); toast(tl('production_lancee'), 'good'); }
-  else if (ds.creq) { const e = CR_EQ.find(x => x[0] === ds.creq), p = e[3] * S.pi; if (S.cash < p) return; S.cash -= p; c.eq[e[0]] = 1; crLog(tl('nouveau_materiel', e[1], eur(p)), 'good', t); buyFx(); }
+  else if (ds.creq) { const e = CR_EQ.find(x => x[0] === ds.creq), p = e[3] * S.pi; if (S.cash < p) return; S.cash -= p; c.eq[e[0]] = 1; crLog(tl('nouveau_materiel', e[1], eur(p)), 'good', t); fxBuy(); }
   else if (ds.crst) { const s = CR_STAFF.find(x => x[0] === ds.crst); c.st[s[0]] = !c.st[s[0]]; crLog(c.st[s[0]] ? tl('recrute', s[1]) : tl('vous_vous_separez_de_votre', s[1].toLowerCase()), '', t); }
   else if (ds.spok) { const o = c.offers.find(x => x.id === +ds.spok); if (!o || c.spon) return; const adv = o.pay / 2 * (c.st.agent ? .9 : 1); S.cash += adv; S.earned += adv; c.rev.spons += adv; c.spon = o; c.offers = c.offers.filter(x => x !== o); crLog(tl('contrat_signe_avec_davance_le_reste', o.brand, eur(adv)), 'good', t); }
   else if (ds.spno) c.offers = c.offers.filter(x => x.id !== +ds.spno);
@@ -3443,7 +3656,7 @@ function riskSim(dtH, t) {
     // Procès : salarié mal payé ou épuisé, clients très mécontents
     if (!S.pending.some(x => x.f === f.u)) {
       const e = f.staff.find(e => e.mood < 25 || e.fat > 85);
-      if (e && p(.006)) S.pending.push({ k: 'suit', f: f.u, who: e.n, emp: 1, claim: e.sal * 30, odds: e.sal < mktWage(d, e.sk) * .9 || e.fat > 85 ? .25 : .6 });
+      if (e && p(.006)) S.pending.push({ k: 'suit', f: f.u, who: e.n, emp: 1, claim: e.sal * 30, odds: e.sal < mktWage(d, e.sk, e.r) * .9 || e.fat > 85 ? .25 : .6 });
       else if (f.ops && f.ops.rating < 2.2 && p(.01)) S.pending.push({ k: 'suit', f: f.u, who: tl('un_client'), emp: 0, claim: Math.max(500 * S.pi, firmStats(f, t).ca * .5), odds: f.ops.rating < 1.8 ? .3 : .55 });
     }
   }
@@ -3602,7 +3815,7 @@ function dailyModal(x) {
   modal(`<span class="ev-ico">🎁</span><h3>${tl('bonus_quotidien')}</h3><p>${tl('jour_daffilee', x.streak, x.streak < 7 ? ` ${tl('revenez_demain_pour_un_bonus_plus')}` : ` ${tl('bonus_maximal')}`)}</p>
     <span class="big num">${eur(x.cash)}</span><p>${tl('jetons_4', x.tok, TOK)}</p>
     <div class="modal-actions"><button class="btn go" id="mYes" type="button">${tl('recuperer')}</button></div>`);
-  $('mYes').onclick = () => { S.cash += x.cash; S.earned += x.cash; giveTok(x.tok, tl('bonus_quotidien_jour', x.streak)); closeModal(); winFx(); afterAction(); };
+  $('mYes').onclick = () => { S.cash += x.cash; S.earned += x.cash; giveTok(x.tok, tl('bonus_quotidien_jour', x.streak)); closeModal(); fxBuy(); afterAction(); };
 }
 // Succès : quelques jetons pour les grandes étapes.
 const ACH = [
@@ -3613,7 +3826,7 @@ const ACH = [
   ['m1', tl('millionnaire'), '💰', 10, () => fortune() >= 1e6], ['md1', tl('milliardaire'), '👑', 25, () => fortune() >= 1e9],
 ];
 function checkAch() {
-  for (const [id, n, ico, tok, ok] of ACH) if (!S.ach[id] && ok()) { S.ach[id] = Date.now(); giveTok(tok, tl('succes', n)); toast(tl('succes_2', ico, n, tok, TOK), 'good'); winFx(); }
+  for (const [id, n, ico, tok, ok] of ACH) if (!S.ach[id] && ok()) { S.ach[id] = Date.now(); giveTok(tok, tl('succes', n)); toast(tl('succes_2', ico, n, tok, TOK), 'good'); if (['k100', 'm1', 'md1'].includes(id)) fxBig(); else fxGoal(); }
 }
 const renderAch = () => `<div class="card"><div class="row"><span class="label">${tl('succes_3')}</span><span class="muted">${Object.keys(S.ach).length}/${ACH.length}</span></div>
   <div class="trophies" style="margin-top:10px">${ACH.map(([id, n, ico, tok]) => `<div class="trophy${S.ach[id] ? ' on' : ''}"><span>${ico}</span><b>${n}</b><small>+${tok} ${TOK}</small></div>`).join('')}</div></div>`;
@@ -3648,7 +3861,7 @@ function renderQuests() {
 function claimQuest(i) {
   const q = S.quests.list[i]; if (!q || q.claimed || questProg(q) < q.n) return;
   const [cash, tk] = questReward(); q.claimed = true; S.cash += cash; S.earned += cash; giveTok(tk, tl('objectif_du_jour'));
-  toast(tl('objectif_reussi_et', eur(cash), tk, TOK), 'good'); winFx(); afterAction();
+  toast(tl('objectif_reussi_et', eur(cash), tk, TOK), 'good'); fxGoal(); afterAction();
 }
 
 // Prestige : à partir de 1 M€ de fortune, tout revendre contre des Étoiles d'entrepreneur (+5 % de revenus et +10 % par clic chacune).
@@ -3667,10 +3880,10 @@ function prestigeAsk() {
     <div class="modal-actions"><button class="btn ghost" id="mNo" type="button">${tl('annuler')}</button><button class="btn gold" id="mYes" type="button">${tl('revendre_et_recommencer')}</button></div>`);
   $('mNo').onclick = closeModal;
   $('mYes').onclick = () => {
-    const keep = { name: S.name, tok: S.tok, tokDay: S.tokDay, tokAdNext: S.tokAdNext, tokLog: S.tokLog, daily: S.daily, ach: S.ach, quests: S.quests, stats: S.stats, unl: S.unl, tuto: 1, coach: COACH_DONE, start: START.length, mute: S.mute, lang: S.lang, stars: S.stars + gain, prestiges: (S.prestiges || 0) + 1 };
+    const keep = { name: S.name, tok: S.tok, tokDay: S.tokDay, tokAdNext: S.tokAdNext, tokLog: S.tokLog, daily: S.daily, ach: S.ach, quests: S.quests, stats: S.stats, unl: S.unl, tuto: 1, coach: COACH_DONE, start: START.length, mute: S.mute, snd: S.snd, lang: S.lang, stars: S.stars + gain, prestiges: (S.prestiges || 0) + 1 };
     S = Object.assign(defaultState(), keep);
     closeModal(); tab = 'gains'; invView = null; bizView = 'list'; crView = 0; render();
-    toast(tl('prestige_vous_avez_maintenant_etoile', S.stars, S.stars > 1 ? 's' : ''), 'good'); save();
+    toast(tl('prestige_vous_avez_maintenant_etoile', S.stars, S.stars > 1 ? 's' : ''), 'good'); fxBig(); save();
   };
 }
 
@@ -3688,7 +3901,7 @@ function checkUnlocks(silent) {
 function unlockModal(k) {
   const u = UNL.find(x => x[0] === k); if (!u) return; // anciennes bulles « Bourse » ou « Créateur » encore en attente
   const [, ico, n, txt, , go] = u;
-  winFx();
+  fxGoal();
   modal(`<span class="ev-ico">${ico}</span><h3>${tl('nouveau', n)}</h3><p>${txt}</p>
     <div class="modal-actions"><button class="btn ghost" id="mNo" type="button">${tl('plus_tard')}</button><button class="btn go" id="mYes" type="button">${tl('decouvrir')}</button></div>`);
   $('mNo').onclick = () => { closeModal(); render(); };
@@ -3711,17 +3924,32 @@ function roleNeed(d, l, i) { const R = d.roles.length, extra = needAt(d, l) - R;
 // Comptes nominaux (équipe complète, compétence 2, humeur 75 %) : le bénéfice net vaut netAt().
 const ca1 = d => dc(d) / d.pb / d.m;
 const stockRate = d => (1 - d.m) * d.split[2];
-const wage0 = d => ca1(d) * (1 - d.m) * d.split[0] / d.roles.length;
+// Salaires réels : taux horaire du métier (pour 2 étoiles), indexé sur l'inflation.
+// Dans les gros business, chaque poste est une équipe : le salaire affiché est celui de toute l'équipe.
+const RATE = { vendeur: 13, photographe: 16, preparateur_de_colis: 13, service_client: 14, laveur: 12.5, caissier: 12.5, cuisinier: 15, vendeur_au_comptoir: 13, coiffeur: 14, coloriste: 15, apprenti: 9,
+  boulanger: 15, patissier: 15.5, barman: 13, buraliste: 13, repasseur: 12.5, agent_daccueil: 13, responsable_de_stock: 16, chauffeur: 14, dispatcheur: 15, mecanicien: 17, moniteur: 18, secretaire: 14,
+  agent_immobilier: 20, assistant: 15, coach_sportif: 18, agent_dentretien: 12.5, serveur: 13, plongeur: 12, community_manager: 18, graphiste: 19, chef_de_projet: 26, pharmacien: 30, preparateur: 16,
+  macon: 16, chef_de_chantier: 24, electricien: 18, chauffeur_poids_lourd: 16, logisticien: 18, equipe_caisse: 12.5, equipe_rayons: 12.5, chef_de_rayon: 18, vendeur_auto: 18, carrossier: 17,
+  equipe_programmation: 30, equipe_graphisme: 24, game_designer: 28, equipe_developpement: 32, support_technique: 18, commercial: 22, reception: 14, equipe_menage: 12.5, chef_cuisinier: 24,
+  equipe_production: 15, ingenieur: 35, equipe_maintenance: 18, equipe_medicale: 45, equipe_infirmiere: 22, administration: 18, equipes_cuisine: 13, equipes_caisse: 12.5, directeur_de_restaurant: 25,
+  conseillers: 24, traders: 60, conformite: 35, pilotes: 75, personnel_navigant: 22, maintenance: 22, ingenieurs_reseau: 35, commerciaux: 22, joueur_vedette: 2500, entraineur: 250, staff_medical: 40,
+  ingenieurs_forage: 45, raffinerie: 20, ingenieurs_r_d: 40, equipe_usine: 16, designers: 28 };
+const SOLO_ROLES = new Set(['chef_de_projet', 'chef_de_chantier', 'chef_de_rayon', 'chef_cuisinier', 'directeur_de_restaurant', 'game_designer', 'joueur_vedette', 'entraineur', 'responsable_de_stock']);
+const roleKey = (d, r) => { const x = d.roles[r]; return x && x.toJSON ? x.toJSON().$t : String(x); };
+const teamSize = (d, r) => SOLO_ROLES.has(roleKey(d, r)) ? 1 : Math.max(1, Math.round(Math.pow(d.cost / 40000, .7)));
+const wageRole = (d, r) => (RATE[roleKey(d, r)] || 14) * teamSize(d, r) * S.pi;
+const wagesAt = (d, l) => d.roles.reduce((a, _, i) => a + wageRole(d, i) * roleNeed(d, l, i), 0);
 const rentAt = (d, l) => ca1(d) * (1 - d.m) * d.split[1] * SITES[l];
-const caFull = (d, l) => (netAt(d, l) + rentAt(d, l) + wage0(d) * needAt(d, l)) / (1 - stockRate(d));
-const mktWage = (d, sk) => wage0(d) * (.7 + .15 * sk);
+// Chiffre d'affaires nominal : de quoi payer loyer, salaires et achats en gardant la rentabilité prévue.
+const caFull = (d, l) => (netAt(d, l) + rentAt(d, l) + wagesAt(d, l)) / (1 - stockRate(d));
+const mktWage = (d, sk, r = 0) => wageRole(d, r) * (.7 + .15 * sk);
 // Le manager coûte 18 % du bénéfice normal de l'entreprise à son niveau actuel.
 // Le manager coûte 1,5 fois le salaire moyen de l'équipe (ou du marché si l'équipe est vide) ; il apporte +10 % de productivité.
 const mgrWage = f => { const n = f.staff.length; return 1.5 * (n ? f.staff.reduce((a, e) => a + e.sal, 0) / n : mktWage(bizById(f.t), 2)); };
 function mgrImpact(f) { const t = Date.now(), n0 = firmStats(f, t).net; f.mgr = { n: '', sal: mgrWage(f) }; const n1 = firmStats(f, t).net; f.mgr = null; return n1 - n0; }
 function book(d, l) {
   const ca = caFull(d, l);
-  return { ca, sal: wage0(d) * needAt(d, l), rent: rentAt(d, l), stock: ca * stockRate(d), net: netAt(d, l) };
+  return { ca, sal: wagesAt(d, l), rent: rentAt(d, l), stock: ca * stockRate(d), net: netAt(d, l) };
 }
 function firmName(f) {
   const same = S.firms.filter(x => x.t === f.t);
@@ -3746,7 +3974,7 @@ const roleOf = (d, r, g) => g === 'f' ? FEM[d.roles[r]] || d.roles[r] : d.roles[
 function newEmp(d, r, sk, t, sal, tr) {
   const [n, g] = NAMES[Math.floor(Math.random() * NAMES.length)];
   tr = tr || pick(Object.keys(TRAITS));
-  return { id: ++S.uid, n, g, r, sk, tr, sal: sal || mktWage(d, sk) * (TRAITS[tr][3].pay || 1), mood: 75 + (TRAITS[tr][3].mood || 0), fat: 15, hired: t, raise: t, rest: t, away: null, ask: false, tired: false };
+  return { id: ++S.uid, n, g, r, sk, tr, sal: sal || mktWage(d, sk, r) * (TRAITS[tr][3].pay || 1), mood: 75 + (TRAITS[tr][3].mood || 0), fat: 15, hired: t, raise: t, rest: t, away: null, ask: false, tired: false };
 }
 function initialTeam(d, l, t) {
   const team = [];
@@ -3962,9 +4190,10 @@ function addReview(f, d, st, t) {
 function firmStats(f, t = Date.now()) {
   const d = bizById(f.t), need = Math.max(1, needF(f)), strike = f.strike > t;
   if (!f.ops) opsInit(f, true);
-  let eff = 0, sal = 0, mood = 0, present = 0;
+  let eff = 0, sal = 0, mood = 0, present = 0, arriving = 0;
   for (const e of f.staff) {
     mood += e.mood;
+    if (e.away && e.away.k === 'start' && e.away.until > t) arriving++;
     if (strike) continue;
     if (isIn(e, t)) { eff += effOf(e); present++; }
     if (isIn(e, t) || (e.away.k !== 'sick' && e.away.k !== 'start')) sal += e.sal;   // arrêts maladie indemnisés par la Sécurité sociale ; pas de salaire avant l'arrivée
@@ -3973,12 +4202,12 @@ function firmStats(f, t = Date.now()) {
   // Les présents couvrent en partie les postes vides (au prix de leur fatigue).
   // Sans personne, vous tenez la boutique vous-même : 15 % de l'activité normale.
   const cover = strike ? 0 : .6 * Math.max(0, need - present) / need * Math.min(1, present / need);
-  // Sans personnel, l'entreprise ne produit rien ; les tout petits business (limonade…) sont tenus par le patron à 60 % d'un poste.
-  const owner = d.solo && present < need ? .6 / need : 0;
+  // Sans personnel, l'entreprise ne produit rien ; les tout petits business (limonade…) sont tenus par le patron à 35 % d'un poste.
+  const owner = d.solo && present < need ? .35 / need : 0;
   const staffF = clamp((eff / need + cover) * vibe + owner, 0, 1.5);
   const o = opsStats(f, d, { staffF, fx: fxMult(f, t), avgMood, n }, t);
   const ca = o.ca, stock = o.cogs + o.waste + o.veh, rent = rentAt(d, f.l), mgr = f.mgr ? f.mgr.sal : 0;
-  return { ca, stock, rent, sal: sal + mgr, mgr, net: ca - stock - rent - sal - mgr, need, n, avgMood, staffF: opsOf(d).a === 'veh' ? o.capR : staffF, vibe: n > 0 && avgMood >= 80, ops: o };
+  return { ca, stock, rent, sal: sal + mgr, mgr, net: ca - stock - rent - sal - mgr, need, n, present, arriving, avgMood, staffF: opsOf(d).a === 'veh' ? o.capR : staffF, vibe: n > 0 && avgMood >= 80, ops: o };
 }
 // Valeur de revente : au moins 50 % de ce qui a été investi (achat + améliorations),
 // ou 40 h du bénéfice actuel si c'est plus, une fois que l'entreprise a fait ses preuves (48 h d'activité).
@@ -4023,7 +4252,7 @@ function simFirm(f, dtH, t, broke) {
     const fTarget = here ? clamp(22 * load + Math.min(35, (t - e.rest) / H / 3), 0, 100) : 0;
     e.fat += (fTarget - e.fat) * Math.min(1, dtH * .15);
     // Humeur : salaire face au marché, fatigue, augmentations qui se font attendre, manager, trésorerie.
-    const pay = e.sal / mktWage(d, e.sk);
+    const pay = e.sal / mktWage(d, e.sk, e.r);
     const mTarget = clamp(72 + clamp((pay - 1) * 120, -45, 30) - Math.max(0, e.fat - 50) * .8 - Math.min(20, (t - e.raise) / H / 4) - (e.ask ? 8 : 0) + (f.mgr ? 5 : 0) - (broke ? 20 : 0) + (TR(e).mood || 0), 0, 100);
     e.mood += (mTarget - e.mood) * Math.min(1, dtH * .12);
     if (here) {
@@ -4168,15 +4397,17 @@ function marketTick(silent, n = 1, t = Date.now()) {
   const pr = rate => Math.random() < rate * n * TICK_MS / H;   // rate : nombre moyen par heure
   const sh = {}, add = (id, v) => { sh[id] = (sh[id] || 0) + v; };
   let msg = null;
-  if (pr(.08)) { const v = Math.log(1 - rf(.04, .08)); STOCKS.forEach(d => add(d.id, v * rf(.6, 1.4))); msg = ['crash', tl('correction_sur_les_marches_actions'), -1]; }
-  else if (pr(.07)) { const v = Math.log(1 + rf(.03, .07)); STOCKS.forEach(d => add(d.id, v * rf(.6, 1.4))); msg = ['good', tl('euphorie_boursiere_les_actions_senvolent'), 1]; }
+  const mv = v => SECS.forEach(d => { if (d.beta) add(d.id, v * d.beta * (d.cls === 'stock' ? rf(.7, 1.3) : 1)); });
+  if (pr(.08)) { mv(Math.log(1 - rf(.04, .08))); msg = ['crash', tl('correction_sur_les_marches_actions'), -1]; }
+  else if (pr(.07)) { mv(Math.log(1 + rf(.03, .07))); msg = ['good', tl('euphorie_boursiere_les_actions_senvolent'), 1]; }
   if (pr(.05)) { const v = Math.log(1 - rf(.25, .55)); CRYPTO.forEach(d => add(d.id, v * rf(.8, 1.2))); msg = ['crash', tl('krach_des_cryptomonnaies_environ', Math.round((1 - Math.exp(v)) * 100)), -1, 'crypto']; }
   for (const d of CRYPTO) if (d.risk === 2 && !S.rug[d.id] && pr(.015)) {
     add(d.id, Math.log(rf(.02, .06))); S.rug[d.id] = t;
     addInfo({ cat: 'crypto', title: tl('rug_pull_seffondre', d.n), text: tl('les_createurs_anonymes_ont_disparu_avec'), eff: tl('t_95_environ_de_facon_durable', d.n) }, t);
   }
   const ih = inflH();
-  for (const id in S.mk) { const m = S.mk[id]; step(m, PAR(id, S.rug[id], ih), n, sh[id] || 0, t, id); rec(m.H, t, m.p); }
+  const z = [gauss(), gauss()];   // mouvement commun du marché et des cryptos pour ce pas
+  for (const id in S.mk) { const m = S.mk[id]; step(m, PAR(id, S.rug[id], ih), n, sh[id] || 0, t, id, z); rec(m.H, t, m.p); }
   if (msg) addInfo({ cat: msg[3] || 'bourse', title: msg[1].replace(/\.$/, ''), text: msg[2] < 0 ? tl('les_vendeurs_prennent_le_dessus_sur') : tl('les_acheteurs_reviennent_en_force'), eff: tl('choc_durable_sur_les_cours') }, t);
   checkOrders(t, silent);
   rec(S.pfH, t, pfValue());
@@ -4211,7 +4442,7 @@ function execTrade(id, side, q, t = Date.now(), auto = false) {
   if (rt.side && rt.side !== side) rt.n++;
   rt.side = side; rt.last = t; S.rt[id] = rt;
   const after = feeRate(id, t);
-  if (after > r.rate && !simQuiet) setTimeout(() => toast(tl('trading_trop_frequent_sur_courtage_porte', (SBY[id] || CBY[id]).n, nf1.format(after * 100), nf1.format((isC ? FEE_C : FEE_S) * 100)), 'crash'), 1800);
+  if (after > r.rate && !simQuiet) setTimeout(() => toast(tl('trading_trop_frequent_sur_courtage_porte', (SBY[id] || CBY[id]).n, nf1.format(after * 100), nf1.format(baseFee(id) * 100)), 'crash'), 1800);
   S.trades.unshift([t, id, side, q, r.avg, r.fee, auto ? 1 : 0, r.tax || 0]);
   if (!auto) S.stats.trades++;
   if (S.trades.length > 200) S.trades.length = 200;
@@ -4231,10 +4462,10 @@ function checkOrders(t, silent) {
 const qtyTxt = (id, q) => CBY[id] ? nf4.format(q) : nf0.format(q);
 const px = lzf('px', v => v >= 100 ? String(eur(v)) : money('', v >= 1 ? nfx(2, v) : v.toLocaleString(locale(), { maximumSignificantDigits: 4 })));
 
-/* --- Dividendes (versés chaque heure) --- */
-function divH() { let d = 0; for (const s of STOCKS) d += (S.stocks[s.id] || 0) * S.mk[s.id].p * s.y / 12; return d * (1 + collBonus()); }
+/* --- Dividendes, coupons et intérêts (versés chaque heure = chaque mois de jeu) --- */
+function divH() { let d = 0; for (const s of SECS) if (s.y) d += (S.stocks[s.id] || 0) * S.mk[s.id].p * s.y / 12; return d * (1 + collBonus()); }
 function payDividends(dtH, t) {
-  for (const s of STOCKS) { const q = S.stocks[s.id]; if (q) { const v = q * S.mk[s.id].p * s.y / 12 * (1 + collBonus()) * dtH; S.divPend += v; S.divRec[s.id] = (S.divRec[s.id] || 0) + v; } }
+  for (const s of SECS) if (s.y) { const q = S.stocks[s.id]; if (q) { const v = q * S.mk[s.id].p * s.y / 12 * (1 + collBonus()) * dtH; S.divPend += v; S.divRec[s.id] = (S.divRec[s.id] || 0) + v; } }
   if (!S.divNext) S.divNext = t + H;
   if (t >= S.divNext) {
     S.divNext = t + H;
@@ -4322,8 +4553,8 @@ const loansH = () => S.props.reduce((a, pr) => a + (pr.loan ? pr.loan.pay : 0), 
 
 /* --- Portefeuille global --- */
 function pfParts() {
-  const p = { stocks: 0, crypto: 0, realty: 0, debt: 0, pl: 0 };
-  for (const d of STOCKS) { const q = S.stocks[d.id] || 0; if (q) { const v = q * S.mk[d.id].p; p.stocks += v; p.pl += v - (S.basis[d.id] || 0); } }
+  const p = { stocks: 0, crypto: 0, realty: 0, debt: 0, pl: 0, by: { stock: 0, etf: 0, bond: 0, cash: 0 } };
+  for (const d of SECS) { const q = S.stocks[d.id] || 0; if (q) { const v = q * S.mk[d.id].p; p.stocks += v; p.by[d.cls] += v; p.pl += v - (S.basis[d.id] || 0); } }
   for (const d of CRYPTO) { const q = S.crypto[d.id] || 0; if (q) { const v = q * S.mk[d.id].p; p.crypto += v; p.pl += v - (S.basis[d.id] || 0); } }
   for (const pr of S.props) { const v = propValue(pr); p.realty += v; p.pl += v - pr.paid - pr.fees; if (pr.loan) p.debt += pr.loan.rem; }
   p.total = p.stocks + p.crypto + p.realty - p.debt;
@@ -4342,6 +4573,7 @@ function typoFix(root) {
   for (let n = w.nextNode(); n; n = w.nextNode()) { const v = typo(n.nodeValue); if (v !== n.nodeValue) n.nodeValue = v; }
 }
 function toast(t, kind = '') {
+  if (kind === 'info') sfx('notify'); else if (kind === 'crash') sfx('alert');
   const el = $('toast');
   el.textContent = typo(t); el.className = 'toast ' + kind; el.hidden = false;
   clearTimeout(toast._t); toast._t = setTimeout(() => { el.hidden = true; }, 3200);
@@ -4409,25 +4641,25 @@ function doClick(e) {
   const x = (e && e.clientX ? e.clientX : rect.left + rect.width / 2) - rect.left + rf(-18, 18);
   const y = (e && e.clientY ? e.clientY : rect.top + 100) - rect.top - 10;
   const f = document.createElement('span');
-  f.className = 'fly' + (boosted() ? ' x5' : '') + (S.clicks % 10 === 0 ? ' big' : '');
+  f.className = 'fly' + (boosted() ? ' x5' : '');
   f.textContent = '+' + eur(v);
-  f.style.rotate = rf(-8, 8).toFixed(0) + 'deg';
   f.style.left = x + 'px'; f.style.top = y + 'px';
   zone.appendChild(f);
   setTimeout(() => f.remove(), 900);
   const ring = document.createElement('span'); ring.className = 'ring'; zone.appendChild(ring); setTimeout(() => ring.remove(), 500);
   coin.classList.remove('bounce'); void coin.offsetWidth; coin.classList.add('bounce');
-  coinBurst(e && e.clientX ? e.clientX : rect.left + rect.width / 2, e && e.clientY ? e.clientY : rect.top + 100, boosted() ? 7 : 4);
-  sfx('click'); vibrate(6);
+  sfx('coin'); vibrate(6);
   refresh();
 }
 
 /* --- Investir --- */
-const PERIODS = [[tl('per_1h'), H], [tl('per_24h'), 24 * H], [tl('per_7d'), 7 * 24 * H], [tl('per_30d'), 30 * 24 * H], [tl('tout'), 0]];
+// Calendrier boursier du jeu (1 h = 1 mois) : 1 jour = 2 min, 1 semaine = 14 min, 1 mois = 1 h, 1 an = 12 h.
+const DAY = 2 * 60e3;
+const PERIODS = [[tl('per_1d'), DAY], [tl('per_1w'), 7 * DAY], [tl('per_1m'), H], [tl('per_1y'), 12 * H], [tl('tout'), 0]];
 // Série de points [t (s), valeur] sur une période, rééchantillonnée en 120 points au plus.
 function series(hs, ms, cur, mult = 1) {
   const now = Date.now() / 1000, from = ms ? now - ms / 1000 : 0, all = [];
-  for (const [k] of HT) for (const pt of hs[k]) if (pt[0] >= from && pt[0] < now) all.push(pt);
+  for (const [k] of HT) for (const pt of hs[k] || []) if (pt[0] >= from && pt[0] < now) all.push(pt);
   all.sort((a, b) => a[0] - b[0]);
   const out = [], t0 = all.length ? all[0][0] : now, span = (now - t0) || 1;
   let lastB = -1;
@@ -4467,34 +4699,59 @@ const hiLo = pts => pts.reduce((a, [, v]) => [Math.max(a[0], v), Math.min(a[1], 
 const chgBoth = (pts, cur) => { const v0 = pts[0][1]; return `<span class="chg ${cur >= v0 ? 'up' : 'down'}">${cur >= v0 ? '+' : '−'}${px(Math.abs(cur - v0))} · ${sgn(v0 ? (cur / v0 - 1) * 100 : 0)}</span>`; };
 const plHtml = (v, base) => `<b class="num" style="color:var(${v >= 0 ? '--pos' : '--neg'})">${v >= 0 ? '+' : '−'}${eur(Math.abs(v))}${base > 0 ? ` · ${sgn(v / base * 100)}` : ''}</b>`;
 
-let invView = null, perPf = 24 * H, perAsset = 24 * H, tq = 1, tAmt = 0, olt = 'buy', loanCfg = { ap: .2, yrs: 20 };
+let invView = null, perPf = H, perAsset = H, tq = 1, tAmt = 0, olt = 'buy', loanCfg = { ap: .2, yrs: 20 };
 function pfInvested() { let c = 0; for (const id in S.basis) c += S.basis[id] || 0; for (const pr of S.props) c += pr.paid + pr.fees; return c; }
 
+const ITABS = [['stocks', tl('actions')], ['etf', tl('inv_etf')], ['bond', tl('inv_bonds')], ['crypto', tl('crypto')], ['realty', tl('immobilier')]];
+const OPEN_TABS = ['stocks', 'etf', 'bond'];
+const tabDefs = k => k === 'crypto' ? [...CRYPTO].sort((a, b) => S.mk[b.id].p * b.sup - S.mk[a.id].p * a.sup) : k === 'etf' ? ETFS : k === 'bond' ? BONDS : STOCKS;
+// Répartition du portefeuille par type de placement.
+function allocHtml(pf) {
+  const rows = [[tl('actions'), pf.by.stock, '--sky'], [tl('inv_etf'), pf.by.etf, '--teal'], [tl('k_bonds_s'), pf.by.bond, '--gold'], [tl('cls_cash'), pf.by.cash, '--money'], [tl('crypto'), pf.crypto, '--plum'], [tl('immobilier_net'), Math.max(0, pf.realty - pf.debt), '--coral']].filter(r => r[1] > .005);
+  const tot = rows.reduce((a, r) => a + r[1], 0);
+  if (!tot) return '';
+  return `<div class="alloc"><div class="alloc-bar">${rows.map(r => `<i style="width:${r[1] / tot * 100}%;background:var(${r[2]})"></i>`).join('')}</div>
+    <div class="alloc-leg">${rows.map(r => `<span><i style="background:var(${r[2]})"></i>${r[0]} <b class="num">${nf0.format(r[1] / tot * 100)} %</b><small class="num">${eur(r[1])}</small></span>`).join('')}</div></div>`;
+}
+// Positions détenues : quantité, prix de revient unitaire (PRU), valeur et plus/moins-value en € et en %.
+function positionsHtml() {
+  const rows = [...SECS, ...CRYPTO].filter(d => holdOf(d.id) > 0);
+  if (!rows.length) return '';
+  return `<div class="card"><span class="label">${tl('my_pos')}</span><div class="list pos">${rows.map(d => {
+    const q = holdOf(d.id), m = S.mk[d.id], v = q * m.p, b = S.basis[d.id] || 0;
+    return `<button type="button" class="prow-s" data-asset="${d.id}"><span class="arow-main"><b>${d.ico} ${d.n}</b><small>${d.fix ? tl('cls_cash') : tl('pos_line', qtyTxt(d.id, q), px(b / q))}</small></span>
+      <span class="arow-p"><b class="num" id="pv-${d.id}">${eur(v)}</b><small id="pp-${d.id}">${d.fix ? '' : plHtml(v - b, b)}</small></span></button>`;
+  }).join('')}</div></div>`;
+}
 function renderInvest() {
   if (invView) return invView.k === 'asset' ? renderAsset(invView.id) : invView.k === 'prop' ? renderProp(invView.u) : renderListing(invView.t);
-  if (investTab !== 'stocks' && !S.unl[investTab]) investTab = 'stocks';
-  const tabs = [['stocks', tl('actions')], ['realty', tl('immobilier')], ['crypto', tl('crypto')]], pf = pfParts(), pts = series(S.pfH, perPf, pf.total);
+  if (!OPEN_TABS.includes(investTab) && !S.unl[investTab]) investTab = 'stocks';
+  const pf = pfParts(), pts = series(S.pfH, perPf, pf.total);
   const inc = divH() + S.props.reduce((a, pr) => a + propAcc(pr).cf, 0);
   let h = `<section class="screen" id="scr"><div class="screen-title"><h1>${tl('investir')}</h1><span>${tl('t_1_h_de_jeu_1_mois')}</span></div>
     <div class="card pf"><span class="label">${tl('mon_portefeuille')}</span>
       <b class="num pf-val" id="pfVal">${eur(pf.total)}</b>
       <div class="pf-row"><span>${tl('plus_value_latente')} <span id="pfPL">${plHtml(pf.pl, pfInvested())}</span></span><span>${tl('revenus_2', inc < 0 ? '--neg' : '--money', perH(inc))}</span></div>
       ${chartBlock('pf', pts, perPf, eur)}${perChips(perPf, 'data-perpf')}
-      <div class="pf-split"><div><small>${tl('actions')}</small><b class="num">${eur(pf.stocks)}</b></div><div><small>${tl('crypto')}</small><b class="num">${eur(pf.crypto)}</b></div><div><small>${tl('immobilier_net')}</small><b class="num">${eur(pf.realty - pf.debt)}</b></div></div></div>
-    <div class="seg" role="tablist">${tabs.map(([k, n]) => `<button type="button" role="tab" data-itab="${k}" aria-selected="${investTab === k}" ${S.unl[k] || k === 'stocks' ? '' : 'disabled'}>${S.unl[k] || k === 'stocks' ? n : `🔒 ${n}<small class="lock-at">${tl('de_fortune', eur(UNL_AT[k]))}</small>`}</button>`).join('')}</div>`;
+      ${allocHtml(pf)}</div>
+    ${positionsHtml()}
+    <div class="seg scroll" role="tablist">${ITABS.map(([k, n]) => { const open = OPEN_TABS.includes(k) || S.unl[k]; return `<button type="button" role="tab" data-itab="${k}" aria-selected="${investTab === k}" ${open ? '' : 'disabled'}>${open ? n : `🔒 ${n}<small class="lock-at">${tl('de_fortune', eur(UNL_AT[k]))}</small>`}</button>`; }).join('')}</div>`;
   if (investTab === 'realty') return h + renderRealtyTab() + '</section>';
-  const isC = investTab === 'crypto', defs = isC ? [...CRYPTO].sort((a, b) => S.mk[b.id].p * b.sup - S.mk[a.id].p * a.sup) : STOCKS;
+  const isC = investTab === 'crypto', defs = tabDefs(investTab);
+  h += `<p class="muted tab-intro">${tl('in_' + investTab)}</p>`;
   const news = infoFor(isC);
   h += `<div class="card"><div class="row"><span class="label">${tl('actualites')}</span>${S.unl.news ? `<button class="linkbtn" type="button" data-opennews="${isC ? 'crypto' : ''}">${tl('tout_voir')}</button>` : ''}</div><ul class="news" id="newsList">${newsHtml(news)}</ul></div>`;
   const ords = S.orders.filter(o => !!CBY[o.a] === isC);
   if (ords.length) h += `<div class="card"><span class="label">${tl('ordres_en_attente')}</span><div class="orders">${ords.map(orderRow).join('')}</div></div>`;
-  h += '<div class="list">';
+  h += `<p class="muted list-note">${tl('chg_day')}</p><div class="list">`;
   defs.forEach((d, i) => {
-    const m = S.mk[d.id], q = holdOf(d.id), c24 = chgSince(m.H, 24 * H, m.p);
-    h += `<button type="button" class="arow" data-asset="${d.id}"><span class="ico-tile" style="--cc:var(${isC ? '--plum' : '--sky'})">${d.ico}</span>
-      <span class="arow-main"><b>${isC ? `<i class="rank-n">${i + 1}</i>` : ''}${d.n}</b><small>${isC ? `${d.id}${S.rug[d.id] ? ` · <span class="neg">${tl('rug_pull')}</span>` : d.risk === 2 ? ` · <span class="warn-t">${tl('tres_risquee')}</span>` : ''}` : `${d.sec} · ${d.id}`}</small>${fxChip(assetFx(d.id))}${q ? `<small class="own">${tl('detenu', qtyTxt(d.id, q), q > 1 && !isC ? 's' : '', eur(q * m.p))}</small>` : ''}</span>
-      <svg class="mini" id="s-${d.id}" viewBox="0 0 100 32" preserveAspectRatio="none">${chartSVG(series(m.H, H, m.p), 100, 32)}</svg>
-      <span class="arow-p"><b class="num" id="p-${d.id}">${px(m.p)}</b><span id="c-${d.id}">${chgHtml(c24)}</span></span></button>`;
+    const m = S.mk[d.id], q = holdOf(d.id), c1 = chgSince(m.H, DAY, m.p);
+    const sub = isC ? `${d.id}${S.rug[d.id] ? ` · <span class="neg">${tl('rug_pull')}</span>` : d.risk === 2 ? ` · <span class="warn-t">${tl('tres_risquee')}</span>` : ''}`
+      : d.cls === 'etf' ? tl('ter_s', nf2.format(d.ter * 100)) : d.cls === 'stock' ? `${d.sec} · ${d.id}` : d.fix ? tl('sv_sub') : tl('yld_s', nf1.format(d.y * 100));
+    h += `<button type="button" class="arow" data-asset="${d.id}"><span class="ico-tile" style="--cc:var(${isC ? '--plum' : d.cls === 'etf' ? '--teal' : d.cls === 'stock' ? '--sky' : '--gold'})">${d.ico}</span>
+      <span class="arow-main"><b>${isC ? `<i class="rank-n">${i + 1}</i>` : ''}${d.n}</b><small>${srriBadge(d)} ${sub}</small>${fxChip(assetFx(d.id))}${q ? `<small class="own">${d.fix ? eur(q) : tl('detenu', qtyTxt(d.id, q), q > 1 && !isC ? 's' : '', eur(q * m.p))}</small>` : ''}</span>
+      ${d.fix ? '' : `<svg class="mini" id="s-${d.id}" viewBox="0 0 100 32" preserveAspectRatio="none">${chartSVG(series(m.H, H, m.p), 100, 32)}</svg>`}
+      <span class="arow-p">${d.fix ? `<b class="num">${tl('yr_pct', nf1.format(d.y * 100))}</b><small class="muted">${tl('k_rate')}</small>` : `<b class="num" id="p-${d.id}">${px(m.p)}</b><span id="c-${d.id}">${chgHtml(c1)}</span>`}</span></button>`;
   });
   return h + '</div></section>';
 }
@@ -4538,6 +4795,8 @@ function tradeQty(id, side) {
   return Math.max(0, q);
 }
 function tradeSummary(id) {
+  if (SBY[id].fix) { const qb = tradeQty(id, 'buy'), qs = tradeQty(id, 'sell'); return `<div><span>${tl('sv_in')}</span><b class="num">${eur(qb)}</b></div><small>${tl('sv_note', nf1.format(SBY[id].y * 100))}${qb > S.cash + 1e-9 ? ` · <span class="neg">${tl('solde_insuffisant')}</span>` : ''}</small>
+    <div><span>${tl('sv_out')}</span><b class="num">${eur(qs)}</b></div><small>${tl('sv_note2')}</small>`; }
   const qb = tradeQty(id, 'buy'), qs = tradeQty(id, 'sell'), b = quote(id, 'buy', qb), v = quote(id, 'sell', qs);
   return `<div><span>${tl('achat')}</span><b class="num">${qtyTxt(id, qb)} × ${px(b.avg)} = ${eur(b.total)}</b></div><small>${tl('prix_affiche_prix_moyen_estime_courtage', px(b.p), px(b.avg), nf1.format(b.rate * 100), b.total > S.cash + 1e-9 ? ` · <span class="neg">${tl('solde_insuffisant')}</span>` : '')}</small>
     <div><span>${tl('vente')}</span><b class="num">${qtyTxt(id, qs)} × ${px(v.avg)} = ${eur(v.net)}</b></div><small>${tl('frais', v.gain > 0 ? tl('plus_value_impot', eur(v.gain), eur(v.tax)) : tl('pas_de_plus_value_aucun_impot'), eur(v.fee))}</small>`;
@@ -4545,63 +4804,71 @@ function tradeSummary(id) {
 function renderAsset(id) {
   const isC = !!CBY[id], d = isC ? CBY[id] : SBY[id], m = S.mk[id], pts = series(m.H, perAsset, m.p), [hi, lo] = hiLo(pts);
   const q = holdOf(id), basis = S.basis[id] || 0, val = q * m.p, ords = S.orders.filter(o => o.a === id), trades = S.trades.filter(x => x[1] === id).slice(0, 12);
-  const qb = tradeQty(id, 'buy'), p = m.p, fee = isC ? FEE_C : FEE_S;
+  const qb = tradeQty(id, 'buy'), p = m.p, fee = baseFee(id), fix = !isC && d.fix;
+  const TQ = fix ? [100, 1000, 10000] : [1, 10, 100];
+  if (fix ? ![...TQ, 'max', 'amt'].includes(tq) : [1000, 10000].includes(tq)) tq = TQ[fix ? 1 : 0];
+  // Fiche produit : risque SRRI, volatilité, revenu, frais.
+  const yl = d.cls === 'bond' ? tl('k_coupon') : d.cls === 'cash' ? tl('k_rate') : tl('dividende');
+  const fees = fix ? tl('fee_none') : `${tl('fee_brk', nf1.format(fee * 100))}${d.ter ? `<br>${tl('fee_ter', nf2.format(d.ter * 100))}` : ''}`;
+  const risk = `<div class="wide"><small>${tl('k_risk')} · ${srriOf(d)}/7</small>${srriScale(d)}<small>${tl('risk_scale')}</small></div>
+    <div><small>${tl('volatilite')}</small>${fix ? `<b>${tl('k_none')}</b>` : tl('an', nf0.format(d.vol * 100))}</div><div><small>${tl('k_fees')}</small><b>${fees}</b></div>`;
   let stats;
   if (isC) {
     const rank = [...CRYPTO].sort((a, b) => S.mk[b.id].p * b.sup - S.mk[a.id].p * a.sup).findIndex(x => x.id === id) + 1, cap = p * d.sup;
     const vol = cap * (.03 + .04 * d.risk) * (1 + 6 * Math.abs(chgSince(m.H, 24 * H, p)));
     stats = `<div><small>${tl('capitalisation')}</small><b class="num" id="dCap">${eur(cap)}</b></div><div><small>${tl('volume_24_h')}</small><b class="num" id="dVol">${eur(vol)}</b></div>
-      <div><small>${tl('offre_en_circulation')}</small><b class="num">${String(eur(d.sup)).replace(/[€$]/g, '').trim()} ${d.id}</b></div><div><small>${tl('classement')}</small>${tl('sur', rank, CRYPTO.length)}</div>`;
-  } else stats = `<div><small>${tl('dividende')}</small>${tl('an', nf1.format(d.y * 100))}</div><div><small>${tl('verse_chaque_heure')}</small>${tl('action_2', eurFine(p * d.y / 12))}</div>
-      <div><small>${tl('secteur')}</small><b>${d.sec}</b></div><div><small>${tl('volatilite')}</small><b>${d.s >= .028 ? tl('elevee') : d.s >= .018 ? tl('moyenne') : tl('faible')}</b></div>`;
+      <div><small>${tl('offre_en_circulation')}</small><b class="num">${String(eur(d.sup)).replace(/[€$]/g, '').trim()} ${d.id}</b></div><div><small>${tl('classement')}</small>${tl('sur', rank, CRYPTO.length)}</div>${risk}`;
+  } else stats = `${risk}<div><small>${yl}</small>${d.y ? tl('an', nf1.format(d.y * 100)) : `<b>${tl('k_none')}</b>`}</div><div><small>${tl('paid_month')}</small>${d.y ? (fix ? `<b class="num">${tl('per_k', eurFine(1000 * d.y / 12), eur(1000))}</b>` : tl(d.cls === 'stock' ? 'action_2' : 'per_unit', eurFine(p * d.y / 12))) : `<b>—</b>`}</div>
+      <div><small>${tl('k_type')}</small><b>${tl('cls_' + d.cls)}</b></div><div><small>${d.cls === 'stock' ? tl('secteur') : tl('k_cap')}</small><b>${d.cls === 'stock' ? d.sec : isFinite(d.cap) ? eur(d.cap * 1e9) : '—'}</b></div>`;
   return `<section class="screen" id="scr"><div class="screen-title with-back"><button class="back" id="invBack" type="button" aria-label="${tl('retour')}">←</button><h1>${d.n}</h1></div>
     <div class="card dhero"><span class="ico-tile lg" style="--cc:var(${isC ? '--plum' : '--sky'})">${d.ico}</span>
-      <div><small class="muted">${d.id} · ${isC ? `<span class="chipx ${S.rug[id] ? 'bad' : RISK[d.risk][1]}">${S.rug[id] ? tl('rug_pull_2') : RISK[d.risk][0]}</span>` : d.sec}</small>
+      <div><small class="muted">${d.id} · ${isC ? `<span class="chipx ${S.rug[id] ? 'bad' : RISK[d.risk][1]}">${S.rug[id] ? tl('rug_pull_2') : RISK[d.risk][0]}</span>` : d.cls === 'stock' ? d.sec : tl('cls_' + d.cls)} ${srriBadge(d)}</small>
       <b class="num big-net" id="dPrice">${px(p)}</b><span id="dChg">${chgBoth(pts, p)}</span>${fxChip(assetFx(id))}</div></div>
-    <div class="card">${chartBlock('asset', pts, perAsset)}${perChips(perAsset, 'data-per')}
-      <div class="stats" style="margin-top:12px"><div><small>${tl('plus_haut_periode')}</small><b class="num" id="dHi">${px(hi)}</b></div><div><small>${tl('plus_bas_periode')}</small><b class="num" id="dLo">${px(lo)}</b></div>${stats}</div></div>
+    <div class="card">${fix ? '' : `${chartBlock('asset', pts, perAsset)}${perChips(perAsset, 'data-per')}`}
+      <div class="stats" style="margin-top:12px">${fix ? '' : `<div><small>${tl('plus_haut_periode')}</small><b class="num" id="dHi">${px(hi)}</b></div><div><small>${tl('plus_bas_periode')}</small><b class="num" id="dLo">${px(lo)}</b></div>`}${stats}</div></div>
 
-    <div class="card trade"><div class="row"><span class="label">${tl('acheter_ou_vendre')}</span><span class="muted">${tl('courtage', nf1.format(feeRate(id) * 100), feeRate(id) > (isC ? FEE_C : FEE_S) ? ` ${tl('majore')}` : '')}</span></div>
-      <div class="qty">${[1, 10, 100].map(n => `<button type="button" data-tq="${n}" aria-pressed="${tq === n}">×${n}</button>`).join('')}<button type="button" data-tq="max" aria-pressed="${tq === 'max'}">${tl('max')}</button><button type="button" data-tq="amt" aria-pressed="${tq === 'amt'}">${tl('montant_2')}</button></div>
+    <div class="card trade"><div class="row"><span class="label">${fix ? tl('sv_head') : tl('acheter_ou_vendre')}</span><span class="muted">${fix ? tl('fee_none') : tl('courtage', nf1.format(feeRate(id) * 100), feeRate(id) > fee ? ` ${tl('majore')}` : '')}</span></div>
+      <div class="qty">${TQ.map(n => `<button type="button" data-tq="${n}" aria-pressed="${tq === n}">${fix ? String(eur(n)).replace(/[,.]00(?=\D|$)/, '') : `×${n}`}</button>`).join('')}<button type="button" data-tq="max" aria-pressed="${tq === 'max'}">${tl('max')}</button><button type="button" data-tq="amt" aria-pressed="${tq === 'amt'}">${tl('montant_2')}</button></div>
       ${tq === 'amt' ? `<label class="inp"><span>${tl('montant')}</span><input id="amtIn" type="number" inputmode="decimal" min="0" step="any" value="${tAmt || ''}" placeholder="0"><span>${CUR()}</span></label>` : ''}
       <div class="tsum" id="tSum">${tradeSummary(id)}</div>
-      <div class="asset-actions"><button class="btn ghost" type="button" id="sellBtn" ${tradeQty(id, 'sell') > 0 ? '' : 'disabled'}>${tl('vendre')}</button><button class="btn go" type="button" id="buyBtn" ${qb > 0 && quote(id, 'buy', qb).total <= S.cash + 1e-9 ? '' : 'disabled'}>${tl('acheter_2')}</button></div></div>
+      <div class="asset-actions"><button class="btn ghost" type="button" id="sellBtn" ${tradeQty(id, 'sell') > 0 ? '' : 'disabled'}>${fix ? tl('withdraw') : tl('vendre')}</button><button class="btn go" type="button" id="buyBtn" ${qb > 0 && quote(id, 'buy', qb).total <= S.cash + 1e-9 ? '' : 'disabled'}>${fix ? tl('deposit') : tl('acheter_2')}</button></div></div>
 
     <div class="card"><span class="label">${tl('ma_position')}</span>
-      ${q ? `<div class="stats" style="margin-top:10px"><div><small>${tl('quantite')}</small><b class="num">${qtyTxt(id, q)}</b></div><div><small>${tl('prix_moyen_dachat')}</small><b class="num">${px(basis / q)}</b></div>
+      ${q && fix ? `<div class="stats" style="margin-top:10px"><div><small>${tl('valeur_actuelle')}</small><b class="num" id="posVal">${eur(val)}</b></div><div><small>${tl('interest_rec')}</small><b class="num">${eur(S.divRec[id] || 0)}</b></div><div><small>${tl('revenu_actuel')}</small>${tl('h_2', eurFine(val * d.y / 12))}</div></div>`
+        : q ? `<div class="stats" style="margin-top:10px"><div><small>${tl('quantite')}</small><b class="num">${qtyTxt(id, q)}</b></div><div><small>${tl('prix_moyen_dachat')}</small><b class="num">${px(basis / q)}</b></div>
         <div><small>${tl('valeur_actuelle')}</small><b class="num" id="posVal">${eur(val)}</b></div><div><small>${tl('plus_ou_moins_value')}</small><span id="posPL">${plHtml(val - basis, basis)}</span></div>
-        ${isC ? '' : `<div><small>${tl('dividendes_percus')}</small><b class="num">${eur(S.divRec[id] || 0)}</b></div><div><small>${tl('revenu_actuel')}</small>${tl('h_2', eurFine(val * d.y / 12))}</div>`}</div>`
-        : `<p class="muted" style="margin:8px 0 0">${tl('vous_ne_detenez_pas_encore', isC ? tl('cette_crypto') : tl('cette_action'))}</p>`}</div>
+        ${isC ? '' : `<div><small>${d.cls === 'stock' || d.cls === 'etf' ? tl('dividendes_percus') : tl('interest_rec')}</small><b class="num">${eur(S.divRec[id] || 0)}</b></div><div><small>${tl('revenu_actuel')}</small>${tl('h_2', eurFine(val * d.y / 12))}</div>`}</div>`
+        : `<p class="muted" style="margin:8px 0 0">${tl('vous_ne_detenez_pas_encore', isC ? tl('cette_crypto') : d.cls === 'stock' ? tl('cette_action') : tl('ce_placement'))}</p>`}</div>
 
-    <div class="card"><span class="label">${tl('ordre_a_cours_limite')}</span>
+    ${fix ? '' : `<div class="card"><span class="label">${tl('ordre_a_cours_limite')}</span>
       <div class="qty" style="margin-top:10px">${Object.entries({ buy: tl('achat_si'), tp: tl('vente_si'), sl: tl('stop_si') }).map(([k, l]) => `<button type="button" data-olt="${k}" aria-pressed="${olt === k}">${l}</button>`).join('')}</div>
       <p class="muted" style="margin:8px 0">${OTYPES[olt]}…</p>
       <div class="inp-row"><label class="inp"><span>${tl('prix')}</span><input id="limP" type="number" inputmode="decimal" min="0" step="any" value="${+(p * (olt === 'tp' ? 1.05 : .95)).toPrecision(4)}"><span>${CUR()}</span></label>
         <label class="inp"><span>${tl('qte')}</span><input id="limQ" type="number" inputmode="decimal" min="0" step="${isC ? 'any' : 1}" value="${olt === 'buy' ? (isC ? 1 : 10) : (q || 1)}"></label></div>
       <button class="btn gold full" type="button" id="placeOrder" style="margin-top:10px">${tl('placer_lordre')}</button>
-      ${ords.length ? `<div class="orders" style="margin-top:10px">${ords.map(orderRow).join('')}</div>` : ''}</div>
+      ${ords.length ? `<div class="orders" style="margin-top:10px">${ords.map(orderRow).join('')}</div>` : ''}</div>`}
 
-    <div class="card"><span class="label">${isC ? tl('a_propos') : tl('lentreprise')}</span><p style="margin:8px 0 0">${d.desc}</p></div>
+    <div class="card"><span class="label">${isC ? tl('a_propos') : d.cls === 'stock' ? tl('lentreprise') : d.cls === 'etf' ? tl('k_fund') : tl('k_product')}</span><p style="margin:8px 0 0">${d.desc}</p></div>
     <div class="card"><span class="label">${tl('mes_transactions')}</span><ul class="log">${trades.map(([t, , side, qq, pp, f, auto, tx]) => `<li class="${side === 'buy' ? 'good' : 'warn'}"><span>${tl('frais_2', side === 'buy' ? tl('achat') : tl('vente'), auto ? ` ${tl('ordre')}` : '', qtyTxt(id, qq), px(pp), eur(f), tx ? ` ${tl('impot_2', eur(tx))}` : '')}</span><small>${ago(t)}</small></li>`).join('') || `<li><span class="muted">${tl('aucune_transaction')}</span></li>`}</ul></div>
   </section>`;
 }
 function doTrade(side) {
   const id = invView.id, d = SBY[id] || CBY[id], q = tradeQty(id, side), r = quote(id, side, q), buy = side === 'buy';
   if (!(q > 0)) return;
-  modal(`<h3>${buy ? tl('acheter_2') : tl('vendre')} : ${esc(d.n)}</h3>
+  modal(`<h3>${d.fix ? (buy ? tl('deposit') : tl('withdraw')) : buy ? tl('acheter_2') : tl('vendre')}${LANG === 'fr' ? ' :' : ':'} ${esc(d.n)}</h3>
     <div class="pl"><div><span>${tl('quantite')}</span><b class="num">${qtyTxt(id, q)}</b></div><div><span>${tl('prix_affiche')}</span><b class="num">${px(r.p)}</b></div><div><span>${tl('prix_moyen_estime')}</span><b class="num">${px(r.avg)}</b></div>
       <div><span>${tl('montant')}</span><b class="num">${eur(r.gross)}</b></div><div class="minus"><span>${tl('courtage_2', nf1.format(r.rate * 100))}</span><b class="num">${buy ? '+' : '−'}${eur(r.fee)}</b></div>
       ${buy ? `<div class="net"><span>${tl('total_a_payer')}</span><b class="num">${eur(r.total)}</b></div>` : taxRows(r.gain, r.tax, r.net)}</div>
     ${r.imp > .002 ? `<p>${tl('votre_ordre_fait_le_cours_denviron', buy ? tl('w_monter') : tl('w_baisser'), nf1.format(r.imp * 100))}</p>` : ''}
-    ${r.rate > (CBY[id] ? FEE_C : FEE_S) ? `<p class="need">${tl('courtage_majore_vous_achetez_et_revendez')}</p>` : ''}
+    ${r.rate > baseFee(id) ? `<p class="need">${tl('courtage_majore_vous_achetez_et_revendez')}</p>` : ''}
     <div class="modal-actions"><button class="btn ghost" id="mNo" type="button">${tl('annuler')}</button><button class="btn ${buy ? 'go' : 'coral'}" id="mYes" type="button">${tl('confirmer_2')}</button></div>`);
   $('mNo').onclick = closeModal;
   $('mYes').onclick = () => {
     closeModal();
     const x = execTrade(id, side, q);
     if (!x.ok) return toast(tl('ordre_refuse', x.msg), 'crash');
-    toast(tl('a_en_moyenne', buy ? tl('achat') : tl('vente'), qtyTxt(id, x.q), d.n, px(x.p), x.tax ? ` ${tl('impot_2', eur(x.tax))}` : ''), buy ? 'good' : '');
-    buyFx(); afterAction();
+    toast(d.fix ? tl(buy ? 'sv_toast_in' : 'sv_toast_out', eur(x.q)) : tl('a_en_moyenne', buy ? tl('achat') : tl('vente'), qtyTxt(id, x.q), d.n, px(x.p), x.tax ? ` ${tl('impot_2', eur(x.tax))}` : ''), buy ? 'good' : '');
+    fxBuy(); afterAction();
   };
 }
 function placeOrder() {
@@ -4694,7 +4961,7 @@ function buyProp(tid, loan) {
   S.props.push(pr); delete S.listings[tid];
   invView = { k: 'prop', u: pr.u };
   toast(tl('felicitations_vous_etes_proprietaire_a', T.n, pr.city), 'good');
-  winFx(); afterAction(); window.scrollTo(0, 0);
+  fxGoal(); afterAction(); window.scrollTo(0, 0);
 }
 function loanModal(tid) {
   const T = RBY[tid], L = getListing(tid), price = listPrice(tid, L), notary = price * NOTARY;
@@ -4766,10 +5033,11 @@ function updateInvest() {
     const v = $('pfVal'); if (v) v.textContent = eur(p.total);
     const pl = $('pfPL'); if (pl) pl.innerHTML = plHtml(p.pl, pfInvested());
     chartUpdate('pf', series(S.pfH, perPf, p.total));
+    for (const d of [...SECS, ...CRYPTO]) { const el = $('pv-' + d.id); if (!el) continue; const q = holdOf(d.id), v = q * S.mk[d.id].p, b = S.basis[d.id] || 0; el.textContent = eur(v); if (!d.fix) $('pp-' + d.id).innerHTML = plHtml(v - b, b); }
     if (investTab !== 'realty') {
-      for (const d of investTab === 'crypto' ? CRYPTO : STOCKS) {
+      for (const d of tabDefs(investTab)) {
         const m = S.mk[d.id], el = $('p-' + d.id); if (!el) continue;
-        el.textContent = px(m.p); $('c-' + d.id).innerHTML = chgHtml(chgSince(m.H, 24 * H, m.p));
+        el.textContent = px(m.p); $('c-' + d.id).innerHTML = chgHtml(chgSince(m.H, DAY, m.p));
         $('s-' + d.id).innerHTML = chartSVG(series(m.H, H, m.p), 100, 32);
       }
       const nl = $('newsList'), isC = investTab === 'crypto';
@@ -4780,7 +5048,7 @@ function updateInvest() {
   if (invView.k === 'asset') {
     const id = invView.id, m = S.mk[id], pts = series(m.H, perAsset, m.p), [hi, lo] = hiLo(pts), q = holdOf(id);
     $('dPrice').textContent = px(m.p); $('dChg').innerHTML = chgBoth(pts, m.p);
-    $('dHi').textContent = px(hi); $('dLo').textContent = px(lo);
+    if ($('dHi')) { $('dHi').textContent = px(hi); $('dLo').textContent = px(lo); }
     chartUpdate('asset', pts);
     if ($('posVal')) { $('posVal').textContent = eur(q * m.p); $('posPL').innerHTML = plHtml(q * m.p - (S.basis[id] || 0), S.basis[id] || 0); }
     if ($('dCap')) { const d = CBY[id], cap = m.p * d.sup; $('dCap').textContent = eur(cap); $('dVol').textContent = eur(cap * (.03 + .04 * d.risk) * (1 + 6 * Math.abs(chgSince(m.H, 24 * H, m.p)))); }
@@ -4817,23 +5085,33 @@ const minus = v => v >= .005 ? '−' + eur(v) : eur(0);
 const plRows = b => `<div><span>${tl('chiffre_daffaires')}</span>${tl('h_2', eur(b.ca))}</div>
   <div class="minus"><span>${tl('salaires', b.mgr ? ` ${tl('dont_manager')}` : '')}</span>${tl('h_2', minus(b.sal))}</div>
   <div class="minus"><span>${tl('loyer_2')}</span>${tl('h_2', minus(b.rent))}</div>
-  <div class="minus"><span>${tl('achats_et_stock')}</span>${tl('h_2', minus(b.stock))}</div>
+  ${b.ops ? `<div class="minus"><span>${tl('pl_cogs')}</span>${tl('h_2', minus(b.ops.cogs))}</div>${b.ops.waste > .005 ? `<div class="minus"><span>${tl('pl_waste')}</span>${tl('h_2', minus(b.ops.waste))}</div>` : ''}${b.ops.veh > .005 ? `<div class="minus"><span>${tl('pl_veh')}</span>${tl('h_2', minus(b.ops.veh))}</div>` : ''}`
+    : `<div class="minus"><span>${tl('achats_et_stock')}</span>${tl('h_2', minus(b.stock))}</div>`}
   <div class="net${b.net < 0 ? ' loss' : ''}"><span>${b.net < 0 ? tl('perte_nette') : tl('benefice_net')}</span>${tl('h_2', eur(b.net))}</div>`;
 const sitesTxt = l => tl('adresse', SITES[l], SITES[l] > 1 ? 's' : '');
 const netTxt = v => `<b class="num" style="color:var(${v < 0 ? '--neg' : '--money'})">${perH(v)}</b>`;
 const meter = (v, inv) => { const c = inv ? (v > 70 ? '--neg' : v > 45 ? '--gold' : '--money') : (v < 30 ? '--neg' : v < 55 ? '--gold' : '--money'); return `<span class="meter"><i style="width:${clamp(v, 0, 100)}%;background:var(${c})"></i></span>`; };
 const ago = t => { const m = Math.max(0, (Date.now() - t) / 60000); return m < 1 ? tl('a_linstant') : m < 60 ? tl('il_y_a_min', Math.floor(m)) : m < 1440 ? tl('il_y_a_h', Math.floor(m / 60)) : tl('il_y_a_j', Math.floor(m / 1440)); };
 const AWAY = { sick: tl('malade'), leave: tl('en_conges'), train: tl('en_formation'), start: tl('arrive_bientot') };
-// Préavis d'une nouvelle recrue : 10 min pour un petit business, jusqu'à 40 min pour un très gros.
-const hireDelay = d => (10 + 10 * d.tier) * 60e3;
+// Compte à rebours qui se met à jour tout seul (voir refresh()).
+const cd = ts => `<span class="num" data-cd="${ts}">${mmss(ts - Date.now())}</span>`;
+// Heure de retour, avec le jour si ce n'est pas aujourd'hui.
+const backAt = ts => new Date(ts).toLocaleString(locale(), new Date(ts).toDateString() === new Date().toDateString() ? { hour: '2-digit', minute: '2-digit' } : { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+const arrivingOf = (f, t) => f.staff.filter(e => e.away && e.away.k === 'start' && e.away.until > t);
+const awayTxt = (e, t) => e.away.k === 'start' ? tl('aw_start', cd(e.away.until)) : tl('aw_' + e.away.k, backAt(e.away.until));
+// Arrivée d'une nouvelle recrue : 1 min pour un petit business, 2 min au plus pour un très gros.
+const hireDelay = d => Math.min(120, 60 + 20 * d.tier) * 1e3;
 function firmAlerts(f, t) {
   const d = bizById(f.t), a = [];
   if (f.strike > t) a.push(['bad', tl('en_greve')]);
   if (f.upEnd > t) a.push(['warn', tl('travaux_2', dur(f.upEnd - t))]);
-  if (!d.solo && !f.staff.some(e => isIn(e, t))) a.push(['bad', tl('a_larret_aucun_employe')]);
+  // En route (nouvelles recrues) et absents (malades, congés, formation) sont comptés à part.
+  const arr = arrivingOf(f, t), off = f.staff.filter(e => !isIn(e, t) && !arr.includes(e)).length, here = f.staff.length - arr.length - off;
+  const soon = arr.length ? Math.min(...arr.map(e => e.away.until)) : 0;
+  if (!d.solo && !here) a.push(!f.staff.length ? ['bad', tl('a_larret_aucun_employe')] : !off ? ['warn', tl('st_enroute_open', cd(soon))] : ['bad', tl('st_nobody_here')]);
   const asks = f.staff.filter(e => e.ask).length;
   if (asks) a.push(['warn', tl('demande_daugmentation', asks, asks > 1 ? 's' : '')]);
-  const off = f.staff.filter(e => !isIn(e, t)).length;
+  if (arr.length && (d.solo || here)) a.push(['warn', tl('st_enroute', arr.length, arr.length > 1 ? 's' : '', cd(soon))]);
   if (off) a.push(['', tl('absent', off, off > 1 ? 's' : '')]);
   const fl = fxOn(f, t);
   if (fl.length) a.push(['event', tl('evenement_en_cours', [...new Set(fl.map(x => `${x.label} ${pctTxt(x.m)}`))].join(', '))]);
@@ -4858,11 +5136,19 @@ function renderBiz() {
       <div class="asset-head"><span class="bico" style="--cc:var(${d.c})">${d.ico}</span>
         <div class="asset-name"><b>${esc(firmName(f))}</b><small>${tl('niveau_sur', f.l, BIZ_MAX, sitesTxt(f.l))}</small></div>
         <div class="asset-price">${netTxt(st.net)}<small class="muted">${tl('benefice_net_2')}</small></div></div>
-      <div class="team-line"><span>${tl('employes', st.n, st.need, vacN(f) ? ` · <span class="warn-t">${tl('poste_a_pourvoir', vacN(f), vacN(f) > 1 ? 's' : '')}</span>` : '')}</span><span>⭐ <b>${nf1.format(f.ops.rating)}</b></span><span>😊 <b>${st.n ? Math.round(st.avgMood) + pc() : '—'}</b></span><span>${tl('h_3', eur(st.sal))}</span></div>
+      <div class="team-line"><span>${tl('emp_at_work', st.present, st.need, vacN(f) ? ` · <span class="warn-t">${tl('poste_a_pourvoir', vacN(f), vacN(f) > 1 ? 's' : '')}</span>` : '')}</span><span>⭐ <b>${nf1.format(f.ops.rating)}</b></span><span>😊 <b>${st.n ? Math.round(st.avgMood) + pc() : '—'}</b></span><span>${tl('h_3', eur(st.sal))}</span></div>
       ${chips(firmAlerts(f, t))}
       <button class="btn gold full" type="button" data-firm="${f.u}">${tl('gerer_lentreprise')}</button></div>`;
   }
   return h + '</div></section>';
+}
+// Personne au travail : on explique pourquoi et on propose de quoi régler le problème.
+function nobodyCard(f, d, t) {
+  if (!f.staff.length) return `<div class="card nobody"><p>${tl('nobody_none')}</p><button class="btn go full" type="button" data-ftab="team">${tl('btn_team')}</button></div>`;
+  const arr = arrivingOf(f, t), away = f.staff.filter(e => !arr.includes(e)), first = [...f.staff].sort((a, b) => a.away.until - b.away.until)[0];
+  if (!away.length) return `<div class="card nobody"><p>${tl('nobody_arriving', cd(first.away.until))}</p>${waitBtns(`emp:${f.u}:${first.id}`, first.away.until, t)}</div>`;
+  const why = [...new Set(away.map(e => AWAY[e.away.k]))].join(', '), back = away.filter(e => e.away.k !== 'sick').sort((a, b) => a.away.until - b.away.until)[0];
+  return `<div class="card nobody"><p>${tl('nobody_away', why)}</p><div class="nobody-act"><button class="btn go sm" type="button" data-recruit="${away[0].r}">${tl('btn_replace')}</button>${back ? waitBtns(`emp:${f.u}:${back.id}`, back.away.until, t) : ''}</div></div>`;
 }
 function renderFirm() {
   const f = S.firms.find(x => x.u === firmU);
@@ -4874,23 +5160,24 @@ function renderFirm() {
   return `<section class="screen" id="scr"><div class="screen-title with-back"><button class="back" id="firmBack" type="button" aria-label="${tl('retour')}">←</button><h1>${esc(firmName(f))}</h1></div>
     <div class="card firm-hero"><span class="bico lg" style="--cc:var(${d.c})">${d.ico}</span>
       <div><span class="label">${tl('benefice_net')}</span><b class="num big-net" style="color:var(${st.net < 0 ? '--neg' : '--money'})">${perH(st.net)}</b><span class="muted">${tl('niveau_sur_satisfaction', f.l, BIZ_MAX, sitesTxt(f.l), nf1.format(f.ops.rating), Math.round(st.ops.sat * 100))}</span></div></div>
-    ${chips(firmAlerts(f, t).filter(a => !a[1].startsWith('👔')))}
+    ${chips(firmAlerts(f, t).filter(a => !String(a[1]).startsWith('👔')))}
+    ${!d.solo && !st.present && !(f.strike > t) ? nobodyCard(f, d, t) : ''}
     ${f.strike > t ? `<div class="card strike">${tl('lequipe_est_en_greve')}<span>${tl('plus_aucune_production_ni_salaire_verse', dur(f.strike - t))}</span>
       <div class="modal-actions"><button class="btn go" id="strikeYes" type="button">${tl('accorder_10_a_tous')}</button><button class="btn ghost" id="strikeNo" type="button">${tl('tenir_bon')}</button></div></div>` : ''}
     <div class="seg" role="tablist">${[['ops', tl('gestion')], ['team', tl('equipe_2', vac.length ? ' •' : '')], ['compta', tl('comptes')]].map(([k, l]) => `<button type="button" role="tab" data-ftab="${k}" aria-selected="${firmTab === k}">${l}</button>`).join('')}</div>
     ${firmTab === 'ops' ? renderOps(f, d, st, t) : ''}
-    ${firmTab === 'compta' ? `<div class="card"><span class="label">${tl('compte_de_resultat_par_heure')}</span><div class="pl" style="margin-top:10px">${plRows(st)}</div>
+    ${firmTab === 'compta' ? `<div class="card"><span class="label">${tl('compte_de_resultat_par_heure')}</span><div class="pl" style="margin-top:10px">${plRows(st)}</div>${st.ca < .005 ? `<p class="muted" style="margin:10px 0 0">${tl('pl_shut')}</p>` : ''}
       ${st.vibe ? `<p class="good-note">${tl('bonne_ambiance_10_de_productivite')}</p>` : ''}</div>` : ''}
 
     ${firmTab === 'team' ? `<div class="card team"><div class="row"><span class="label">${tl('equipe')}</span>${d.tier >= 2 ? `<span class="muted">${tl('chaque_poste_est_une_equipe_et')}</span>` : ''}</div>
-      <div class="stats"><div><small>${tl('employes_2')}</small><b>${st.n} / ${st.need}</b></div><div><small>${tl('masse_salariale')}</small>${tl('h_2', eur(st.sal))}</div>
+      <div class="stats"><div><small>${tl('at_work')}</small><b>${st.present} / ${st.need}</b>${st.arriving ? `<small class="warn-t">${tl('enroute_paid', st.arriving, st.arriving > 1 ? 's' : '')}</small>` : ''}</div><div><small>${tl('masse_salariale')}</small>${tl('h_2', eur(st.sal))}</div>
         <div><small>${tl('humeur_moyenne')}</small><b>${st.n ? Math.round(st.avgMood) + pc() : '—'}</b>${meter(st.avgMood)}</div><div><small>${tl('productivite')}</small><b>${Math.round(st.staffF * 100)}${pc()}</b>${meter(st.staffF / 1.5 * 100)}</div></div>
       ${vac.length ? `<div class="vacs">${vac.flatMap(([r, n]) => Array.from({ length: n }, () => `<div class="vac"><span class="emp-av vac-av">?</span><span class="emp-main">${tl('poste_vacant')}<small>${esc(r)}</small></span><button class="btn go sm" type="button" data-recruit="${d.roles.indexOf(r)}">${tl('recruter')}</button></div>`)).join('')}</div>`
         : `<button class="btn ghost full" id="recruitBtn" type="button" ${full ? 'disabled' : ''}>${full ? tl('equipe_au_complet') : tl('recruter_un_employe_en_plus')}</button>`}
       <div class="emps">${emps.map(e => {
-        const st2 = f.strike > t ? tl('en_greve_2') : e.away && e.away.until > t ? `${AWAY[e.away.k]} · ${dur(e.away.until - t)}` : '';
+        const st2 = f.strike > t ? tl('en_greve_2') : e.away && e.away.until > t ? awayTxt(e, t) : '', ts = teamSize(d, e.r);
         return `<button class="emp" type="button" data-emp="${e.id}"><span class="emp-av" style="--cc:var(${PALETTE[e.id % PALETTE.length]})">${esc(e.n[0])}</span>
-          <span class="emp-main"><b>${esc(e.n)}${e.ask ? ' <i class="ask">💬</i>' : ''}</b><small>${esc(roleOf(d, e.r, e.g))} · <span class="stars">${stars(e.sk)}</span> ${traitChip(e)}</small>
+          <span class="emp-main"><b>${esc(e.n)}${e.ask ? ' <i class="ask">💬</i>' : ''}</b><small>${esc(roleOf(d, e.r, e.g))}${ts > 1 ? ` · 👥 ${nf0.format(ts)}` : ''} · <span class="stars">${stars(e.sk)}</span> ${traitChip(e)}</small>
             <span class="emp-bars"><span>${tl('humeur')}</span>${meter(e.mood)}<span>${tl('fatigue_2')}</span>${meter(e.fat, true)}</span>${st2 ? `<span class="chipx">${st2}</span>` : ''}</span>
           <span class="emp-sal num">${eur(e.sal)}<small>${tl('h_4')}</small></span></button>`;
       }).join('') || `<p class="muted">${d.solo ? tl('personne_pour_linstant_vous_tenez_laffai') : tl('personne_pour_linstant_lentreprise_ne_pr')}</p>`}</div>
@@ -5027,7 +5314,7 @@ function foundBiz(id) {
   logF(f, d.solo ? tl('ouverture_vous_tenez_vous_meme_laffaire', d.roles.join(', ')) : tl('ouverture_poste_a_pourvoir_rien_ne', d.roles.length, d.roles.length > 1 ? 's' : '', d.roles.join(', ')), 'good', t);
   bizView = 'firm'; firmU = f.u;
   toast(tl('nouvelle_entreprise', firmName(f)), 'good');
-  if (S.firms.length === 1) winFx(); else buyFx(); afterAction(); window.scrollTo(0, 0);
+  fxBig(); afterAction(); window.scrollTo(0, 0);
 }
 const findFirm = u => S.firms.find(x => x.u === +u);
 // Durée des travaux d'amélioration : 5 min au niveau 1, environ 2 h 15 au niveau 9.
@@ -5040,7 +5327,7 @@ function upFirm(u) {
   S.cash -= c; f.s += c; S.stats.ups++; f.upTo = f.l + 1; f.upEnd = t + upDur(f.l);
   logF(f, tl('travaux_lances', STEPS[f.upTo], dur(f.upEnd - t)), '', t);
   toast(tl('travaux_lances_fin_dans', STEPS[f.upTo], dur(f.upEnd - t)), 'good');
-  buyFx(); afterAction();
+  fxUp(); afterAction();
 }
 function sellFirmAsk(u) {
   const f = findFirm(u);
@@ -5056,7 +5343,7 @@ function genCands(d, r) {
   return [0, 1, 2].map(() => {
     const role = r == null ? Math.floor(Math.random() * d.roles.length) : r, tr = pick(Object.keys(TRAITS));
     const sk = clamp(1 + Math.floor(Math.pow(Math.random(), 1.5) * 5), 1, 5), [n, g] = pick(NAMES);
-    return { n, g, r: role, sk, tr, sal: mktWage(d, sk) * (TRAITS[tr][3].pay || 1) * rf(.95, 1.1) };
+    return { n, g, r: role, sk, tr, sal: mktWage(d, sk, role) * (TRAITS[tr][3].pay || 1) * rf(.95, 1.1) };
   }).sort((a, b) => a.sk - b.sk);
 }
 // Trois candidats par poste ; ils restent jusqu'à l'embauche, ou contre une petite somme on en fait venir trois autres.
@@ -5080,18 +5367,18 @@ function recruitModal(u, r) {
     f.staff.push(e); S.stats.hires++; list.splice(+b.dataset.hire, 1);
     logF(f, tl('vous_avez_recrute_etoile', e.n, roleOf(d, e.r, e.g), e.sk, e.sk > 1 ? 's' : ''), 'good', now);
     toast(tl('est_arrivee_dans', e.n, gx(e, tl('embauche'), tl('embauchee')), dur(hireDelay(d))), 'good');
-    buyFx(); closeModal(); afterAction();
+    fxBuy(); closeModal(); afterAction();
   });
 }
 function empModal(u, id) {
   const f = findFirm(u), d = bizById(f.t), e = f.staff.find(x => x.id === +id), t = Date.now();
   if (!e) return;
-  const here = isIn(e, t), prime = e.sal * 8, train = e.sal * 20 * e.sk, fire = indemnity(e, t), mw = mktWage(d, e.sk);
+  const here = isIn(e, t), prime = e.sal * 8, train = e.sal * 20 * e.sk, fire = indemnity(e, t), mw = mktWage(d, e.sk, e.r), ts = teamSize(d, e.r);
   modal(`<div class="mhead"><span class="emp-av lg" style="--cc:var(${PALETTE[e.id % PALETTE.length]})">${esc(e.n[0])}</span><div><h3>${esc(e.n)}</h3><span class="muted">${esc(roleOf(d, e.r, e.g))} ${traitChip(e)} · <span class="stars">${stars(e.sk)}</span></span></div></div>
-    <div class="pl"><div><span>${tl('salaire')}</span>${tl('h_2', eur(e.sal))}</div><div><span>${tl('prix_du_marche')}</span>${tl('h_2', eur(mw))}</div>
+    <div class="pl"><div><span>${tl('salaire')}</span>${tl('h_2', eur(e.sal))}</div>${ts > 1 ? `<div><span class="muted">${tl('team_of', nf0.format(ts), eur(e.sal / ts))}</span></div>` : ''}<div><span>${tl('prix_du_marche')}</span>${tl('h_2', eur(mw))}</div>
       <div><span>${tl('humeur')}</span><b>${Math.round(e.mood)}${pc()}</b></div>${meter(e.mood)}<div><span>${tl('fatigue_2')}</span><b>${Math.round(e.fat)}${pc()}</b></div>${meter(e.fat, true)}
       <div><span>${tl('anciennete')}</span><b>${dur(t - e.hired)}</b></div></div>
-    ${e.ask ? `<p class="need">${tl('demande_une_augmentation_2', e.n)}</p>` : ''}${!here ? `<p class="need">${tl('encore', AWAY[e.away.k], dur(e.away.until - t))}</p>${e.away.k !== 'sick' ? waitBtns(`emp:${f.u}:${e.id}`, e.away.until, t) : ''}` : ''}
+    ${e.ask ? `<p class="need">${tl('demande_une_augmentation_2', e.n)}</p>` : ''}${!here ? `<p class="need">${awayTxt(e, t)}</p><p class="muted" style="text-align:left">${tl('why_' + e.away.k, e.away.k === 'start' ? cd(e.away.until) : backAt(e.away.until))}</p>${e.away.k !== 'sick' ? waitBtns(`emp:${f.u}:${e.id}`, e.away.until, t) : ''}` : e.fat > 80 ? `<p class="need">${tl('why_tired')}</p>` : ''}
     <div class="emp-actions">
       <button class="btn go sm" type="button" data-a="raise">${tl('augmenter_10')}<small>${tl('h_7', eur(e.sal * .1))}</small></button>
       <button class="btn gold sm" type="button" data-a="prime" ${S.cash < prime ? 'disabled' : ''}>${tl('prime')}<small>${eur(prime)}</small></button>
@@ -5170,8 +5457,8 @@ function buyItem(id) {
   if (!it || S.owned[id] || S.cash < ipx(it)) return;
   S.cash -= ipx(it); S.owned[id] = true;
   const c = COLLECTIONS.find(c => c.items.some(i => i[0] === id));
-  if (c && c.items.every(i => S.owned[i[0]])) { toast(tl('collection_complete_sur_tous_vos_revenus', c.n, c.bonus * 100), 'good'); winFx(); }
-  else { toast(tl('achete_2', it[1], it[4] === 'home' ? 'e' : ''), 'good'); buyFx(); } afterAction();
+  if (c && c.items.every(i => S.owned[i[0]])) { toast(tl('collection_complete_sur_tous_vos_revenus', c.n, c.bonus * 100), 'good'); fxGoal(); }
+  else { toast(tl('achete_2', it[1], it[4] === 'home' ? 'e' : ''), 'good'); fxBuy(); } afterAction();
 }
 function sellItem(id) {
   const it = findItem(id);
@@ -5181,7 +5468,7 @@ function sellItem(id) {
 }
 
 /* --- Profil --- */
-const CATS = [['cash', tl('solde'), '--money'], ['stocks', tl('actions'), '--sky'], ['realty', tl('immobilier'), '--coral'], ['biz', tl('entreprises'), '--teal'], ['crypto', tl('crypto'), '--plum'], ['coll', tl('collections'), '--gold'], ['transport', tl('transport'), '--rose'], ['home', tl('residence'), '--muted']];
+const CATS = [['cash', tl('solde'), '--money'], ['stocks', tl('cat_mk'), '--sky'], ['realty', tl('immobilier'), '--coral'], ['biz', tl('entreprises'), '--teal'], ['crypto', tl('crypto'), '--plum'], ['coll', tl('collections'), '--gold'], ['transport', tl('transport'), '--rose'], ['home', tl('residence'), '--muted']];
 function rivals() { const hrs = (Date.now() - S.started) / 36e5; return RIVALS.map(([n, f]) => [n, f * (1 + .0004 * hrs)]); }
 function tier(f) { return f < 50000 ? tl('quartier') : f < 5e6 ? tl('ville') : f < 1e9 ? tl('region') : f < 50e9 ? tl('pays') : tl('monde'); }
 function renderProfile() {
@@ -5204,6 +5491,7 @@ function renderProfile() {
       <input class="name-input" id="nameInput" maxlength="22" value="${esc(S.name)}" aria-label="${tl('votre_nom')}">
       <span class="label" style="margin-top:6px">${tl('fortune_totale')}</span><b class="num">${eur(total)}</b>
       <span class="muted">${tl('du_classement_niveau', myPos + 1, tier(total))}</span></div>
+    ${renderAudio()}
     <div class="card"><div class="row lang-row"><span class="label">${tl('ui_langue')}</span><div class="qty lang-sw" role="group" aria-label="${tl('ui_langue')}">${LANGS.map(l => `<button type="button" data-lang="${l}" lang="${l}" aria-pressed="${LANG === l}">${FLAGS[l]} ${l.toUpperCase()} · ${tl('ui_lang_' + l)}</button>`).join('')}</div></div></div>
     <div class="card"><div class="row" style="margin-bottom:12px"><span class="label">${tl('repartition')}</span></div>
       <div class="donut-wrap"><svg class="donut" viewBox="0 0 150 150" role="img" aria-label="${tl('repartition_de_la_fortune')}"><circle cx="75" cy="75" r="${R}" fill="none" stroke="var(--surface-2)" stroke-width="20"/>${arcs}</svg>
@@ -5276,64 +5564,251 @@ async function watchAd() {
   render();
 }
 
-/* ================= Sons, effets et premiers pas ================= */
-// Sons courts générés en Web Audio (aucun fichier) ; coupés par le bouton 🔊 de l'en-tête et pendant les pubs.
-let AC = null;
-const soundOn = () => !S.mute && !(typeof CG !== 'undefined' && CG.muted);
+/* ================= Sons, musique et effets ================= */
+// Tout le son est synthétisé en Web Audio : aucun fichier, donc libre de droits.
+// Effets → bus Effets ┐
+// Musique → passe-bas « lo-fi » → bus Musique ┴→ petite réverbération + compresseur doux → haut-parleurs.
+let AC = null, BUS = null, audioUnlocked = false;
+const SND0 = { mOn: true, mVol: .35, fOn: true, fVol: .7 };
+const snd = () => (S.snd ||= { ...SND0 });
+const adPause = () => typeof CG !== 'undefined' && CG.muted;
+const sfxOn = () => !S.mute && snd().fOn && snd().fVol > 0;
+const musicOn = () => !S.mute && snd().mOn && snd().mVol > 0;
 function audio() {
-  if (!AC) { const C = window.AudioContext || window.webkitAudioContext; if (!C) return null; AC = new C(); }
-  if (AC.state === 'suspended') AC.resume();
+  if (AC) return AC;
+  const C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
+  AC = new C();
+  const comp = AC.createDynamicsCompressor();
+  comp.threshold.value = -20; comp.knee.value = 14; comp.ratio.value = 3; comp.attack.value = .006; comp.release.value = .3;
+  comp.connect(AC.destination);
+  // Réverbération : réponse impulsionnelle de bruit qui décroît en 1,6 s (donne de l'espace, adoucit les attaques).
+  const len = Math.floor(AC.sampleRate * 1.6), ir = AC.createBuffer(2, len, AC.sampleRate);
+  for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.5); }
+  const rev = AC.createConvolver(); rev.buffer = ir; rev.connect(comp);
+  const fx = AC.createGain(), mus = AC.createGain(), lo = AC.createBiquadFilter(), fxSend = AC.createGain(), musSend = AC.createGain();
+  lo.type = 'lowpass'; lo.frequency.value = 2800; lo.Q.value = .4;
+  fx.connect(comp); fx.connect(fxSend); fxSend.gain.value = .25; fxSend.connect(rev);
+  mus.connect(lo); lo.connect(comp); lo.connect(musSend); musSend.gain.value = .4; musSend.connect(rev);
+  fx.gain.value = 0; mus.gain.value = 0;
+  BUS = { fx, mus };
   return AC;
 }
-function tone(f, at, len, type = 'triangle', vol = .06, to = 0) {
-  const a = audio(); if (!a) return;
-  const t = a.currentTime + at, o = a.createOscillator(), g = a.createGain();
-  o.type = type; o.frequency.setValueAtTime(f, t); if (to) o.frequency.exponentialRampToValueAtTime(to, t + len);
-  g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .008); g.gain.exponentialRampToValueAtTime(.0001, t + len);
-  o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + len + .03);
+// Volumes : courbe douce (carré du curseur) ; la musique reste nettement sous les effets.
+function volSync() {
+  if (!BUS) return;
+  const t = AC.currentTime, o = snd(), quiet = document.hidden || adPause();
+  BUS.fx.gain.setTargetAtTime(sfxOn() && !quiet ? 1.6 * o.fVol * o.fVol : 0, t, .02);
+  BUS.mus.gain.setTargetAtTime(musicOn() && !quiet ? 3 * o.mVol * o.mVol : 0, t, .4);
 }
+// Le son ne peut démarrer qu'après un premier toucher (obligatoire sur iPhone).
+function unlockAudio() {
+  const a = audio(); if (!a) return;
+  if (!audioUnlocked) {
+    audioUnlocked = true;
+    const b = a.createBuffer(1, 1, 22050), z = a.createBufferSource(); z.buffer = b; z.connect(a.destination); z.start(0);   // réveille les anciens iOS
+  }
+  audioSync();
+}
+['pointerdown', 'touchend', 'keydown'].forEach(ev => document.addEventListener(ev, unlockAudio, { capture: true, passive: true }));
+// Arrière-plan ou pub en cours : tout est suspendu, puis reprend au retour.
+function audioSync() {
+  if (!AC || !audioUnlocked) return;
+  const quiet = document.hidden || adPause();
+  if (quiet) { if (AC.state === 'running') AC.suspend(); }
+  else if (AC.state !== 'running') AC.resume();
+  volSync();
+  if (!quiet && musicOn()) Music.start(); else Music.stop();
+}
+document.addEventListener('visibilitychange', audioSync);
+
+// --- Briques sonores ---
+// Une note : attaque douce puis extinction exponentielle, éventuellement placée en stéréo.
+function voice(bus, t, f, { type = 'sine', vol = .1, att = .005, dec = .4, detune = 0, pan = 0 } = {}) {
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type = type; o.frequency.value = f; if (detune) o.detune.value = detune;
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + att); g.gain.exponentialRampToValueAtTime(.0001, t + att + dec);
+  o.connect(g);
+  if (pan && AC.createStereoPanner) { const p = AC.createStereoPanner(); p.pan.value = pan; g.connect(p); p.connect(bus); } else g.connect(bus);
+  o.start(t); o.stop(t + att + dec + .05);
+}
+// Timbre de cloche ou de marimba : fondamentale + partiels qui s'éteignent plus vite. parts : [rapport, volume, durée].
+const MARIMBA = [[1, 1, 1], [3.99, .1, .25], [9.8, .025, .1]];
+function bell(bus, t, f, vol, dec, parts = MARIMBA, pan = 0) { for (const [r, a, d] of parts) voice(bus, t, f * r, { vol: vol * a, dec: dec * d, pan }); }
+let NOISE = null;
+function noiseBuf() {
+  if (!NOISE) { const n = AC.sampleRate; NOISE = AC.createBuffer(1, n, n); const d = NOISE.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; }
+  return NOISE;
+}
+function noiseHit(bus, t, { vol = .05, dec = .05, f = 3000, q = 1, type = 'bandpass' } = {}) {
+  const z = AC.createBufferSource(), fl = AC.createBiquadFilter(), g = AC.createGain();
+  z.buffer = noiseBuf(); fl.type = type; fl.frequency.value = f; fl.Q.value = q;
+  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0001, t + dec);
+  z.connect(fl); fl.connect(g); g.connect(bus); z.start(t, rf(0, .4)); z.stop(t + dec + .02);
+}
+const mid = m => 440 * Math.pow(2, (m - 69) / 12);   // numéro de note MIDI → fréquence
+
+// --- Effets sonores ---
+// Pièce : quatre timbres de tintement, hauteur et stéréo tirées au hasard, volume bas.
+// Clics très rapides : 50 ms au moins entre deux tintements et 3 au plus en même temps.
+const COIN_TIMBRES = [
+  [[1, 1, 1], [1.51, .45, .7], [2.43, .22, .45]],
+  [[1, 1, 1], [1.34, .4, .8], [2.76, .2, .4]],
+  [[1, 1, 1], [1.62, .35, .6], [2.17, .25, .5]],
+  [[1, 1, 1], [1.41, .5, .65], [3.02, .15, .35]],
+];
+let coinEnds = [], lastCoin = 0, lastNote = 0;
 const SFX = {
-  click: () => { const f = rf(820, 980) * (boosted() ? 1.2 : 1); tone(f, 0, .06, 'triangle', .045, f * 1.5); },
-  buy: () => { tone(660, 0, .08, 'triangle', .06); tone(990, .07, .16, 'triangle', .06); tone(1320, .07, .16, 'sine', .025); },
-  win: () => [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, i * .07, .22, 'triangle', .055)),
+  coin() {
+    const t = AC.currentTime;
+    coinEnds = coinEnds.filter(x => x > t);
+    if (t - lastCoin < .05 || coinEnds.length >= 3) return;
+    const f = pick([2093, 2217, 2349, 2489, 2637, 2794]) * rf(.985, 1.015) * (boosted() ? 1.05 : 1), dec = rf(.14, .24);
+    bell(BUS.fx, t, f, rf(.03, .045), dec, pick(COIN_TIMBRES), rf(-.3, .3));
+    noiseHit(BUS.fx, t, { vol: .012, dec: .012, f: rf(5000, 7000), q: .8 });
+    coinEnds.push(t + dec); lastCoin = t;
+  },
+  // Achat : deux notes de marimba en quinte, rondes et brèves.
+  buy() { const t = AC.currentTime; bell(BUS.fx, t, mid(79), .09, .45); bell(BUS.fx, t + .07, mid(86), .07, .55); },
+  // Amélioration : petit arpège montant de marimba.
+  upgrade() { const t = AC.currentTime; [72, 76, 79, 84].forEach((m, i) => bell(BUS.fx, t + i * .055, mid(m), .055 - i * .006, .5)); },
+  // Étape importante : accord chaud (Fmaj9) qui s'ouvre, puis trois clochettes.
+  success() {
+    const t = AC.currentTime;
+    [53, 60, 64, 67, 69].forEach((m, i) => { voice(BUS.fx, t + i * .02, mid(m), { vol: .035, att: .04, dec: 1.6, pan: (i - 2) * .15 }); voice(BUS.fx, t + i * .02, mid(m), { type: 'triangle', vol: .01, att: .06, dec: 1.2, detune: 7 }); });
+    [84, 88, 91].forEach((m, i) => bell(BUS.fx, t + .12 + i * .09, mid(m), .04, .8, [[1, 1, 1], [2.756, .25, .4], [5.404, .08, .2]], (i - 1) * .3));
+  },
+  // Notification : « pling » discret en deux notes.
+  notify() { const t = AC.currentTime; if (t - lastNote < 1.2) return; lastNote = t; bell(BUS.fx, t, mid(88), .03, .35, [[1, 1, 1], [2.756, .2, .4]]); bell(BUS.fx, t + .09, mid(93), .025, .45, [[1, 1, 1], [2.756, .2, .4]]); },
+  // Mauvaise nouvelle : deux notes graves et feutrées.
+  alert() { const t = AC.currentTime; if (t - lastNote < 1.2) return; lastNote = t; bell(BUS.fx, t, mid(69), .05, .45); bell(BUS.fx, t + .12, mid(65), .05, .6); },
 };
-function sfx(k) { try { if (soundOn()) SFX[k](); } catch (e) {} }
+function sfx(k) { try { if (sfxOn() && !adPause() && audio() && AC.state === 'running') SFX[k](); } catch (e) {} }
+
+// --- Musique d'ambiance générative (lo-fi / jazz) ---
+// Piano électrique en accords de 7e et 9e, basse ronde, batterie aux balais très douce, petites phrases de mélodie.
+// Cinq grilles d'accords ; toutes les 8 mesures, nouvelle grille et nouvelle densité (pause, groove, groove + mélodie).
+const PROGS = [
+  [[50, [3, 7, 10, 14]], [55, [4, 10, 14, 21]], [48, [4, 7, 11, 14]], [57, [3, 7, 10, 14]]],   // Dm9 G13 Cmaj9 Am9
+  [[53, [4, 7, 11, 14]], [52, [3, 7, 10, 14]], [50, [3, 7, 10, 14]], [55, [4, 10, 14, 17]]],   // Fmaj9 Em9 Dm9 G11
+  [[45, [3, 7, 10, 14]], [50, [4, 10, 14, 19]], [43, [4, 7, 11, 14]], [48, [4, 7, 11, 14]]],   // Am9 D9 Gmaj9 Cmaj9
+  [[51, [4, 7, 11, 14]], [50, [3, 7, 10, 14]], [48, [3, 7, 10, 14]], [46, [4, 10, 14, 21]]],   // Ebmaj9 Dm9 Cm9 Bb13
+  [[48, [4, 7, 11, 14]], [45, [3, 7, 10, 14]], [53, [4, 7, 11, 14]], [55, [4, 10, 14, 17]]],   // Cmaj9 Am9 Fmaj9 G11
+];
+const BPM = 72;
+function ep(t, m, vol, dec) {
+  const f = mid(m), p = rf(-.25, .25);
+  voice(BUS.mus, t, f, { vol, att: .012, dec, pan: p });
+  voice(BUS.mus, t, f * 2, { vol: vol * .14, att: .006, dec: dec * .3, pan: p });
+  voice(BUS.mus, t, f, { type: 'triangle', vol: vol * .1, att: .02, dec: dec * .6, detune: 5, pan: -p });
+}
+const Music = {
+  on: false, next: 0, step: 0, bar: 0, prog: 0, sec: 0, mel: 72, timer: 0,
+  start() {
+    if (this.on || !AC || AC.state !== 'running') return;
+    this.on = true; this.next = AC.currentTime + .15; this.step = 0; this.bar = 0; this.sec = 0;
+    this.prog = Math.floor(Math.random() * PROGS.length);
+    this.timer = setInterval(() => this.tick(), 120);
+  },
+  stop() { if (!this.on) return; this.on = false; clearInterval(this.timer); },
+  tick() {
+    if (!AC || AC.state !== 'running') return;
+    const e8 = 60 / BPM / 2;
+    while (this.next < AC.currentTime + .35) {
+      this.play(this.step, this.next);
+      this.next += e8 * (this.step % 2 ? .68 : 1.32);    // croches swinguées
+      if (++this.step === 8) { this.step = 0; this.newBar(); }
+    }
+  },
+  newBar() {
+    if (++this.bar % 8) return;
+    let p; do p = Math.floor(Math.random() * PROGS.length); while (p === this.prog);
+    this.prog = p; this.sec = pick([0, 1, 1, 2, 2, 2]);
+  },
+  play(st, t) {
+    const [root, iv] = PROGS[this.prog][this.bar % 4], nextRoot = PROGS[this.prog][(this.bar + 1) % 4][0];
+    const notes = iv.map(i => { let m = root + 12 + i; while (m > 79) m -= 12; return m; });
+    // Piano électrique : accord au premier temps, relances légères sur les contretemps.
+    if (st === 0) notes.forEach((m, i) => ep(t + i * .012, m, .045, 2.6));
+    else if ((st === 3 && Math.random() < .45) || (st === 6 && Math.random() < .3)) notes.slice(1).forEach(m => ep(t, m, .025, .9));
+    // Basse : fondamentale, puis quinte, octave ou note d'approche de l'accord suivant.
+    if (st === 0) { voice(BUS.mus, t, mid(root - 12), { vol: .16, att: .01, dec: 1.1 }); voice(BUS.mus, t, mid(root), { type: 'triangle', vol: .02, att: .01, dec: .5 }); }
+    if (st === 4) voice(BUS.mus, t, mid(pick([root - 5, root, nextRoot - 11, nextRoot - 13])), { vol: .12, att: .01, dec: .8 });
+    if (st === 7 && Math.random() < .35) voice(BUS.mus, t, mid(root - 10), { vol: .08, att: .01, dec: .3 });
+    // Batterie aux balais (sections groove) : grosse caisse feutrée, caisse claire balayée, charleston léger.
+    if (this.sec >= 1) {
+      if (st === 0 || (st === 5 && Math.random() < .5)) {
+        const o = AC.createOscillator(), g = AC.createGain();
+        o.frequency.setValueAtTime(95, t); o.frequency.exponentialRampToValueAtTime(42, t + .18);
+        g.gain.setValueAtTime(.22, t); g.gain.exponentialRampToValueAtTime(.0001, t + .3);
+        o.connect(g); g.connect(BUS.mus); o.start(t); o.stop(t + .32);
+      }
+      if (st === 2 || st === 6) noiseHit(BUS.mus, t, { vol: .045, dec: .22, f: 1600, q: .6 });
+      noiseHit(BUS.mus, t, { vol: st % 2 ? .016 : .009, dec: .035, f: 8000, q: .7, type: 'highpass' });
+    }
+    // Mélodie (sections 2) : phrases pentatoniques clairsemées, par petits intervalles.
+    if (this.sec === 2 && st !== 0 && Math.random() < .2) {
+      const pool = [...notes.map(m => m + 12), root + 24 + 2, root + 24 + 9].filter(m => m >= 69 && m <= 88);
+      pool.sort((a, b) => Math.abs(a - this.mel) - Math.abs(b - this.mel));
+      this.mel = pick(pool.slice(0, 3));
+      ep(t, this.mel, .03, 1.1);
+    }
+    // Craquements de vinyle, très discrets.
+    if (Math.random() < .25) noiseHit(BUS.mus, t + rf(0, .1), { vol: .004, dec: .01, f: 5000, q: .5, type: 'highpass' });
+  },
+};
+
+// --- Bouton 🔊 de l'en-tête (coupe tout) et réglages du Profil ---
 function updSound() {
   const b = $('sndBtn'); if (!b) return;
   b.textContent = S.mute ? '🔇' : '🔊'; b.setAttribute('aria-pressed', String(!S.mute));
   b.setAttribute('aria-label', tl(S.mute ? 'ui_sound_off' : 'ui_sound_on'));
 }
-function toggleSound() { S.mute = !S.mute; updSound(); save(); sfx('buy'); }
+function toggleSound() { S.mute = !S.mute; updSound(); audioSync(); save(); sfx('notify'); }
+const renderAudio = () => {
+  const o = snd(), row = (k, v, ico, n, lab) => `<div class="snd-row"><label class="sw"><input type="checkbox" data-snd="${k}" ${o[k] ? 'checked' : ''}><span>${ico} ${tl(n)}</span></label><input type="range" min="0" max="100" step="5" data-sndv="${v}" value="${Math.round(o[v] * 100)}" aria-label="${tl(lab)}"></div>`;
+  return `<div class="card"><span class="label">${tl('ui_audio')}</span>${row('mOn', 'mVol', '🎵', 'ui_music', 'ui_vol_music')}${row('fOn', 'fVol', '🔔', 'ui_sfx', 'ui_vol_sfx')}</div>`;
+};
+$('main').addEventListener('input', e => {
+  const k = e.target.dataset.sndv; if (!k) return;
+  snd()[k] = +e.target.value / 100;
+  if (S.mute && +e.target.value > 0) { S.mute = false; updSound(); }
+  audioSync();
+  if (k === 'fVol') sfx('coin');
+});
+$('main').addEventListener('change', e => {
+  const k = e.target.dataset.snd, v = e.target.dataset.sndv;
+  if (k) { snd()[k] = e.target.checked; if (e.target.checked && S.mute) { S.mute = false; updSound(); } audioSync(); if (k === 'fOn' && e.target.checked) sfx('notify'); }
+  if (k || v) save();
+});
 
+// --- Animations : discrètes au quotidien, grande fête réservée aux moments rares ---
 const reduceMotion = () => !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-let fxLayer = null;
+let fxLayer = null, lastPt = { x: innerWidth / 2, y: innerHeight / 2 };
+document.addEventListener('pointerdown', e => { lastPt = { x: e.clientX, y: e.clientY }; }, { capture: true, passive: true });
 function fxRoot() { if (!fxLayer) { fxLayer = document.createElement('div'); fxLayer.id = 'fx'; document.body.appendChild(fxLayer); } return fxLayer; }
-// Petites pièces qui jaillissent du point touché.
-function coinBurst(x, y, n) {
-  if (reduceMotion()) return;
-  const L = fxRoot(); if (L.childElementCount > 70) return;
-  for (let i = 0; i < n; i++) {
-    const p = document.createElement('i'), a = rf(-Math.PI * .95, -Math.PI * .05), d = rf(45, 110);
-    p.className = 'pt';
-    p.style.cssText = `left:${x}px;top:${y}px;--dx:${(Math.cos(a) * d).toFixed(0)}px;--dy:${(Math.sin(a) * d).toFixed(0)}px;--r:${rf(-220, 220).toFixed(0)}deg`;
-    L.appendChild(p); setTimeout(() => p.remove(), 750);
-  }
+// Petit repère qui monte à l'endroit touché (« ✓ » pour un achat, « +1 » pour une amélioration).
+function tapFx(txt) {
+  const f = document.createElement('i'); f.className = 'tapfx'; f.textContent = txt;
+  f.style.left = lastPt.x + 'px'; f.style.top = lastPt.y + 'px';
+  fxRoot().appendChild(f); setTimeout(() => f.remove(), 700);
 }
 const CONF = ['#F2C45C', '#17935F', '#FF6F4F', '#3A7BEF', '#E9558F', '#8455E8'];
 function confetti(n) {
-  if (reduceMotion()) n = Math.min(n, 6);
   const L = fxRoot(), W = innerWidth;
   for (let i = 0; i < n; i++) {
     const p = document.createElement('i');
     p.className = 'cf';
-    p.style.cssText = `left:${(rf(.05, .95) * W).toFixed(0)}px;background:${pick(CONF)};--dx:${rf(-90, 90).toFixed(0)}px;--r:${rf(-560, 560).toFixed(0)}deg;--t:${rf(.9, 1.7).toFixed(2)}s;animation-delay:${rf(0, .25).toFixed(2)}s;width:${rf(6, 10).toFixed(0)}px;height:${rf(8, 15).toFixed(0)}px`;
+    p.style.cssText = `left:${(rf(.05, .95) * W).toFixed(0)}px;background:${pick(CONF)};--dx:${rf(-80, 80).toFixed(0)}px;--r:${rf(-480, 480).toFixed(0)}deg;--t:${rf(1, 1.7).toFixed(2)}s;animation-delay:${rf(0, .2).toFixed(2)}s;width:${rf(6, 9).toFixed(0)}px;height:${rf(8, 13).toFixed(0)}px`;
     L.appendChild(p); setTimeout(() => p.remove(), 2100);
   }
 }
-function flash(gold) { const f = document.createElement('i'); f.className = 'flash' + (gold ? ' gold' : ''); fxRoot().appendChild(f); setTimeout(() => f.remove(), 450); }
-// Achat : petit flash, son et quelques confettis. Palier (succès, objectif, déblocage) : la grande fête.
-function buyFx() { vibrate(14); sfx('buy'); flash(false); confetti(16); }
-function winFx() { vibrate(30); sfx('win'); flash(true); confetti(80); }
+function flash() { const f = document.createElement('i'); f.className = 'flash gold'; fxRoot().appendChild(f); setTimeout(() => f.remove(), 500); }
+// Achat ou amélioration : son court et petit repère. Étape importante : son de succès seul.
+// Nouvelle entreprise ou gros palier de fortune : confettis (sauf si le téléphone demande moins d'animations).
+function fxBuy() { vibrate(10); sfx('buy'); if (!reduceMotion()) tapFx('✓'); }
+function fxUp() { vibrate(10); sfx('upgrade'); if (!reduceMotion()) tapFx('+1'); }
+function fxGoal() { vibrate(20); sfx('success'); }
+function fxBig() { vibrate(30); sfx('success'); if (!reduceMotion()) { flash(); confetti(45); } }
 
 /* --- Tutoriel : 4 bulles qui montrent quoi toucher (pièce → stand → revenu passif → objectifs) --- */
 const COACH_DONE = 99;
@@ -5410,7 +5885,7 @@ function checkStarter() {
   const cash = s[4] * S.pi;
   S.cash += cash; S.earned += cash; if (s[5]) giveTok(s[5], tl('st_title'));
   S.start++;
-  toast(tl('st_done', s[1], startReward(s)), 'good'); winFx(); save();
+  toast(tl('st_done', s[1], startReward(s)), 'good'); fxGoal(); save();
   if (tab === 'gains') softRender();
 }
 function renderStarter() {
@@ -5449,6 +5924,7 @@ function setLang(l) {
 function afterAction() { save(); render(); }
 /* Mise à jour légère, sans reconstruire l'écran. */
 function refresh() {
+  document.querySelectorAll('[data-cd]').forEach(el => { el.textContent = mmss(Math.max(0, +el.dataset.cd - Date.now())); });
   const inc = incomeH();
   $('hdrCash').textContent = eur(S.cash);
   $('hdrIncome').textContent = perH(inc);
@@ -5489,6 +5965,7 @@ function refresh() {
 
 let lastFrame = Date.now(), lastTick = Date.now(), lastSave = Date.now();
 function loop() {
+  audioSync();
   if (document.hidden) return;   // l'absence est rattrapée par offlineGains() au retour
   const now = Date.now(), dt = now - lastFrame;
   lastFrame = now;
@@ -5552,7 +6029,7 @@ $('main').addEventListener('keydown', e => { if (e.target.id === 'coin' && (e.ke
 $('main').addEventListener('click', e => {
   const t = e.target.closest('button');
   if (!t || t.disabled) return;
-  if (t.id === 'upClick') { const c = clickCost(S.clickLvl); if (S.cash >= c) { S.cash -= c; S.clickLvl++; toast(tl('productivite_niveau_par_clic', S.clickLvl, eur(clickBase(S.clickLvl))), 'good'); buyFx(); afterAction(); } return; }
+  if (t.id === 'upClick') { const c = clickCost(S.clickLvl); if (S.cash >= c) { S.cash -= c; S.clickLvl++; toast(tl('productivite_niveau_par_clic', S.clickLvl, eur(clickBase(S.clickLvl))), 'good'); fxUp(); afterAction(); } return; }
   if (t.id === 'adBtn') return watchAd();
   if (t.dataset.lang) return setLang(t.dataset.lang);
   if (t.dataset.stgo != null) return starterGo();
@@ -5619,6 +6096,16 @@ document.addEventListener('click', e => {
   useTokens(key, !!b.dataset.half, k === 'emp' ? () => empModal(+a, id) : null);
 }, true);
 $('sndBtn').addEventListener('click', toggleSound);
+// Pas de zoom : pincement bloqué (événements gesture d'iOS) et double toucher hors des boutons et des champs.
+['gesturestart', 'gesturechange', 'gestureend'].forEach(ev => document.addEventListener(ev, e => e.preventDefault(), { passive: false }));
+let lastTouchEnd = 0;
+document.addEventListener('touchend', e => {
+  const now = Date.now();
+  const el = e.target instanceof Element ? e.target : null;
+  if (now - lastTouchEnd < 320 && !(el && el.closest('button, a, input, select, textarea, label, [data-skip], .coin'))) e.preventDefault();
+  lastTouchEnd = now;
+}, { passive: false });
+document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
 $('newsBtn').addEventListener('click', () => { if (tab !== 'news') prevTab = tab; tab = 'news'; render(); window.scrollTo(0, 0); });
 // Mode test caché : 5 appuis rapides sur l'avatar du Profil.
 let testTaps = 0, testT = 0;
