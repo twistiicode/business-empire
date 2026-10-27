@@ -89,17 +89,22 @@ button, input { font: inherit; color: inherit; }
 button { cursor: pointer; }
 :focus-visible { outline: 3px solid color-mix(in srgb, var(--money) 60%, transparent); outline-offset: 2px; }
 .num { font-variant-numeric: tabular-nums; }
-#app { max-width: 520px; margin: 0 auto; padding-block: 0 calc(112px + env(safe-area-inset-bottom, 0px)); }
+/* Barres fixes : le contenu commence juste sous l'en-tête et finit au-dessus des onglets (hauteurs réelles mesurées en JS). */
+:root { --top-h: calc(env(safe-area-inset-top, 0px) + 64px); --nav-h: calc(env(safe-area-inset-bottom, 0px) + 66px); }
+html { scroll-padding-top: calc(var(--top-h) + 8px); scroll-padding-bottom: calc(var(--nav-h) + 8px); }
+#app { max-width: 520px; margin: 0 auto; padding-block: calc(var(--top-h) + 10px) calc(var(--nav-h) + 26px); }
 
-/* En-tête. La zone de la barre d'état (iPhone installé, barre « black-translucent ») garde le fond sombre du jeu. */
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: #0A1A11; }
+/* En-tête : pleine largeur, fond qui monte derrière la barre d'état iOS et se fond dans la page par un dégradé. */
 .top {
-  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 8;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 8;
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding-block: 12px; background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  padding: calc(env(safe-area-inset-top, 0px) + 12px) max(16px, env(safe-area-inset-right, 0px), calc((100% - 520px) / 2)) 12px max(16px, env(safe-area-inset-left, 0px), calc((100% - 520px) / 2));
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
 }
-.brand { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 auto; overflow: hidden; }
+.top::after, .nav::before { content: ""; position: absolute; left: 0; right: 0; height: 22px; pointer-events: none; }
+.top::after { top: 100%; background: linear-gradient(to bottom, color-mix(in srgb, var(--bg) 86%, transparent), color-mix(in srgb, var(--bg) 0%, transparent)); }
+.brand { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 auto; overflow: hidden; padding: 10px; margin: -10px; }   /* marge : l'ombre du logo n'est pas coupée */
 .logo { width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; background: linear-gradient(140deg, var(--money), color-mix(in srgb, var(--money) 55%, var(--gold))); box-shadow: 0 6px 16px color-mix(in srgb, var(--money) 35%, transparent); }
 .brand b { font-family: var(--f-display); font-weight: 800; font-size: 18px; letter-spacing: -.02em; white-space: nowrap; }
 .balance-pill { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.15; flex: none; text-align: right; }
@@ -242,7 +247,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .back { position: relative; z-index: 2; border: 1.5px solid var(--line); background: var(--surface); width: 44px; height: 44px; border-radius: 50%; font-size: 18px; font-weight: 700; flex: none; align-self: center; }
 .back::after { content: ""; position: absolute; inset: -6px; }   /* zone tactile élargie à 56 px */
 /* Barre de titre des sous-pages : reste collée sous l'en-tête, la flèche retour est toujours visible et touchable. */
-.screen-title.with-back { justify-content: flex-start; align-items: center; position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--top-h, 64px)); z-index: 7;
+.screen-title.with-back { justify-content: flex-start; align-items: center; position: sticky; top: var(--top-h); z-index: 7;
   padding-block: 6px; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 #main.swiping { transition: none; }
 #main.swipe-end { transition: transform .22s ease, opacity .22s ease; }
@@ -575,9 +580,10 @@ details.plbox[open] summary { margin-bottom: 8px; }
 .nav {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 9;
   padding: 8px max(10px, env(safe-area-inset-left, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-right, 0px));
-  background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
 }
+/* Barre d'onglets : pleine largeur jusqu'en bas de l'écran, fondue vers le haut. */
+.nav::before { bottom: 100%; background: linear-gradient(to top, color-mix(in srgb, var(--surface) 92%, transparent), color-mix(in srgb, var(--surface) 0%, transparent)); }
 .nav-inner { max-width: 560px; margin: 0 auto; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 2px; }
 .nav button[hidden], .news-btn[hidden] { display: none !important; }
 .nav button { font-size: 10.5px !important; letter-spacing: -.01em; }
@@ -599,7 +605,7 @@ details.plbox[open] summary { margin-bottom: 8px; }
 .ad-screen small { position: absolute; top: 10px; left: 12px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .85; }
 .ad-count { position: absolute; top: 10px; right: 12px; background: rgba(0, 0, 0, .35); padding: 4px 10px; border-radius: 999px; font-weight: 700; font-size: 13px; }
 .ad-progress { position: absolute; left: 0; bottom: 0; height: 4px; background: #FFFFFF; transition: width 1s linear; }
-.toast { position: fixed; left: 50%; top: calc(env(safe-area-inset-top, 0px) + 70px); transform: translateX(-50%); z-index: 15; width: max-content; max-width: min(92vw, 420px); padding: 11px 16px; border-radius: 16px; background: var(--ink); color: var(--bg); font-weight: 600; font-size: 14px; box-shadow: 0 10px 30px rgba(0, 0, 0, .25); animation: toast .3s ease; }
+.toast { position: fixed; left: 50%; top: calc(var(--top-h) + 8px); transform: translateX(-50%); z-index: 15; width: max-content; max-width: min(92vw, 420px); padding: 11px 16px; border-radius: 16px; background: var(--ink); color: var(--bg); font-weight: 600; font-size: 14px; box-shadow: 0 10px 30px rgba(0, 0, 0, .25); animation: toast .3s ease; }
 .toast.crash { background: var(--neg); color: #FFFFFF; }
 .toast.good { background: var(--money); color: #FFFFFF; }
 @keyframes toast { from { opacity: 0; transform: translate(-50%, -10px); } }
@@ -5844,7 +5850,7 @@ function coachTick() {
   coachEl.hidden = false;
   if (coachHi !== el) { if (coachHi) coachHi.classList.remove('coach-hi'); el.classList.add('coach-hi'); coachHi = el; }
   // Nouvelle cible hors de l'écran : on la ramène doucement, sauf si le joueur fait défiler la page.
-  if (coachSel !== st.sel) { coachSel = st.sel; const r0 = el.getBoundingClientRect(); if ((r0.bottom > innerHeight - 80 || r0.top < 60) && !scrolling() && $('modal').hidden) el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  if (coachSel !== st.sel) { coachSel = st.sel; const r0 = el.getBoundingClientRect(); const nb = document.querySelector('.nav').offsetHeight, tb = document.querySelector('.top').offsetHeight; if ((r0.bottom > innerHeight - nb - 10 || r0.top < tb + 10) && !scrolling() && $('modal').hidden) el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
   const r = el.getBoundingClientRect(), w = coachEl.offsetWidth, h = coachEl.offsetHeight;
   // Position imposée par l'étape si la place le permet, sinon du côté où il y a le plus d'espace.
   const above = st.pos === 'above' && r.top - h - 12 > 56 ? true : st.pos === 'below' && r.bottom + h + 12 < innerHeight ? false : r.top > innerHeight * .5;
@@ -6128,11 +6134,13 @@ $('main').addEventListener('change', e => {
   if (e.target.dataset.auto != null) { const f = findFirm(firmU); if (f) { f.ops.auto = e.target.checked; afterAction(); } return; }
   if (e.target.id === 'nameInput') { S.name = e.target.value.trim().slice(0, 22) || tl('vous'); afterAction(); }
 });
-// Hauteur réelle de l'en-tête : la barre de titre des sous-pages se colle juste en dessous.
-const topBar = document.querySelector('.top');
-const setTopH = () => document.documentElement.style.setProperty('--top-h', `${topBar.offsetHeight}px`);
+// Hauteurs réelles de l'en-tête et des onglets (zones de la barre d'état et de l'indicateur d'accueil comprises) :
+// le contenu commence juste sous l'en-tête, la barre de titre des sous-pages s'y colle, et la fin de page reste au-dessus des onglets.
+const topBar = document.querySelector('.top'), navBar = document.querySelector('.nav');
+const setTopH = () => { const st = document.documentElement.style; st.setProperty('--top-h', `${topBar.offsetHeight}px`); st.setProperty('--nav-h', `${navBar.offsetHeight}px`); };
 setTopH();
-if (window.ResizeObserver) new ResizeObserver(setTopH).observe(topBar); else window.addEventListener('resize', setTopH);
+if (window.ResizeObserver) { const ro = new ResizeObserver(setTopH); ro.observe(topBar); ro.observe(navBar); }
+window.addEventListener('resize', setTopH); window.addEventListener('orientationchange', () => setTimeout(setTopH, 300));
 // Glisser depuis le bord gauche vers la droite : même effet que la flèche retour de la sous-page affichée.
 const backBtn = () => $('main').querySelector('.screen-title.with-back .back');
 let swipe = null;
