@@ -369,6 +369,33 @@ details.plbox[open] summary { margin-bottom: 8px; }
 .inp input { flex: 1; min-width: 0; border: 0; background: none; color: var(--ink); font: inherit; font-weight: 700; font-size: 15px; padding: 4px 0; outline: none; }
 .inp:focus-within { border-color: var(--money); }
 .inp-row { display: flex; gap: 8px; }
+.pills { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.pills::-webkit-scrollbar { display: none; }
+.pills button { flex: 1 1 auto; min-width: 0; border: 1px solid var(--line); background: var(--surface); color: var(--muted); border-radius: 999px; padding: 7px 9px; font-size: 13px; font-weight: 700; white-space: nowrap; }
+.pills button[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.pills button.locked { opacity: .5; border-style: dashed; }
+@media (max-width: 374px) { .pills { gap: 3px; } .pills button { font-size: 11px; padding: 6px 4px; letter-spacing: -.01em; } }
+.rk { display: inline-block; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+.rk-lo { color: var(--pos); } .rk-mid { color: color-mix(in srgb, var(--gold) 80%, var(--ink)); } .rk-hi { color: var(--neg); }
+.ib { border: 0; background: none; color: var(--muted); font-size: 15px; line-height: 1; padding: 4px 6px; margin: -4px -2px; cursor: pointer; vertical-align: middle; }
+.ico-tile.sm { width: 38px; height: 38px; font-size: 19px; border-radius: 12px; flex: none; }
+.empty-pf { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+.empty-pf .big { font-size: 40px; }
+.prop-line { margin: 8px 0 0; font-size: 12.5px; color: var(--muted); }
+.works-bar { margin-top: 8px; }
+.modal.sheet { place-items: end center; padding: 0; }
+.modal.sheet .modal-card { max-width: 520px; border-radius: 24px 24px 0 0; text-align: left; gap: 10px; padding: 10px 18px calc(18px + env(safe-area-inset-bottom, 0px)); max-height: 90dvh; animation: sheetUp .28s cubic-bezier(.2, .8, .2, 1); }
+@keyframes sheetUp { from { transform: translateY(100%); } to { transform: none; } }
+.sheet-grab { width: 40px; height: 5px; border-radius: 3px; background: var(--line); align-self: center; }
+.sheet-head { display: flex; align-items: center; gap: 10px; }
+.sheet-head > div { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sheet-x { border: 0; background: var(--surface-2); color: var(--ink); width: 34px; height: 34px; border-radius: 50%; font-size: 15px; flex: none; }
+.sheet-rows { margin: 4px 0; }
+.sv-btns { display: grid; gap: 8px; }
+.rest-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
+.rest-btns .btn { flex-direction: column; gap: 2px; padding: 8px 4px; line-height: 1.15; white-space: normal; }
+.rest-btns small { display: block; font-size: 11px; font-weight: 600; opacity: .85; }
+.warn-note { margin: 6px 0 0; padding: 8px 10px; border-radius: 12px; background: color-mix(in srgb, var(--gold) 16%, transparent); font-size: 13px; }
 .code-box { width: 100%; margin: 4px 0; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface-2); color: var(--ink); font-family: ui-monospace, Menlo, monospace; font-size: 16px; line-height: 1.35; word-break: break-all; resize: vertical; }
 @media (max-width: 359px) { .inp-row { flex-direction: column; } }
 .prow { width: 100%; text-align: left; color: var(--ink); }
@@ -1335,9 +1362,9 @@ const I18N = {
   chaine_demonetisee_pendant_3_h_la: ["Chaîne démonétisée pendant 3 h : la plateforme a jugé un contenu « non adapté aux annonceurs ». Plus aucun revenu publicitaire.", "Channel demonetized for 3 h: the platform ruled some content \"not advertiser-friendly\". No more ad revenue."],
   chaine_demonetisee_3_h: ["Chaîne démonétisée 3 h", "Channel demonetized for 3 h"],
   les_themes_plus_sages_cuisine_tech: ["Les thèmes plus sages (cuisine, tech) sont rarement démonétisés.", "Safer topics (cooking, tech) rarely get demonetized."],
-  burn_out_vous_etes_a_bout: ["Burn-out : vous êtes à bout et devez faire une pause forcée de 4 h.", "Burnout: you're exhausted and must take a forced 4-hour break."],
+  burn_out_vous_etes_a_bout: ["Burn-out : fatigue à 100 %, pause forcée de 3 h.", "Burnout: fatigue hit 100%, forced 3-hour break."],
   burn_out_du_createur: ["Burn-out du créateur", "Creator burnout"],
-  surveillez_la_fatigue_au_dela_de: ["Surveillez la fatigue : au-delà de 60 %, la qualité baisse ; au-delà de 90 %, le burn-out guette. Un monteur réduit la fatigue.", "Watch your fatigue: above 60%, quality drops; above 90%, burnout looms. A video editor reduces fatigue."],
+  surveillez_la_fatigue_au_dela_de: ["Surveillez la fatigue : au-delà de 60 %, la qualité baisse ; à 100 %, c’est le burn-out. Reposez-vous, et un monteur ou un community manager réduisent la fatigue.", "Watch your fatigue: above 60%, quality drops; at 100%, it’s burnout. Take breaks; a video editor or community manager reduces fatigue."],
   bad_buzz_vous_perdez_abonnes_et: ["Bad buzz : {0}. Vous perdez {1} abonnés et la confiance chute.", "Backlash: {0}. You lose {1} subscribers and trust plummets."],
   bad_buzz_abonnes_perdus: ["Bad buzz : {0} abonnés perdus", "Backlash: {0} subscribers lost"],
   est_en_train_de_devenir_virale: ["🔥 « {0} » est en train de devenir virale !", "🔥 \"{0}\" is going viral!"],
@@ -2729,6 +2756,72 @@ const I18N = {
   sv_replace: ["Remplacer", "Replace"],
   sv_rec_bak: ["Sauvegarde principale vide ou abîmée : partie récupérée depuis la copie de secours.", "Main save empty or damaged: game restored from the backup copy."],
   sv_rec_old: ["Ancienne partie retrouvée et récupérée.", "Previous game found and restored."],
+  cr_rest: ["Se reposer", "Rest"],
+  cr_weekend: ["Week-end off", "Weekend off"],
+  cr_holiday: ["Vacances", "Holiday"],
+  cr_free: ["gratuit", "free"],
+  cr_resting: ["Au repos : encore {0}", "Resting: {0} left"],
+  cr_fat_ok: ["Aucun effet : vos vidéos sont à pleine qualité. La fatigue baisse d’environ 7 points par heure sans tournage, même quand vous ne jouez pas.", "No effect: your videos are at full quality. Fatigue drops about 7 points per hour when you’re not filming, even while you’re away."],
+  cr_fat_60: ["Fatigue élevée : qualité des vidéos −{0} points. Reposez-vous pour retrouver la pleine qualité.", "High fatigue: video quality −{0} points. Rest to get back to full quality."],
+  cr_fat_90: ["⚠️ Épuisement : qualité −{0} points, et à 100 % c’est le burn-out (pause forcée de 3 h). Reposez-vous maintenant !", "⚠️ Exhausted: quality −{0} points, and at 100% it’s burnout (forced 3-hour break). Rest now!"],
+  cr_fat_burn: ["🥵 Burn-out : pause forcée encore {0}. La fatigue redescend deux fois plus vite pendant ce temps.", "🥵 Burnout: forced break for {0}. Fatigue drops twice as fast meanwhile."],
+  cr_fat_rest: ["{0} {1} : encore {2}. La fatigue baisse, aucun tournage possible.", "{0} {1}: {2} left. Fatigue is dropping; no filming meanwhile."],
+  cr_rest_prod: ["Repos possible une fois la vidéo en cours publiée.", "You can rest once the current video is published."],
+  cr_rest_start: ["{0} {1} : pause de {2}.", "{0} {1}: {2} break."],
+  cr_rest_done: ["{0} De retour, reposé et prêt à créer.", "{0} Back, rested and ready to create."],
+  cr_will_burn: ["Cette vidéo vous mènera à 100 % : burn-out assuré.", "This video will push you to 100%: guaranteed burnout."],
+  mk_market: ["Marché", "Market"],
+  mk_savings: ["Épargne", "Savings"],
+  mk_locked: ["{0} se débloque à {1} de fortune.", "{0} unlocks at {1} net worth."],
+  pf_total: ["Valeur totale", "Total value"],
+  pf_gain: ["Gain / perte", "Gain / loss"],
+  pf_lines: ["Mes placements", "My investments"],
+  pf_own: ["Vous en avez pour {0}", "You hold {0}"],
+  pf_empty_t: ["Aucun placement pour l’instant", "No investments yet"],
+  pf_empty: ["Commencez sans risque avec le livret d’épargne, ou par un ETF Monde qui répartit votre argent sur 1 500 entreprises.", "Start risk-free with the savings account, or with a World ETF that spreads your money over 1,500 companies."],
+  pf_discover: ["Découvrir le marché", "Explore the market"],
+  rk_low: ["Faible", "Low"],
+  rk_mid: ["Moyen", "Medium"],
+  rk_high: ["Élevé", "High"],
+  ter_s2: ["frais {0} %/an", "fees {0}%/yr"],
+  in2_stocks: ["Une part d’une seule entreprise : ça peut beaucoup monter… ou baisser.", "A share of a single company: it can rise a lot… or fall."],
+  in2_etf: ["Des centaines d’entreprises en un seul achat : moins de surprises.", "Hundreds of companies in one purchase: fewer surprises."],
+  in2_bond: ["De l’argent qui rapporte un peu chaque mois, presque sans risque.", "Money that earns a little every month, almost risk-free."],
+  in2_crypto: ["Monnaies numériques : gros gains possibles, grosses pertes aussi.", "Digital currencies: big gains possible, big losses too."],
+  in2_realty: ["Achetez un bien, louez-le, encaissez les loyers.", "Buy a property, rent it out, collect the rent."],
+  ib_more: ["Explication", "Explanation"],
+  ib_ok: ["Compris", "Got it"],
+  ib_pl_t: ["Valeur et gain", "Value and gain"],
+  ib_pl: ["La valeur totale est ce que valent vos placements aujourd’hui (crédits immobiliers déduits). Le gain compare cette valeur à ce que vous avez payé. Il n’est encaissé qu’à la vente : un impôt de 15 % s’applique alors seulement sur le gain.", "Total value is what your investments are worth today (property loans deducted). The gain compares that value with what you paid. You only cash it in when you sell: a 15% tax then applies to the gain only."],
+  ib_avg_t: ["Prix d’achat moyen", "Average buy price"],
+  ib_avg: ["Le prix moyen que vous avez payé pour chaque part, frais compris. Si le cours actuel est au-dessus, vous êtes en gain.", "The average price you paid per share, fees included. If the current price is above it, you’re in profit."],
+  ib_stocks_t: ["Les actions", "Stocks"],
+  ib_stocks: ["Une action est un petit morceau d’une entreprise. Son prix suit les résultats de l’entreprise et l’humeur du marché, et beaucoup versent un dividende chaque mois de jeu (1 h).", "A share is a small piece of a company. Its price follows the company’s results and the market’s mood, and many pay a dividend every game month (1 h)."],
+  ib_etf_t: ["Les ETF", "ETFs"],
+  ib_etf: ["Un ETF achète d’un coup des centaines d’actions. Si une entreprise chute, les autres compensent : c’est plus calme qu’une action seule. Petits frais annuels, déjà inclus dans le prix.", "An ETF buys hundreds of stocks at once. If one company drops, the others make up for it: calmer than a single stock. Small yearly fees, already included in the price."],
+  ib_bond_t: ["L’épargne", "Savings"],
+  ib_bond: ["Le livret est garanti : votre argent ne baisse jamais et rapporte 3 % par an. Les obligations sont des prêts à un État ou à des entreprises : un intérêt régulier, et un prix qui bouge peu.", "The savings account is guaranteed: your money never drops and earns 3% a year. Bonds are loans to a government or companies: steady interest and a price that barely moves."],
+  ib_crypto_t: ["Les cryptos", "Crypto"],
+  ib_crypto: ["Des monnaies numériques très spéculatives : elles peuvent doubler ou perdre 80 % en peu de temps, et certaines disparaissent. N’y mettez que ce que vous acceptez de perdre.", "Highly speculative digital currencies: they can double or lose 80% quickly, and some vanish. Only put in what you can afford to lose."],
+  ib_realty_t: ["L’immobilier", "Real estate"],
+  ib_realty: ["Vous achetez un bien (à crédit si vous voulez), vous le louez, et vous touchez un loyer chaque mois de jeu, moins les charges et la mensualité du crédit.", "You buy a property (with a loan if you like), rent it out, and collect rent every game month, minus costs and the loan payment."],
+  sh_invested: ["Investi", "Invested"],
+  sh_value: ["Valeur actuelle", "Current value"],
+  sh_qty: ["Quantité", "Quantity"],
+  sh_net: ["Résultat net", "Net result"],
+  sh_manage: ["Gérer le bien", "Manage the property"],
+  prop_mo: ["{0}/mois", "{0}/mo"],
+  prop_line: ["Loyer {0} · Charges {1} · Crédit {2} · Net {3}/mois", "Rent {0} · Costs {1} · Loan {2} · Net {3}/mo"],
+  rw_norent: ["Résultat négatif : aucun loyer encaissé en ce moment ({0}), mais les charges et le crédit continuent.", "Negative result: no rent coming in right now ({0}), but costs and the loan keep running."],
+  rw_works: ["travaux en cours", "works in progress"],
+  rw_vacant: ["logement vacant", "property empty"],
+  rw_unpaid: ["loyers impayés", "unpaid rent"],
+  rw_loan: ["Résultat négatif : la mensualité du crédit ({0}) dépasse le loyer moins les charges ({1}). C’est courant avec un crédit : chaque mensualité rembourse aussi du capital, donc le bien vous appartient un peu plus chaque mois.", "Negative result: the loan payment ({0}) is higher than rent minus costs ({1}). That’s common with a loan: each payment also repays capital, so you own a bit more of the property every month."],
+  rw_charges: ["Résultat négatif : les charges dépassent le loyer. Remettez le bien en état (l’entretien baisse) ou trouvez un locataire qui paie plus.", "Negative result: costs exceed the rent. Repair the property (upkeep goes down) or find a tenant who pays more."],
+  works_chip: ["🏗️ {0} · encore {1}", "🏗️ {0} · {1} left"],
+  works_reno_s: ["Rénovation niv. {0}", "Renovation lvl {0}"],
+  works_reno: ["Rénovation vers le niveau {0} : encore {1} (loyer suspendu).", "Renovation to level {0}: {1} left (rent on hold)."],
+  works_cond: ["La rénovation monte le niveau du bien, pas son état.", "Renovation raises the property’s level, not its condition."],
 };
 const LANGS = ['en', 'fr'];
 const FLAGS = { en: '<svg class="flag" viewBox="0 0 19 10" aria-hidden="true"><rect width="19" height="10" fill="#B22234"/><path d="M0 1.15h19M0 2.7h19M0 4.23h19M0 5.77h19M0 7.3h19M0 8.85h19" stroke="#FFF" stroke-width=".77"/><rect width="7.6" height="5.4" fill="#3C3B6E"/></svg>', fr: '<svg class="flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="1" height="2" fill="#0055A4"/><rect x="1" width="1" height="2" fill="#FFF"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg>' };
@@ -3101,7 +3194,12 @@ function load() {
     }
     // Nouveaux titres (ETF, obligations, livret…) ajoutés au marché ; les positions et prix de revient existants restent intacts.
     for (const id of [...SECS, ...CRYPTO, ...REALTY].map(x => x.id)) if (!S.mk[id]) S.mk[id] = seedAsset(id, Date.now());
-    for (const id in S.mk) if (S.mk[id] && !S.mk[id].H) S.mk[id].H = emptyHist();   // partie importée : historiques non inclus
+    for (const id in S.mk) if (S.mk[id] && !S.mk[id].H) S.mk[id].H = emptyHist();
+    // Créateur : heures de visionnage = vues × durée × rétention (même formule partout).
+    if (S.cr && !S.cr.whV) {
+      const c = S.cr, P = PLATS[c.plat], del = c.vids.reduce((a, v) => a + v.del, 0), wh = c.vids.reduce((a, v) => a + vidWh(v, P), 0);
+      c.wh = del > 0 ? wh * Math.max(1, c.views / del) : 0; c.whV = 1;
+    }   // partie importée : historiques non inclus
     if (!S.pfH || !S.pfH.h) S.pfH = emptyHist();
     // Parties déjà commencées : pas de tutoriel, et les fonctionnalités déjà atteintes restent ouvertes sans bulle.
     if (d.tuto == null) S.tuto = 1;
@@ -3453,9 +3551,27 @@ const CR_TIERS = [[1e3, tl('bouton_de_bronze'), '🥉', 100], [1e4, tl('bouton_d
 const thOf = id => THEMES.find(x => x[0] === id);
 const crEqQ = c => 10 + CR_EQ.reduce((a, e) => a + (c.eq[e[0]] ? e[4] : 0), 0);
 const canFilm = c => c.eq.phone || c.eq.webcam || c.eq.camera;
+// Fatigue : l'équipe en absorbe une partie (monteur −30 %, community manager −15 %).
+const fatMul = c => (c.st.editor ? .7 : 1) * (c.st.cm ? .85 : 1);
+const fatGain = (c, pr, du) => (PREPS[pr][3] + PLATS[c.plat].durs[du][4]) * fatMul(c);
+// Repos : gratuit mais long ; week-end et vacances coûtent de l'argent mais remettent d'aplomb tout de suite.
+const RESTS = { rest: [tl('cr_rest'), '😴', 0, 1, 35, 0], weekend: [tl('cr_weekend'), '🏕️', 400, .5, 0, 45], holiday: [tl('cr_holiday'), '🏝️', 2500, 1, 0, 100] };
+const resting = (c, t = Date.now()) => c.rest && c.rest.until > t;
+const crBusy = (c, t = Date.now()) => c.burn > t || resting(c, t);
+// Ce que la fatigue fait à vos vidéos, en clair.
+function fatCard(c, t) {
+  const qPen = Math.round(crEqQ(c) * PREPS[c.sel.pr][2] * Math.max(0, c.fat - 60) / 80), f = Math.round(c.fat);
+  const msg = c.burn > t ? `<p class="need">${tl('cr_fat_burn', ldur(c.burn))}</p>${waitBtns('burn', c.burn, t)}`
+    : resting(c, t) ? `<p class="good-note">${tl('cr_fat_rest', RESTS[c.rest.k][1], RESTS[c.rest.k][0], ldur(c.rest.until))}</p>${waitBtns('rest', c.rest.until, t)}`
+    : f >= 90 ? `<p class="need">${tl('cr_fat_90', qPen)}</p>` : f >= 60 ? `<p class="warn-note">${tl('cr_fat_60', qPen)}</p>` : `<p class="muted" style="margin:6px 0 0">${tl('cr_fat_ok')}</p>`;
+  const dis = crBusy(c, t) || !!c.prod || f < 5;
+  return `<div class="card"><div class="row"><span class="label">${tl('votre_fatigue')}</span><b class="num">${f}${pc()}</b></div>${meter(c.fat, true)}${msg}
+    <div class="rest-btns">${Object.entries(RESTS).map(([k, [n, ico, cost, h]]) => `<button class="btn ${cost ? 'gold' : 'ghost'} sm" type="button" data-crrest="${k}" ${dis ? 'disabled' : ''} ${cost ? `data-cost="${cost * S.pi}"` : ''}>${ico} ${n}<small>${cost ? eur(cost * S.pi) : tl('cr_free')} · ${hTxt(h)}</small></button>`).join('')}</div>
+    ${c.prod ? `<p class="muted" style="margin:8px 0 0;font-size:12.5px">${tl('cr_rest_prod')}</p>` : ''}</div>`;
+}
 function newChannel(name, plat, t) {
   return { name, plat, subs: 0, views: 0, wh: 0, trust: 80, fat: 0, burn: 0, demon: 0, eq: {}, st: {}, vids: [], prod: null, offers: [], spon: null, nextOffer: t + 20 * 60e3,
-    trend: pick(THEMES)[0], trendUntil: t + 3 * H, tiers: [], merch: 0, brand: 0, promoU: 0, rev: { ads: 0, don: 0, pay: 0, spons: 0, merch: 0, brand: 0 }, H: emptyHist(), last: t, log: [], sel: { th: 'gaming', du: 1, pr: 1 }, n: 0 };
+    whV: 1, rest: null, trend: pick(THEMES)[0], trendUntil: t + 3 * H, tiers: [], merch: 0, brand: 0, promoU: 0, rev: { ads: 0, don: 0, pay: 0, spons: 0, merch: 0, brand: 0 }, H: emptyHist(), last: t, log: [], sel: { th: 'gaming', du: 1, pr: 1 }, n: 0 };
 }
 function crLog(msg, kind, t, notify) {
   const c = S.cr; c.log.unshift([t, msg, kind || '']);
@@ -3502,9 +3618,13 @@ function genComments(v) {
   return out;
 }
 // Chiffres d'une vidéo, tirés de ses vues et de sa qualité (avec une part de hasard fixée à la publication).
+// Rétention : part de la vidéo regardée en moyenne, de 30 % (qualité faible) à 60 % (excellente).
+const retOf = v => clamp(.3 + (v.q || 0) / 100 * .3, .3, .6);
+// Heures de visionnage d'une vidéo = vues × durée × rétention.
+const vidWh = (v, P = PLATS[S.cr.plat]) => v.del * P.durs[v.du || 0][1] / 60 * retOf(v);
 function vidStats(v) {
   const P = PLATS[S.cr.plat], du = P.durs[v.du || 0], r = v.rnd || [1, 1, 1, 1];
-  const ret = clamp((S.cr.plat === 'short' ? .55 : .25) + v.q / 220, .1, .95);
+  const ret = retOf(v);
   return { likes: v.del * (.01 + v.q / 100 * .06) * r[0], dislikes: v.del * (.002 + (100 - v.q) / 100 * .012) * r[1], comments: v.del * .004 * r[2], shares: v.del * .002 * (v.Vx ? 3 : 1) * r[3], ret, watch: du[1] * ret };
 }
 const vidAge = (v, t = Date.now()) => (t - v.t) / H;
@@ -3531,6 +3651,8 @@ let crSort = 'date', crView = 0, crTab = 'dash', crMet = 'subs';
 const CR_TABS = [['dash', tl('tableau_de_bord')], ['create', tl('creer')], ['videos', tl('mes_videos')], ['gear', tl('materiel_2')], ['team', tl('equipe')], ['spons', tl('sponsors')]];
 function crSeries(c) { const m = { subs: [c.H, c.subs], views: [c.HV || c.H, c.views], rev: [c.HR || c.H, crRevTot(c)] }[crMet]; return series(m[0], perCr, m[1]); }
 const crFmt = () => crMet === 'rev' ? eur : v => nf0.format(v);
+// Le grand compteur affiche la même mesure (et la même valeur) que la fin du graphique.
+const crMetTxt = c => crMet === 'rev' ? String(eur(crRevTot(c))) : nf0.format(crMet === 'views' ? c.views : c.subs);
 function crSummary(c, t) {
   const now = t / 1000, d1 = now - 86400, d2 = now - 2 * 86400;
   const rows = [[tl('abonnes'), c.H, c.subs, nf0.format], [tl('vues'), c.HV, c.views, nf0.format], [tl('revenus'), c.HR, crRevTot(c), eur]].map(([n, hs, cur, f]) => {
@@ -3593,7 +3715,7 @@ function publishVid(c, p, t) {
   v.cm = genComments(v);
   c.vids.unshift(v); if (c.vids.length > 100) c.vids.length = 100;
   c.n++; c.last = t; S.stats.vids++;
-  c.fat = Math.min(100, c.fat + (pr[3] + du[4]) * (c.st.editor ? .7 : 1));
+  c.fat = Math.min(100, c.fat + fatGain(c, p.pr, p.du));
   crLog(tl('publiee_qualite_100_estimee', v.ico, v.title, Math.round(q), Math.round(qe), qx.length ? ` ; ${qTxt(qx)}` : ''), '', t, true);
   // Contrat de sponsor : le solde est versé à la publication, la confiance baisse.
   if (p.sp) {
@@ -3612,7 +3734,8 @@ function publishVid(c, p, t) {
   if (Math.random() < th[5] + (c.trust < 40 ? .03 : 0)) v.lost += badBuzz(c, t, pick([tl('une_blague_passe_tres_mal'), tl('une_info_fausse_dans_la_video'), tl('un_clash_avec_un_autre_createur')]), tl('les_videos_soignees_et_une_bonne'));
   if (c.subs >= 1000 && Math.random() < .02 + (th[0] === 'humour' ? .02 : 0)) { c.demon = t + 3 * H; crLog(tl('chaine_demonetisee_pendant_3_h_la'), 'bad', t, true); lossLog(t, '📵', tl('chaine_demonetisee_3_h'), 0, tl('les_themes_plus_sages_cuisine_tech')); }
   if (c.subs >= 500 && Math.random() < .012) S.pending.push({ k: 'polemic' });
-  if (c.fat > 90 && Math.random() < .35) { c.burn = t + 4 * H; crLog(tl('burn_out_vous_etes_a_bout'), 'bad', t, true); lossLog(t, '🥵', tl('burn_out_du_createur'), 0, tl('surveillez_la_fatigue_au_dela_de')); }
+  // Burn-out seulement à 100 % de fatigue : pause forcée, la fatigue redescend plus vite pendant ce temps.
+  if (c.fat >= 100) { c.burn = t + 3 * H; c.rest = null; crLog(tl('burn_out_vous_etes_a_bout'), 'bad', t, true); lossLog(t, '🥵', tl('burn_out_du_createur'), 0, tl('surveillez_la_fatigue_au_dela_de')); }
 }
 function badBuzz(c, t, why, tip) {
   const lost = c.subs * rf(.02, .08) * (c.st.cm ? .5 : 1);
@@ -3635,7 +3758,7 @@ function simCreator(dtH, t) {
     v.del += dv; c.views += dv;
     const hi = Math.min(167, Math.floor(age)); while (v.hv.length <= hi) v.hv.push(0); v.hv[hi] += dv;
     if (v.Vx && !v.vn && age >= v.vd) { v.vn = 1; crLog(tl('est_en_train_de_devenir_virale', v.title), 'good', t, true); }
-    while (v.ms < VID_MS.length && v.del >= VID_MS[v.ms]) { crLog(tl('depasse_vues', v.ico || '🎬', v.title, ['1 k', '10 k', '100 k', '1 M', '10 M'][v.ms]), 'good', t, true); v.ms++; } c.wh += dv * du[1] / 60 * (.3 + v.q / 200);
+    while (v.ms < VID_MS.length && v.del >= VID_MS[v.ms]) { crLog(tl('depasse_vues', v.ico || '🎬', v.title, ['1 k', '10 k', '100 k', '1 M', '10 M'][v.ms]), 'good', t, true); v.ms++; } c.wh += dv * du[1] / 60 * retOf(v);
     const ns = dv * (.012 + v.q / 4000) * (1 + 6 / (1 + c.subs / 100)) * P.conv * (c.st.cm ? 1.15 : 1) * (.5 + c.trust / 100) / 1.3;
     c.subs += ns; v.gain += ns;
     const ads = c.subs >= 1000 && c.demon <= t ? dv / 1000 * P.rpm * thOf(v.th)[4] * du[3] * S.pi : 0, don = c.subs >= 1000 ? dv * P.don * (c.trust / 80) * S.pi : 0;
@@ -3647,7 +3770,10 @@ function simCreator(dtH, t) {
   c.rev.pay += pay; c.rev.merch += merch; c.rev.brand += brand; earn += pay + merch + brand;
   const staff = CR_STAFF.reduce((a, s) => a + (c.st[s[0]] ? s[3] : 0), 0) * S.pi * dtH;
   S.cash += earn - staff; S.earned += earn;
-  if (!c.prod) c.fat = Math.max(0, c.fat - 7 * dtH);
+  // Récupération naturelle (aussi pendant l'absence) : 7 points/h sans tournage, 15 en burn-out, plus pendant un repos.
+  const fr = c.burn > t ? 15 : resting(c, t) ? 7 + c.rest.rate : c.prod ? 0 : 7;
+  c.fat = Math.max(0, c.fat - fr * dtH);
+  if (c.rest && c.rest.until <= t) { crLog(tl('cr_rest_done', RESTS[c.rest.k][1]), 'good', t, true); c.rest = null; }
   c.trust = clamp(c.trust + (80 - c.trust) * .05 * dtH, 0, 100);
   // Sans nouvelle vidéo depuis 6 h, une partie du public décroche.
   if ((t - c.last) / H > 6) c.subs *= 1 - .005 * (c.st.cm ? .5 : 1) * dtH;
@@ -3688,28 +3814,29 @@ function renderCreator() {
   if (cv) return renderVideo(c, cv, t);
   crView = 0;
   const P = PLATS[c.plat], eqQ = crEqQ(c), pts = crSeries(c);
-  const st = c.burn > t ? ['bad', tl('burn_out_pause_forcee', dur(c.burn - t))] : c.prod ? ['warn', tl('en_production', dur(c.prod.end - t))] : ['good', tl('pret_a_creer')];
+  const st = c.burn > t ? ['bad', tl('burn_out_pause_forcee', ldur(c.burn))] : resting(c, t) ? ['warn', tl('cr_resting', ldur(c.rest.until))] : c.prod ? ['warn', tl('en_production', ldur(c.prod.end))] : ['good', tl('pret_a_creer')];
   let h = `<section class="screen" id="scr"><div class="screen-title"><h1>${tl('createur')}</h1><span class="num"${negS(crPassiveH())}>${perH(crPassiveH())}</span></div>
     <div class="qty cats crtabs">${CR_TABS.map(([k, l]) => `<button type="button" data-crtab="${k}" aria-pressed="${crTab === k}">${l}${k === 'spons' && c.offers.length ? ` (${c.offers.length})` : ''}</button>`).join('')}</div>`;
   if (crTab === 'dash') h += `
     <div class="card cr-hero"><div class="row"><span><span class="label">${P.ico} ${esc(c.name)} · ${P.n}</span></span><span class="chipx ${st[0]}">${st[1]}</span></div>${c.burn > t ? waitBtns('burn', c.burn, t) : ''}
-      <b class="num pf-val" id="crSubs">${nf0.format(c.subs)}</b><span class="muted">${tl('abonnes_2', c.demon > t ? ` · <span class="neg">${tl('demonetisee_encore', dur(c.demon - t))}</span>` : c.subs < 1000 ? ` ${tl('pubs_activees_a_1_000_abonnes')}` : '')}</span>
+      <b class="num pf-val" id="crSubs">${crMetTxt(c)}</b><span class="muted">${crMet === 'views' ? tl('vues_totales') : crMet === 'rev' ? tl('revenus_cumules') : tl('abonnes_2', c.demon > t ? ` · <span class="neg">${tl('demonetisee_encore', ldur(c.demon))}</span>` : c.subs < 1000 ? ` ${tl('pubs_activees_a_1_000_abonnes')}` : '')}</span>
       <div class="qty">${[['subs', tl('abonnes')], ['views', tl('vues')], ['rev', tl('revenus')]].map(([k, l]) => `<button type="button" data-crmet="${k}" aria-pressed="${crMet === k}">${l}</button>`).join('')}</div>
       ${chartBlock('cr', pts, perCr, crFmt())}${perChips(perCr, 'data-percr')}
       <div class="stats"><div><small>${tl('vues_totales')}</small><b class="num">${nf0.format(c.views)}</b></div><div><small>${tl('heures_de_visionnage')}</small><b class="num">${nf0.format(c.wh)}</b></div>
-        <div><small>${tl('confiance_des_abonnes')}</small><b>${Math.round(c.trust)}${pc()}</b>${meter(c.trust)}</div><div><small>${tl('votre_fatigue')}</small><b>${Math.round(c.fat)}${pc()}</b>${meter(c.fat, true)}</div></div></div>`;
+        <div><small>${tl('confiance_des_abonnes')}</small><b>${Math.round(c.trust)}${pc()}</b>${meter(c.trust)}</div><div><small>${tl('votre_fatigue')}</small><b>${Math.round(c.fat)}${pc()}</b>${meter(c.fat, true)}</div></div></div>
+    ${fatCard(c, t)}`;
   if (crTab === 'dash' && c.HV) h += crSummary(c, t);
   // Créer du contenu
   if (crTab === 'create') {
-  h += `<div class="card"><div class="row"><span class="label">${tl('creer_du_contenu')}</span><span class="muted">${tl('qualite_estimee_100', Math.round(crQual(c, c.sel.pr)))}</span></div><p class="muted" style="margin:6px 0 0;font-size:12px">${tl('le_jour_j_la_tendance_5', qTxt(crQualParts(c, c.sel.pr)))}</p>`;
+  h += fatCard(c, t) + `<div class="card"><div class="row"><span class="label">${tl('creer_du_contenu')}</span><span class="muted">${tl('qualite_estimee_100', Math.round(crQual(c, c.sel.pr)))}</span></div><p class="muted" style="margin:6px 0 0;font-size:12px">${tl('le_jour_j_la_tendance_5', qTxt(crQualParts(c, c.sel.pr)))}</p>`;
   if (!canFilm(c)) h += `<p class="need" style="margin-top:8px">${tl('il_vous_faut_au_moins_un')}</p><button class="btn gold full" type="button" data-crtab="gear">${tl('acheter_du_materiel')}</button>`;
-  else if (c.prod) { const p = c.prod, k = clamp((t - p.start) / (p.end - p.start), 0, 1); h += `<p style="margin:8px 0">${p.ico || thOf(p.th)[2]} « ${esc(p.title)} » · ${thOf(p.th)[1]}${p.sp ? ` ${tl('sponsorisee_par', esc(p.sp.brand))}` : ''}</p><div class="bar"><i style="width:${k * 100}%"></i></div><p class="muted" style="margin:6px 0 0">${tl('publication_dans', dur(p.end - t))}</p>${waitBtns('vid', p.end, t)}`; }
+  else if (c.prod) { const p = c.prod, k = clamp((t - p.start) / (p.end - p.start), 0, 1); h += `<p style="margin:8px 0">${p.ico || thOf(p.th)[2]} « ${esc(p.title)} » · ${thOf(p.th)[1]}${p.sp ? ` ${tl('sponsorisee_par', esc(p.sp.brand))}` : ''}</p><div class="bar"><i data-prog="${p.start}:${p.end}" style="width:${k * 100}%"></i></div><p class="muted" style="margin:6px 0 0">${tl('publication_dans', ldur(p.end))}</p>${waitBtns('vid', p.end, t)}`; }
   else {
     h += `<div class="lbl" style="margin:10px 0 6px">${tl('theme', c.trendUntil > t ? ` ${tl('tendance_du_moment_vues_1_5', thOf(c.trend)[2], thOf(c.trend)[1])}` : '')}</div><div class="qty">${THEMES.map(th => `<button type="button" data-crth="${th[0]}" aria-pressed="${c.sel.th === th[0]}">${th[2]} ${th[1]}${c.trend === th[0] ? ' 🔥' : ''}</button>`).join('')}</div>
       <div class="lbl" style="margin:12px 0 6px">${tl('format')}</div><div class="qty">${P.durs.map((d, i) => `<button type="button" data-crdu="${i}" aria-pressed="${c.sel.du === i}">${d[0]}</button>`).join('')}</div>
       <div class="lbl" style="margin:12px 0 6px">${tl('preparation_2')}</div><div class="qty">${PREPS.map((p, i) => `<button type="button" data-crpr="${i}" aria-pressed="${c.sel.pr === i}">${tl('min_2', p[0], p[1])}</button>`).join('')}</div>
-      <p class="muted" style="margin:10px 0">${tl('fatigue', Math.round((PREPS[c.sel.pr][3] + P.durs[c.sel.du][4]) * (c.st.editor ? .7 : 1)), c.fat > 60 ? `<span class="neg">${tl('fatigue_elevee_la_qualite_baisse')}</span>` : '', c.spon ? ` ${tl('prochaine_video_sponsorisee_par', esc(c.spon.brand))}` : '', c.promoU && findFirm(c.promoU) ? ` ${tl('promo_de_incluse', esc(firmName(findFirm(c.promoU))))}` : '')}</p>
-      <button class="btn go full" id="crPost" type="button" ${c.burn > t ? 'disabled' : ''}>${c.plat === 'live' ? tl('lancer_le_live') : tl('preparer_et_publier')}</button>`;
+      <p class="muted" style="margin:10px 0">${tl('fatigue', Math.round(fatGain(c, c.sel.pr, c.sel.du)), c.fat + fatGain(c, c.sel.pr, c.sel.du) >= 100 ? `<span class="neg">${tl('cr_will_burn')}</span>` : c.fat > 60 ? `<span class="neg">${tl('fatigue_elevee_la_qualite_baisse')}</span>` : '', c.spon ? ` ${tl('prochaine_video_sponsorisee_par', esc(c.spon.brand))}` : '', c.promoU && findFirm(c.promoU) ? ` ${tl('promo_de_incluse', esc(firmName(findFirm(c.promoU))))}` : '')}</p>
+      <button class="btn go full" id="crPost" type="button" ${crBusy(c, t) ? 'disabled' : ''}>${c.plat === 'live' ? tl('lancer_le_live') : tl('preparer_et_publier')}</button>`;
   }
   h += '</div>';
   }
@@ -3754,7 +3881,14 @@ function crAction(el) {
   else if (ds.crth) c.sel.th = ds.crth;
   else if (ds.crdu != null) c.sel.du = +ds.crdu;
   else if (ds.crpr != null) c.sel.pr = +ds.crpr;
-  else if (el.id === 'crPost') { if (!canFilm(c) || c.prod || c.burn > t) return; startProd(c, t); toast(tl('production_lancee'), 'good'); }
+  else if (el.id === 'crPost') { if (!canFilm(c) || c.prod || crBusy(c, t)) return; startProd(c, t); toast(tl('production_lancee'), 'good'); }
+  else if (ds.crrest) {
+    const [n, ico, cost, h, rate, cut] = RESTS[ds.crrest], p = cost * S.pi;
+    if (crBusy(c, t) || c.prod || S.cash < p) return;
+    S.cash -= p; c.fat = Math.max(0, c.fat - cut); c.rest = { k: ds.crrest, until: t + h * H, rate };
+    if (ds.crrest === 'holiday') c.trust = Math.min(100, c.trust + 5);
+    crLog(tl('cr_rest_start', ico, n, hTxt(h)), 'good', t); fxBuy();
+  }
   else if (ds.creq) { const e = CR_EQ.find(x => x[0] === ds.creq), p = e[3] * S.pi; if (S.cash < p) return; S.cash -= p; c.eq[e[0]] = 1; crLog(tl('nouveau_materiel', e[1], eur(p)), 'good', t); fxBuy(); }
   else if (ds.crst) { const s = CR_STAFF.find(x => x[0] === ds.crst); c.st[s[0]] = !c.st[s[0]]; crLog(c.st[s[0]] ? tl('recrute', s[1]) : tl('vous_vous_separez_de_votre', s[1].toLowerCase()), '', t); }
   else if (ds.spok) { const o = c.offers.find(x => x.id === +ds.spok); if (!o || c.spon) return; const adv = o.pay / 2 * (c.st.agent ? .9 : 1); S.cash += adv; S.earned += adv; c.rev.spons += adv; c.spon = o; c.offers = c.offers.filter(x => x !== o); crLog(tl('contrat_signe_avec_davance_le_reste', o.brand, eur(adv)), 'good', t); }
@@ -3893,6 +4027,7 @@ function waitRef(key) {
   const [k, a, b] = key.split(':');
   if (k === 'vid') return S.cr && S.cr.prod ? [S.cr.prod, 'end'] : null;
   if (k === 'burn') return S.cr ? [S.cr, 'burn'] : null;
+  if (k === 'rest') return S.cr && S.cr.rest ? [S.cr.rest, 'until'] : null;
   if (k === 'up') { const f = findFirm(a); return f && f.upEnd ? [f, 'upEnd'] : null; }
   if (k === 'work' || k === 'evict') { const pr = S.props.find(x => x.u === +a); return pr ? [pr, k === 'work' ? 'works' : 'evict'] : null; }
   if (k === 'veh') { const f = findFirm(a), v = f && f.ops.veh.find(x => x.id === +b); return v ? [v, 'arr'] : null; }
@@ -3929,13 +4064,13 @@ function tokModal(msg) {
   const t = Date.now(), left = tokAdsLeft(), wait = S.tokAdNext - t;
   modal(`<span class="ev-ico">${TOK}</span><h3>${tl('jetons', S.tok)}</h3>${msg ? `<p class="need">${esc(msg)}</p>` : ''}
     <p>${tl('les_jetons_terminent_ou_accelerent_les')}</p>
-    <button class="btn tok full" id="tokAd" type="button" ${left <= 0 || wait > 0 ? 'disabled' : ''}>${left <= 0 ? tl('plus_de_pub_aujourdhui_10_10') : wait > 0 ? tl('prochaine_pub_dans', mmss(wait)) : tl('regarder_une_pub_de_s', AD_SECONDS, TOK_AD, TOK)}</button>
-    <p class="muted" style="font-size:12.5px">${tl('pubs_restantes_aujourdhui_autres_sources', left, TOK_AD_MAX)}</p>
+    ${AdService.off ? '' : `<button class="btn tok full" id="tokAd" type="button" ${left <= 0 || wait > 0 ? 'disabled' : ''}>${left <= 0 ? tl('plus_de_pub_aujourdhui_10_10') : wait > 0 ? tl('prochaine_pub_dans', mmss(wait)) : tl('regarder_une_pub_de_s', AD_SECONDS, TOK_AD, TOK)}</button>
+    <p class="muted" style="font-size:12.5px">${tl('pubs_restantes_aujourdhui_autres_sources', left, TOK_AD_MAX)}</p>`}
     ${S.tokLog.length ? `<ul class="log" style="text-align:left">${S.tokLog.slice(0, 5).map(([lt, n, why]) => `<li class="${n > 0 ? 'good' : ''}"><span>${n > 0 ? '+' : ''}${n} ${TOK} · ${esc(why)}</span><small>${ago(lt)}</small></li>`).join('')}</ul>` : ''}
     ${renderTokenShop()}
     <button class="btn ghost full" id="mNo" type="button">${tl('fermer')}</button>`);
   $('mNo').onclick = closeModal;
-  $('tokAd').onclick = watchTokAd;
+  if ($('tokAd')) $('tokAd').onclick = watchTokAd;
 }
 // Boutique de jetons contre de l'argent réel : prête pour un futur branchement, désactivée et jamais affichée tant que enabled = false.
 const TOKEN_SHOP = { enabled: false, packs: [['p100', 100, 0.99], ['p550', 550, 4.99], ['p1200', 1200, 9.99]] };
@@ -4051,7 +4186,7 @@ function unlockModal(k) {
   modal(`<span class="ev-ico">${ico}</span><h3>${tl('nouveau', n)}</h3><p>${txt}</p>
     <div class="modal-actions"><button class="btn ghost" id="mNo" type="button">${tl('plus_tard')}</button><button class="btn go" id="mYes" type="button">${tl('decouvrir')}</button></div>`);
   $('mNo').onclick = () => { closeModal(); render(); };
-  $('mYes').onclick = () => { closeModal(); if (go === 'news') { prevTab = tab; tab = 'news'; } else { tab = go; if (go === 'invest') { invView = null; investTab = k === 'invest' ? 'stocks' : k; } } render(); window.scrollTo(0, 0); };
+  $('mYes').onclick = () => { closeModal(); if (go === 'news') { prevTab = tab; tab = 'news'; } else { tab = go; if (go === 'invest') { invView = null; invMode = 'mk'; investTab = k === 'invest' ? 'stocks' : k; } } render(); window.scrollTo(0, 0); };
 }
 function applyLocks() {
   // Les 6 onglets sont toujours visibles, quels que soient les indicateurs des anciennes sauvegardes.
@@ -4724,7 +4859,7 @@ function toast(t, kind = '') {
   el.textContent = typo(t); el.className = 'toast ' + kind; el.hidden = false;
   clearTimeout(toast._t); toast._t = setTimeout(() => { el.hidden = true; }, 3200);
 }
-function modal(html) { const m = $('modal'); m.innerHTML = `<div class="modal-card">${html}</div>`; typoFix(m); m.hidden = false; }
+function modal(html, cls = '') { const m = $('modal'); m.className = 'modal' + (cls ? ' ' + cls : ''); m.onclick = null; m.innerHTML = `<div class="modal-card">${html}</div>`; typoFix(m); m.hidden = false; }
 function closeModal() { $('modal').hidden = true; $('modal').innerHTML = ''; }
 
 const chgHtml = c => `<span class="chg ${c >= 0 ? 'up' : 'down'}">${tl('txt', c >= 0 ? '▲' : '▼', nf1.format(Math.abs(c * 100)))}</span>`;
@@ -4763,7 +4898,7 @@ function renderGains() {
       <button class="btn go full" id="upClick" type="button" data-cost="${cost}" ${S.cash < cost ? 'disabled' : ''}>${tl('ameliorer_le_clic', eur(cost))}</button>
     </div>
 
-    ${S.coach < COACH_DONE ? '' : `<div class="card ad-card">
+    ${S.coach < COACH_DONE || AdService.off ? '' : `<div class="card ad-card">
       <span class="ico">📺</span>
       <div>${tl('bonus_x_sur_les_clics', BOOST_MULT)}<span id="adTxt">${adLabel()}</span></div>
       <button class="btn sm" id="adBtn" type="button" ${adLocked() ? 'disabled' : ''}>${tl('regarder')}</button>
@@ -4848,58 +4983,119 @@ const plHtml = (v, base) => `<b class="num" style="color:var(${v >= 0 ? '--pos' 
 let invView = null, perPf = H, perAsset = H, tq = 1, tAmt = 0, olt = 'buy', loanCfg = { ap: .2, yrs: 20 };
 function pfInvested() { let c = 0; for (const id in S.basis) c += S.basis[id] || 0; for (const pr of S.props) c += pr.paid + pr.fees; return c; }
 
-const ITABS = [['stocks', tl('actions')], ['etf', tl('inv_etf')], ['bond', tl('inv_bonds')], ['crypto', tl('crypto')], ['realty', tl('immobilier')]];
-const OPEN_TABS = ['stocks', 'etf', 'bond'];
-const tabDefs = k => k === 'crypto' ? [...CRYPTO].sort((a, b) => S.mk[b.id].p * b.sup - S.mk[a.id].p * a.sup) : k === 'etf' ? ETFS : k === 'bond' ? BONDS : STOCKS;
-// Répartition du portefeuille par type de placement.
-function allocHtml(pf) {
+// Risque en trois mots, d'après l'échelle européenne 1-7 : 1-3 faible, 4-5 moyen, 6-7 élevé.
+const riskLvl = d => { const r = srriOf(d); return r <= 3 ? 1 : r <= 5 ? 2 : 3; };
+const RLV = [null, ['🟢', 'rk_low', 'lo'], ['🟡', 'rk_mid', 'mid'], ['🔴', 'rk_high', 'hi']];
+const riskTag = lv => `<span class="rk rk-${RLV[lv][2]}">${RLV[lv][0]} ${tl(RLV[lv][1])}</span>`;
+// Petite explication sans jargon, ouverte par ⓘ.
+const infoBtn = k => `<button type="button" class="ib" data-info="${k}" aria-label="${tl('ib_more')}">ⓘ</button>`;
+function infoModal(k) { modal(`<h3>${tl('ib_' + k + '_t')}</h3><p style="text-align:left">${tl('ib_' + k)}</p><button class="btn go full" id="mNo" type="button">${tl('ib_ok')}</button>`); $('mNo').onclick = closeModal; }
+const pctArrow = (v, b) => b > 0 ? `<span class="chg ${v >= b ? 'up' : 'down'}">${v >= b ? '↑' : '↓'} ${nf1.format(Math.abs((v / b - 1) * 100))}${pc()}</span>` : '';
+// Tous les placements détenus, du plus gros au plus petit.
+function holdings(t = Date.now()) {
+  const out = [];
+  for (const d of [...SECS, ...CRYPTO]) { const q = holdOf(d.id); if (q > 0) out.push({ id: d.id, ico: d.ico, n: d.n, sub: d.cls === 'crypto' ? tl('crypto') : tl('cls_' + d.cls), v: q * S.mk[d.id].p, b: S.basis[d.id] || 0 }); }
+  for (const pr of S.props) { const a = propAcc(pr, t); out.push({ id: 'pr' + pr.u, ico: RBY[pr.t].ico, n: RBY[pr.t].n, sub: pr.city, v: a.v, b: pr.paid + pr.fees }); }
+  return out.sort((a, b) => b.v - a.v);
+}
+// Répartition par type : camembert + légende en pourcentages.
+function donutHtml(pf) {
   const rows = [[tl('actions'), pf.by.stock, '--sky'], [tl('inv_etf'), pf.by.etf, '--teal'], [tl('k_bonds_s'), pf.by.bond, '--gold'], [tl('cls_cash'), pf.by.cash, '--money'], [tl('crypto'), pf.crypto, '--plum'], [tl('immobilier_net'), Math.max(0, pf.realty - pf.debt), '--coral']].filter(r => r[1] > .005);
-  const tot = rows.reduce((a, r) => a + r[1], 0);
-  if (!tot) return '';
-  return `<div class="alloc"><div class="alloc-bar">${rows.map(r => `<i style="width:${r[1] / tot * 100}%;background:var(${r[2]})"></i>`).join('')}</div>
-    <div class="alloc-leg">${rows.map(r => `<span><i style="background:var(${r[2]})"></i>${r[0]} <b class="num">${nf0.format(r[1] / tot * 100)} %</b><small class="num">${eur(r[1])}</small></span>`).join('')}</div></div>`;
+  const tot = rows.reduce((a, r) => a + r[1], 0); if (!tot) return '';
+  const R = 54, C = 2 * Math.PI * R; let acc = 0;
+  const arcs = rows.map(r => { const f = r[1] / tot, o = `<circle cx="75" cy="75" r="${R}" fill="none" stroke="var(${r[2]})" stroke-width="20" stroke-dasharray="${(f * C).toFixed(2)} ${C.toFixed(2)}" stroke-dashoffset="${(-acc * C).toFixed(2)}" transform="rotate(-90 75 75)"/>`; acc += f; return o; }).join('');
+  return `<div class="card"><span class="label">${tl('repartition')}</span><div class="donut-wrap" style="margin-top:10px"><svg class="donut" viewBox="0 0 150 150" role="img" aria-label="${tl('repartition')}"><circle cx="75" cy="75" r="${R}" fill="none" stroke="var(--surface-2)" stroke-width="20"/>${arcs}</svg>
+    <ul class="legend">${rows.map(r => `<li style="--c:var(${r[2]})"><i></i><span>${r[0]}</span><b class="num">${nf0.format(r[1] / tot * 100)}${pc()}</b></li>`).join('')}</ul></div></div>`;
 }
-// Positions détenues : quantité, prix de revient unitaire (PRU), valeur et plus/moins-value en € et en %.
-function positionsHtml() {
-  const rows = [...SECS, ...CRYPTO].filter(d => holdOf(d.id) > 0);
-  if (!rows.length) return '';
-  return `<div class="card"><span class="label">${tl('my_pos')}</span><div class="list pos">${rows.map(d => {
-    const q = holdOf(d.id), m = S.mk[d.id], v = q * m.p, b = S.basis[d.id] || 0;
-    return `<button type="button" class="prow-s" data-asset="${d.id}"><span class="arow-main"><b>${d.ico} ${d.n}</b><small>${d.fix ? tl('cls_cash') : tl('pos_line', qtyTxt(d.id, q), px(b / q))}</small></span>
-      <span class="arow-p"><b class="num" id="pv-${d.id}">${eur(v)}</b><small id="pp-${d.id}">${d.fix ? '' : plHtml(v - b, b)}</small></span></button>`;
-  }).join('')}</div></div>`;
-}
+const ITABS = [['stocks', tl('actions')], ['etf', tl('inv_etf')], ['bond', tl('mk_savings')], ['crypto', tl('crypto')], ['realty', tl('immobilier')]];
+const OPEN_TABS = ['stocks', 'etf', 'bond'];
+const tabDefs = k => k === 'crypto' ? [...CRYPTO].sort((a, b) => S.mk[b.id].p * b.sup - S.mk[a.id].p * a.sup) : k === 'etf' ? ETFS : k === 'bond' ? [...BONDS].reverse() : STOCKS;
+let invMode = null, perSheet = H, sheetId = null;
 function renderInvest() {
   if (invView) return invView.k === 'asset' ? renderAsset(invView.id) : invView.k === 'prop' ? renderProp(invView.u) : renderListing(invView.t);
-  if (!OPEN_TABS.includes(investTab) && !S.unl[investTab]) investTab = 'stocks';
-  const pf = pfParts(), pts = series(S.pfH, perPf, pf.total);
-  const inc = divH() + S.props.reduce((a, pr) => a + propAcc(pr).cf, 0);
+  const hs = holdings();
+  if (!invMode) invMode = hs.length ? 'pf' : 'mk';
   let h = `<section class="screen" id="scr"><div class="screen-title"><h1>${tl('investir')}</h1><span>${tl('t_1_h_de_jeu_1_mois')}</span></div>
-    <div class="card pf"><span class="label">${tl('mon_portefeuille')}</span>
+    <div class="seg" role="tablist">${[['pf', tl('mon_portefeuille')], ['mk', tl('mk_market')]].map(([k, n]) => `<button type="button" role="tab" data-invmode="${k}" aria-selected="${invMode === k}">${n}</button>`).join('')}</div>`;
+  return h + (invMode === 'pf' ? renderPf(hs) : renderMarket()) + '</section>';
+}
+function renderPf(hs) {
+  const pf = pfParts(), pts = series(S.pfH, perPf, pf.total), inv = pfInvested();
+  const inc = divH() + S.props.reduce((a, pr) => a + propAcc(pr).cf, 0);
+  let h = `<div class="card pf"><div class="row"><span class="label">${tl('pf_total')}</span>${infoBtn('pl')}</div>
       <b class="num pf-val" id="pfVal">${eur(pf.total)}</b>
-      <div class="pf-row"><span>${tl('plus_value_latente')} <span id="pfPL">${plHtml(pf.pl, pfInvested())}</span></span><span>${tl('revenus_2', inc < 0 ? '--neg' : '--money', perH(inc))}</span></div>
-      ${chartBlock('pf', pts, perPf, eur)}${perChips(perPf, 'data-perpf')}
-      ${allocHtml(pf)}</div>
-    ${positionsHtml()}
-    <div class="seg scroll" role="tablist">${ITABS.map(([k, n]) => { const open = OPEN_TABS.includes(k) || S.unl[k]; return `<button type="button" role="tab" data-itab="${k}" aria-selected="${investTab === k}" ${open ? '' : 'disabled'}>${open ? n : `🔒 ${n}<small class="lock-at">${tl('de_fortune', eur(UNL_AT[k]))}</small>`}</button>`; }).join('')}</div>`;
-  if (investTab === 'realty') return h + renderRealtyTab() + '</section>';
+      <div class="pf-row"><span>${tl('pf_gain')} <span id="pfPL">${plHtml(pf.pl, inv)}</span></span><span>${tl('revenus_2', inc < 0 ? '--neg' : '--money', perH(inc))}</span></div>
+      ${chartBlock('pf', pts, perPf, eur)}${perChips(perPf, 'data-perpf')}</div>`;
+  if (!hs.length) return h + `<div class="card empty-pf"><span class="big">🌱</span><b>${tl('pf_empty_t')}</b><p class="muted">${tl('pf_empty')}</p><button class="btn go full" type="button" data-invmode="mk">${tl('pf_discover')}</button></div>`;
+  h += donutHtml(pf);
+  h += `<div class="card"><span class="label">${tl('pf_lines')}</span><div class="list pos">${hs.map(x => `<button type="button" class="prow-s" data-sheet="${x.id}"><span class="ico-tile sm">${x.ico}</span><span class="arow-main"><b>${x.n}</b><small>${x.sub}</small></span>
+      <span class="arow-p"><b class="num" id="pv-${x.id}">${eur(x.v)}</b><small id="pp-${x.id}">${pctArrow(x.v, x.b)}</small></span></button>`).join('')}</div></div>`;
+  const ords = S.orders;
+  if (ords.length) h += `<div class="card"><span class="label">${tl('ordres_en_attente')}</span><div class="orders">${ords.map(orderRow).join('')}</div></div>`;
+  return h;
+}
+function renderMarket() {
+  if (!OPEN_TABS.includes(investTab) && !S.unl[investTab]) investTab = 'stocks';
+  let h = `<div class="pills" role="tablist">${ITABS.map(([k, n]) => { const open = OPEN_TABS.includes(k) || S.unl[k]; return `<button type="button" role="tab" ${open ? `data-itab="${k}"` : `data-locked="${k}"`} aria-selected="${investTab === k}" class="${open ? '' : 'locked'}" ${open ? '' : `aria-disabled="true"`}>${n}</button>`; }).join('')}</div>
+    <p class="muted tab-intro">${tl('in2_' + investTab)} ${infoBtn(investTab)}</p>`;
+  if (investTab === 'realty') return h + renderRealtyTab();
   const isC = investTab === 'crypto', defs = tabDefs(investTab);
-  h += `<p class="muted tab-intro">${tl('in_' + investTab)}</p>`;
   const news = infoFor(isC);
   h += `<div class="card"><div class="row"><span class="label">${tl('actualites')}</span>${S.unl.news ? `<button class="linkbtn" type="button" data-opennews="${isC ? 'crypto' : ''}">${tl('tout_voir')}</button>` : ''}</div><ul class="news" id="newsList">${newsHtml(news)}</ul></div>`;
-  const ords = S.orders.filter(o => !!CBY[o.a] === isC);
-  if (ords.length) h += `<div class="card"><span class="label">${tl('ordres_en_attente')}</span><div class="orders">${ords.map(orderRow).join('')}</div></div>`;
   h += `<p class="muted list-note">${tl('chg_day')}</p><div class="list">`;
-  defs.forEach((d, i) => {
+  for (const d of defs) {
     const m = S.mk[d.id], q = holdOf(d.id), c1 = chgSince(m.H, DAY, m.p);
-    const sub = isC ? `${d.id}${S.rug[d.id] ? ` · <span class="neg">${tl('rug_pull')}</span>` : d.risk === 2 ? ` · <span class="warn-t">${tl('tres_risquee')}</span>` : ''}`
-      : d.cls === 'etf' ? tl('ter_s', nf2.format(d.ter * 100)) : d.cls === 'stock' ? `${d.sec} · ${d.id}` : d.fix ? tl('sv_sub') : tl('yld_s', nf1.format(d.y * 100));
+    const sub = isC ? (S.rug[d.id] ? `<span class="neg">${tl('rug_pull')}</span>` : d.id) : d.cls === 'etf' ? tl('ter_s2', nf2.format(d.ter * 100)) : d.cls === 'stock' ? d.sec : d.fix ? tl('sv_sub') : tl('yld_s', nf1.format(d.y * 100));
     h += `<button type="button" class="arow" data-asset="${d.id}"><span class="ico-tile" style="--cc:var(${isC ? '--plum' : d.cls === 'etf' ? '--teal' : d.cls === 'stock' ? '--sky' : '--gold'})">${d.ico}</span>
-      <span class="arow-main"><b>${isC ? `<i class="rank-n">${i + 1}</i>` : ''}${d.n}</b><small>${srriBadge(d)} ${sub}</small>${fxChip(assetFx(d.id))}${q ? `<small class="own">${d.fix ? eur(q) : tl('detenu', qtyTxt(d.id, q), q > 1 && !isC ? 's' : '', eur(q * m.p))}</small>` : ''}</span>
+      <span class="arow-main"><b>${d.n}</b><small>${riskTag(riskLvl(d))} · ${sub}</small>${fxChip(assetFx(d.id))}${q ? `<small class="own">${tl('pf_own', eur(q * m.p))}</small>` : ''}</span>
       ${d.fix ? '' : `<svg class="mini" id="s-${d.id}" viewBox="0 0 100 32" preserveAspectRatio="none">${chartSVG(series(m.H, H, m.p), 100, 32)}</svg>`}
       <span class="arow-p">${d.fix ? `<b class="num">${tl('yr_pct', nf1.format(d.y * 100))}</b><small class="muted">${tl('k_rate')}</small>` : `<b class="num" id="p-${d.id}">${px(m.p)}</b><span id="c-${d.id}">${chgHtml(c1)}</span>`}</span></button>`;
-  });
-  return h + '</div></section>';
+  }
+  return h + '</div>';
+}
+// Fiche d'un placement qui glisse depuis le bas : graphique, investi, valeur, gain, acheter/vendre.
+function sheetData(id, t = Date.now()) {
+  if (id.startsWith('pr')) {
+    const pr = S.props.find(x => x.u === +id.slice(2)); if (!pr) return null;
+    const a = propAcc(pr, t), m = S.mk[pr.t];
+    return { pr, a, v: a.v, b: pr.paid + pr.fees, pts: series(m.H, perSheet, a.v, a.v / m.p), ico: RBY[pr.t].ico, n: RBY[pr.t].n, sub: pr.city };
+  }
+  const d = SBY[id] || CBY[id], q = holdOf(id); if (!d || !q) return null;
+  const m = S.mk[id], v = q * m.p;
+  return { d, q, v, b: S.basis[id] || 0, pts: series(m.H, perSheet, v, q), ico: d.ico, n: d.n, sub: d.cls === 'crypto' ? tl('crypto') : tl('cls_' + d.cls) };
+}
+function openSheet(id) {
+  sheetId = id;
+  const x = sheetData(id); if (!x) return;
+  const gain = x.v - x.b, rows = [];
+  rows.push([tl('sh_invested'), eur(x.b)], [tl('sh_value'), `<span id="shV">${eur(x.v)}</span>`]);
+  if (x.d) {
+    const d = x.d;
+    if (!d.fix) rows.push([`${tl('prix_moyen_dachat')} ${infoBtn('avg')}`, px(x.b / x.q)], [tl('sh_qty'), d.cls === 'crypto' ? `≈ ${nf4.format(x.q)} ${d.id}` : nf0.format(x.q)]);
+    if (d.y) rows.push([d.cls === 'stock' || d.cls === 'etf' ? tl('dividendes') : tl('interest_rec'), `${perH(x.v * d.y / 12)}`]);
+    rows.push([tl('k_risk'), riskTag(riskLvl(d))]);
+  } else rows.push([tl('sh_net'), `<span style="color:var(${x.a.cf < 0 ? '--neg' : '--money'})">${tl('mois', eur(x.a.cf))}</span>`], [tl('capital_restant_du'), x.pr.loan ? eur(x.pr.loan.rem) : '—']);
+  modal(`<span class="sheet-grab" aria-hidden="true"></span><div class="sheet-head"><span class="ico-tile">${x.ico}</span><div><b>${x.n}</b><small class="muted">${x.sub}</small></div><button class="sheet-x" id="mNo" type="button" aria-label="${tl('fermer')}">✕</button></div>
+    <b class="num big-net" id="shBig">${eur(x.v)}</b><span id="shPL">${plHtml(gain, x.b)}</span>
+    ${chartBlock('sheet', x.pts, perSheet, eur)}<div class="qty per" id="shPer">${PERIODS.map(([l, ms]) => `<button type="button" data-pers="${ms}" aria-pressed="${perSheet === ms}">${l}</button>`).join('')}</div>
+    <div class="pl sheet-rows">${rows.map(([k, v]) => `<div><span>${k}</span><b class="num">${v}</b></div>`).join('')}</div>
+    ${x.d ? `${x.a ? '' : ''}<div class="asset-actions"><button class="btn ghost" type="button" id="shSell">${x.d.fix ? tl('withdraw') : tl('vendre')}</button><button class="btn go" type="button" id="shBuy">${x.d.fix ? tl('deposit') : tl('acheter_2')}</button></div>`
+      : `${propWhy(x.pr, x.a, Date.now())}<button class="btn go full" type="button" id="shProp">${tl('sh_manage')}</button>`}`, 'sheet');
+  const md = $('modal');
+  md.onclick = e => { if (e.target === md) closeModal(); };
+  $('mNo').onclick = closeModal;
+  md.querySelectorAll('[data-pers]').forEach(b => b.onclick = () => { perSheet = +b.dataset.pers; openSheet(id); });
+  md.querySelectorAll('[data-info]').forEach(b => b.onclick = () => infoModal(b.dataset.info));
+  const go = v => { closeModal(); sheetId = null; invView = v; tq = 1; tAmt = 0; olt = 'buy'; render(); window.scrollTo(0, 0); };
+  if ($('shBuy')) $('shBuy').onclick = () => go({ k: 'asset', id });
+  if ($('shSell')) $('shSell').onclick = () => { go({ k: 'asset', id }); tq = 'max'; render(); };
+  if ($('shProp')) $('shProp').onclick = () => go({ k: 'prop', u: x.pr.u });
+}
+function updSheet() {
+  if (!sheetId || $('modal').hidden || !$('cv-sheet')) return;
+  const x = sheetData(sheetId); if (!x) return;
+  $('shBig').textContent = eur(x.v); $('shPL').innerHTML = plHtml(x.v - x.b, x.b); if ($('shV')) $('shV').textContent = eur(x.v);
+  chartUpdate('sheet', x.pts);
 }
 const infoFor = isC => S.info.filter(i => isC ? i.cat === 'crypto' : ['bourse', 'ent', 'eco'].includes(i.cat)).slice(0, 4);
 const newsHtml = list => list.map(i => `<li><span>${ICATS[i.cat][1]} ${esc(i.title)}${i.until > Date.now() ? ` <span class="chipx event">${tl('en_cours')}</span>` : ''}</span><small>${ago(i.t)}</small></li>`).join('') || `<li><span class="muted">${tl('aucune_actualite_pour_linstant')}</span></li>`;
@@ -4912,11 +5108,11 @@ function renderRealtyTab() {
     h += `<div class="group-title"><h2>${tl('mes_biens')}</h2><span>${tl('bien', S.props.length, S.props.length > 1 ? 's' : '')}</span></div><div class="list">`;
     for (const pr of S.props) {
       const T = RBY[pr.t], a = propAcc(pr, t), ten = pr.tenant;
-      const st = pr.works > t ? ['warn', tl('travaux_en_cours')] : !ten ? ['bad', tl('vacant')] : ten.unpaid > t ? ['bad', tl('loyers_impayes')] : ['good', tl('loue')];
+      const works = pr.works > t, st = works ? ['warn', tl('works_chip', pr.wk === 'reno' ? tl('works_reno_s', pr.lvl + 1) : tl('travaux'), ldur(pr.works))] : !ten ? ['bad', tl('vacant')] : ten.unpaid > t ? ['bad', tl('loyers_impayes')] : ['good', tl('loue')];
       h += `<button type="button" class="card asset prow" data-prop="${pr.u}"><div class="asset-head"><span class="ico-tile" style="--cc:var(--coral)">${T.ico}</span>
         <div class="asset-name"><b>${T.n}</b><small>${tl('m2', pr.city, nf0.format(pr.surf), pr.lvl ? ` ${tl('renove_3', pr.lvl)}` : '')}</small></div>
-        <div class="asset-price"><b class="num">${eur(a.v)}</b><small class="num" style="color:var(${a.cf < 0 ? '--neg' : '--money'})">${perH(a.cf)}</small></div></div>
-        <div class="chips"><span class="chipx ${st[0]}">${st[1]}</span>${pr.loan ? `<span class="chipx">${tl('credit', eur(pr.loan.rem))}</span>` : ''}${fxChip(propFx(pr, t))}<span class="chipx">${tl('etat', Math.round(pr.cond))}</span></div></button>`;
+        <div class="asset-price"><b class="num">${eur(a.v)}</b><small class="num" style="color:var(${a.cf < 0 ? '--neg' : '--money'})">${tl('prop_mo', eur(a.cf))}</small></div></div>
+        <div class="chips"><span class="chipx ${st[0]}">${st[1]}</span>${pr.loan ? `<span class="chipx">${tl('credit', eur(pr.loan.rem))}</span>` : ''}${fxChip(propFx(pr, t))}${works ? '' : `<span class="chipx">${tl('etat', Math.round(pr.cond))}</span>`}</div>${works ? worksBar(pr) : ''}${propLine(a)}</button>`;
     }
     h += '</div>';
   }
@@ -4930,6 +5126,16 @@ function renderRealtyTab() {
   }
   return h + '</div>';
 }
+// Pourquoi un bien coûte de l'argent ce mois-ci, en une phrase.
+function propWhy(pr, a, t) {
+  if (a.cf >= 0) return '';
+  const why = a.rent === 0 ? tl('rw_norent', pr.works > t ? tl('rw_works') : !pr.tenant ? tl('rw_vacant') : tl('rw_unpaid'))
+    : a.loan > 0 && a.rent - a.charges > 0 ? tl('rw_loan', eur(a.loan), eur(a.rent - a.charges)) : tl('rw_charges');
+  return `<p class="warn-note">${why}</p>`;
+}
+const propLine = a => `<p class="prop-line">${tl('prop_line', eur(a.rent), eur(a.charges), eur(a.loan), `<b style="color:var(${a.cf < 0 ? '--neg' : '--money'})">${eur(a.cf)}</b>`)}</p>`;
+const worksFrom = pr => pr.wkFrom || pr.works - 3 * H;
+const worksBar = pr => `<div class="bar works-bar"><i data-prog="${worksFrom(pr)}:${pr.works}" style="width:${clamp((Date.now() - worksFrom(pr)) / (pr.works - worksFrom(pr)) * 100, 0, 100)}%"></i></div>`;
 const dealChip = disc => disc <= -.03 ? `<span class="chipx good">${tl('bonne_affaire', sgn(disc * 100))}</span>` : disc >= .03 ? `<span class="chipx bad">${tl('au_dessus_du_marche', sgn(disc * 100))}</span>` : `<span class="chipx">${tl('prix_du_marche')}</span>`;
 
 /* --- Fiche d'une action ou d'une crypto --- */
@@ -4941,7 +5147,7 @@ function tradeQty(id, side) {
   return Math.max(0, q);
 }
 function tradeSummary(id) {
-  if (SBY[id].fix) { const qb = tradeQty(id, 'buy'), qs = tradeQty(id, 'sell'); return `<div><span>${tl('sv_in')}</span><b class="num">${eur(qb)}</b></div><small>${tl('sv_note', nf1.format(SBY[id].y * 100))}${qb > S.cash + 1e-9 ? ` · <span class="neg">${tl('solde_insuffisant')}</span>` : ''}</small>
+  if (SBY[id] && SBY[id].fix) { const qb = tradeQty(id, 'buy'), qs = tradeQty(id, 'sell'); return `<div><span>${tl('sv_in')}</span><b class="num">${eur(qb)}</b></div><small>${tl('sv_note', nf1.format(SBY[id].y * 100))}${qb > S.cash + 1e-9 ? ` · <span class="neg">${tl('solde_insuffisant')}</span>` : ''}</small>
     <div><span>${tl('sv_out')}</span><b class="num">${eur(qs)}</b></div><small>${tl('sv_note2')}</small>`; }
   const qb = tradeQty(id, 'buy'), qs = tradeQty(id, 'sell'), b = quote(id, 'buy', qb), v = quote(id, 'sell', qs);
   return `<div><span>${tl('achat')}</span><b class="num">${qtyTxt(id, qb)} × ${px(b.avg)} = ${eur(b.total)}</b></div><small>${tl('prix_affiche_prix_moyen_estime_courtage', px(b.p), px(b.avg), nf1.format(b.rate * 100), b.total > S.cash + 1e-9 ? ` · <span class="neg">${tl('solde_insuffisant')}</span>` : '')}</small>
@@ -5048,10 +5254,10 @@ function renderProp(u) {
     <div class="card"><span class="label">${tl('valeur_du_bien_marche_local')}</span>${chartBlock('asset', pts, perAsset, eur)}${perChips(perAsset, 'data-per')}</div>
     <div class="card"><span class="label">${tl('fiche_du_bien')}</span><div class="stats" style="margin-top:10px">
       <div><small>${tl('ville')}</small><b>${pr.city}</b></div><div><small>${tl('surface')}</small>${tl('m2_2', nf0.format(pr.surf))}</div>
-      <div><small>${tl('etat_2')}</small><b>${Math.round(pr.cond)}${pc()}</b>${meter(pr.cond)}</div><div><small>${tl('renovation')}</small><b>${pr.lvl} / 3</b></div>
+      <div><small>${tl('etat_2')}</small><b>${Math.round(pr.cond)}${pc()}</b>${meter(pr.cond)}${works && pr.wk === 'reno' ? `<small>${tl('works_cond')}</small>` : ''}</div><div><small>${tl('renovation')}</small><b>${pr.lvl} / 3</b></div>
       <div><small>${tl('prix_dachat')}</small><b class="num">${eur(pr.paid)}</b></div><div><small>${tl('frais_et_travaux')}</small><b class="num">${eur(pr.fees)}</b></div>
       <div><small>${tl('rentabilite_brute')}</small>${tl('an', nf1.format(brut * 100))}</div><div><small>${tl('rentabilite_nette')}</small>${tl('an', nf1.format(net * 100))}</div></div></div>
-    <div class="card"><span class="label">${tl('compte_mensuel_1_mois_1_h')}</span><div class="pl" style="margin-top:10px">${propRows(a, true)}</div></div>
+    <div class="card"><span class="label">${tl('compte_mensuel_1_mois_1_h')}</span><div class="pl" style="margin-top:10px">${propRows(a, true)}</div>${propWhy(pr, a, t)}</div>
 
     <div class="card"><span class="label">${tl('locataire')}</span>
       ${ten ? `<div class="tenant"><span class="emp-av" style="--cc:var(--teal)">${esc(ten.n[0])}</span><span class="emp-main"><b>${esc(ten.n)}</b><small>${tl('depuis', esc(ten.job), dur(t - ten.since))}</small><span class="chipx ${TPROF[ten.prof].k}">${TPROF[ten.prof].l}</span></span><span class="emp-sal num">${eur(a.rentFull)}<small>${tl('mois_2')}</small></span></div>
@@ -5059,7 +5265,7 @@ function renderProp(u) {
         : `<p class="need">${tl('logement_vacant_depuis_aucun_loyer_mais', dur(t - (pr.vacant || t)))}</p><button class="btn go full" type="button" id="tenantBtn">${tl('choisir_un_locataire')}</button>`}</div>
 
     <div class="card"><span class="label">${tl('travaux')}</span>
-      ${works ? `<p class="muted" style="margin:8px 0 0">${tl('en_cours_encore_loyer_suspendu', pr.wk === 'reno' ? tl('renovation') : tl('travaux'), dur(pr.works - t))}</p>${waitBtns(`work:${pr.u}`, pr.works, t)}` : `
+      ${works ? `<p class="muted" style="margin:8px 0 6px">${pr.wk === 'reno' ? tl('works_reno', pr.lvl + 1, ldur(pr.works)) : tl('en_cours_encore_loyer_suspendu', tl('travaux'), ldur(pr.works))}</p>${worksBar(pr)}${waitBtns(`work:${pr.u}`, pr.works, t)}` : `
       <div class="firm-actions" style="margin-top:10px"><button class="btn ghost full wrap" type="button" id="fixBtn" data-cost="${fix}" ${pr.cond >= 99 ? 'disabled' : ''}>${tl('remise_en_etat_etat_100', eur(fix))}</button>
       ${pr.lvl < 3 ? `<button class="btn gold full wrap" type="button" id="renoBtn" data-cost="${reno}">${tl('renovation_niveau', pr.lvl + 1, eur(reno))}<span style="opacity:.8;font-weight:600">${tl('valeur_12_loyer_15_3_h')}</span></button><span class="need" data-need="${reno}"></span>` : `<p class="muted">${tl('renovation_maximale_atteinte')}</p>`}</div>`}</div>
 
@@ -5157,7 +5363,7 @@ function propAction(id) {
   if (id === 'tenantBtn') return tenantModal(pr.u);
   if (id === 'evictBtn') { const c = a.base * 2; if (S.cash < c) return toast(tl('solde_insuffisant_2'), 'crash'); S.cash -= c; pr.evict = t + 2 * H; logP(pr, tl('procedure_dexpulsion_lancee_de_frais_dav', eur(c)), 'warn', t); }
   if (id === 'fixBtn') { const c = a.v * (100 - pr.cond) / 100 * .12; if (S.cash < c) return; S.cash -= c; pr.fees += c; pr.cond = 100; logP(pr, tl('remise_en_etat', eur(c)), 'good', t); }
-  if (id === 'renoBtn') { const c = a.v * (.08 + .04 * pr.lvl); if (S.cash < c) return; S.cash -= c; pr.fees += c; pr.works = t + 3 * H; pr.wk = 'reno'; logP(pr, tl('chantier_de_renovation_lance_3_h', eur(c)), '', t); }
+  if (id === 'renoBtn') { const c = a.v * (.08 + .04 * pr.lvl); if (S.cash < c) return; S.cash -= c; pr.fees += c; pr.works = t + 3 * H; pr.wkFrom = t; pr.wk = 'reno'; logP(pr, tl('chantier_de_renovation_lance_3_h', eur(c)), '', t); }
   if (id === 'repayBtn') { const c = pr.loan.rem * 1.03; if (S.cash < c) return; S.cash -= c; logP(pr, tl('credit_solde_par_anticipation', eur(c)), 'good', t); pr.loan = null; }
   if (id === 'sellProp') {
     const sale = a.v * (1 - AGENCY), ira = pr.loan ? pr.loan.rem * 1.03 : 0, gain = sale - pr.paid - pr.fees, tax = Math.max(0, gain) * TAX, net = sale - ira - tax;
@@ -5173,14 +5379,15 @@ function propAction(id) {
 
 /* --- Mises à jour en direct (toutes les 2 s) --- */
 function updateInvest() {
+  updSheet();
   if (tab !== 'invest') return;
   if (!invView) {
     const p = pfParts();
     const v = $('pfVal'); if (v) v.textContent = eur(p.total);
     const pl = $('pfPL'); if (pl) pl.innerHTML = plHtml(p.pl, pfInvested());
     chartUpdate('pf', series(S.pfH, perPf, p.total));
-    for (const d of [...SECS, ...CRYPTO]) { const el = $('pv-' + d.id); if (!el) continue; const q = holdOf(d.id), v = q * S.mk[d.id].p, b = S.basis[d.id] || 0; el.textContent = eur(v); if (!d.fix) $('pp-' + d.id).innerHTML = plHtml(v - b, b); }
-    if (investTab !== 'realty') {
+    if (invMode === 'pf') for (const x of holdings()) { const el = $('pv-' + x.id); if (!el) continue; el.textContent = eur(x.v); $('pp-' + x.id).innerHTML = pctArrow(x.v, x.b); }
+    if (invMode === 'mk' && investTab !== 'realty') {
       for (const d of tabDefs(investTab)) {
         const m = S.mk[d.id], el = $('p-' + d.id); if (!el) continue;
         el.textContent = px(m.p); $('c-' + d.id).innerHTML = chgHtml(chgSince(m.H, DAY, m.p));
@@ -5240,6 +5447,8 @@ const meter = (v, inv) => { const c = inv ? (v > 70 ? '--neg' : v > 45 ? '--gold
 const ago = t => { const m = Math.max(0, (Date.now() - t) / 60000); return m < 1 ? tl('a_linstant') : m < 60 ? tl('il_y_a_min', Math.floor(m)) : m < 1440 ? tl('il_y_a_h', Math.floor(m / 60)) : tl('il_y_a_j', Math.floor(m / 1440)); };
 const AWAY = { sick: tl('malade'), leave: tl('en_conges'), train: tl('en_formation'), start: tl('arrive_bientot') };
 // Compte à rebours qui se met à jour tout seul (voir refresh()).
+// Durée restante (« 2 h 10 min ») mise à jour en direct par refresh().
+const ldur = ts => `<span data-dur="${ts}">${dur(Math.max(0, ts - Date.now()))}</span>`;
 const cd = ts => `<span class="num" data-cd="${ts}">${mmss(ts - Date.now())}</span>`;
 // Heure de retour, avec le jour si ce n'est pas aujourd'hui.
 const backAt = ts => new Date(ts).toLocaleString(locale(), new Date(ts).toDateString() === new Date().toDateString() ? { hour: '2-digit', minute: '2-digit' } : { weekday: 'short', hour: '2-digit', minute: '2-digit' });
@@ -5657,7 +5866,7 @@ function renderProfile() {
     <div class="card"><span class="label">${tl('sv_card')}</span>
       <p class="muted" style="margin:8px 0 4px">${tl('sv_auto')}</p>
       <p class="muted" style="margin:0 0 12px">${persisted ? tl('sv_persist_ok') : tl('sv_persist_no')}</p>
-      <div class="asset-actions"><button class="btn ghost" id="importBtn" type="button">${tl('sv_import')}</button><button class="btn go" id="exportBtn" type="button">${tl('sv_export')}</button></div></div>
+      <div class="sv-btns"><button class="btn go full" id="exportBtn" type="button">${tl('sv_export')}</button><button class="btn ghost full" id="importBtn" type="button">${tl('sv_import')}</button></div></div>
     <button class="btn ghost full" id="resetBtn" type="button">${tl('recommencer_une_partie')}</button>
   </section>`;
 }
@@ -5666,6 +5875,7 @@ function renderProfile() {
 /* AdService choisit automatiquement le fournisseur présent sur la page. Sans SDK, une pub simulée de 30 s est affichée.
    Pour brancher un vrai réseau, ajoutez son script dans l'en-tête (voir le commentaire en haut du fichier). */
 const AdService = {
+  off: false,   // pubs indisponibles (ex. lancement sans pubs sur CrazyGames) : boutons masqués jusqu'au prochain lancement
   provider() {
     if (window.PokiSDK && typeof window.PokiSDK.rewardedBreak === 'function') return 'poki';
     if (window.CrazyGames && window.CrazyGames.SDK && window.CrazyGames.SDK.ad) return 'crazygames';
@@ -5994,7 +6204,7 @@ function coachTick() {
   coachEl.hidden = false;
   if (coachHi !== el) { if (coachHi) coachHi.classList.remove('coach-hi'); el.classList.add('coach-hi'); coachHi = el; }
   // Nouvelle cible hors de l'écran : on la ramène doucement, sauf si le joueur fait défiler la page.
-  if (coachSel !== st.sel) { coachSel = st.sel; const r0 = el.getBoundingClientRect(); const nb = document.querySelector('.nav').offsetHeight, tb = document.querySelector('.top').offsetHeight; if ((r0.bottom > innerHeight - nb - 10 || r0.top < tb + 10) && !scrolling() && $('modal').hidden) el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  if (coachSel !== st.sel) coachSel = st.sel;   // jamais de défilement automatique : la bulle suit l'élément où qu'il soit
   const r = el.getBoundingClientRect(), w = coachEl.offsetWidth, h = coachEl.offsetHeight;
   // Position imposée par l'étape si la place le permet, sinon du côté où il y a le plus d'espace.
   const above = st.pos === 'above' && r.top - h - 12 > 56 ? true : st.pos === 'below' && r.bottom + h + 12 < innerHeight ? false : r.top > innerHeight * .5;
@@ -6021,10 +6231,10 @@ const START = [
 const START_GO = {
   hire: () => { const f = S.firms[0]; if (f) { tab = 'biz'; bizView = 'firm'; firmU = f.u; firmTab = 'team'; } },
   biz2: () => { tab = 'biz'; bizView = 'found'; },
-  stock: () => { tab = 'invest'; invView = null; investTab = 'stocks'; },
+  stock: () => { tab = 'invest'; invView = null; invMode = 'mk'; investTab = 'stocks'; },
   channel: () => { tab = 'creator'; crView = 0; },
   upbiz: () => { const f = S.firms[0]; if (f) { tab = 'biz'; bizView = 'firm'; firmU = f.u; firmTab = 'compta'; } },
-  crypto: () => { tab = 'invest'; invView = null; investTab = 'crypto'; },
+  crypto: () => { tab = 'invest'; invView = null; invMode = 'mk'; investTab = 'crypto'; },
 };
 function starterGo() { const g = START_GO[START[S.start][0]]; if (!g) return; g(); render(); window.scrollTo(0, 0); }
 const startReward = s => s[4] ? `+${eur(s[4] * S.pi)}` : `+${s[5]} ${TOK}`;
@@ -6055,8 +6265,9 @@ const scrolling = () => touching || Date.now() - lastScrollT < 800;
 function softRender() { if (scrolling()) renderLater = true; else { renderLater = false; render(); } }
 
 /* ================= Rendu et boucle ================= */
+// Reconstruit l'écran en gardant la position de défilement (les changements d'onglet ou de page remontent en haut à part).
 function render() {
-  const main = $('main');
+  const main = $('main'), y = window.scrollY;
   main.innerHTML = tab === 'news' ? renderNews() : tab === 'gains' ? renderGains() : tab === 'invest' ? renderInvest() : tab === 'biz' ? renderBiz() : tab === 'items' ? renderItems() : tab === 'creator' ? renderCreator() : renderProfile();
   typoFix(main);
   applyLocks();
@@ -6064,6 +6275,7 @@ function render() {
   updSound();
   refresh();
   coachTick();
+  if (y && Math.abs(window.scrollY - y) > 1) window.scrollTo(0, y);
 }
 // Changement de langue immédiat : rien n'est rechargé, la partie continue.
 function setLang(l) {
@@ -6075,6 +6287,8 @@ function afterAction() { save(); render(); }
 /* Mise à jour légère, sans reconstruire l'écran. */
 function refresh() {
   document.querySelectorAll('[data-cd]').forEach(el => { el.textContent = mmss(Math.max(0, +el.dataset.cd - Date.now())); });
+  document.querySelectorAll('[data-dur]').forEach(el => { const v = String(dur(Math.max(0, +el.dataset.dur - Date.now()))); if (el.textContent !== v) el.textContent = v; });
+  document.querySelectorAll('[data-prog]').forEach(el => { const [a, b] = el.dataset.prog.split(':').map(Number); el.style.width = clamp((Date.now() - a) / ((b - a) || 1) * 100, 0, 100) + '%'; });
   const inc = incomeH();
   $('hdrCash').textContent = eur(S.cash);
   $('hdrIncome').textContent = perH(inc);
@@ -6123,9 +6337,9 @@ function loop() {
   if (now - lastTick >= TICK_MS) {
     lastTick = now; marketTick(false); updateInvest(); maybeEvent(now); maybeInfo(now); checkDaily(); checkQuests(); checkAch(); checkUnlocks(); maybePending();
     if (tab === 'creator' && S.cr && $('modal').hidden) {
-      const c = S.cr, cs = `${c.vids.length}:${c.n}:${c.offers.length}:${!!c.prod}:${c.log[0] ? c.log[0][0] : 0}:${c.burn > now}:${crView}:${crSort}:${crTab}:${crMet}:${Math.floor(now / (crView ? 1e4 : 2e4))}`;
+      const c = S.cr, cs = `${c.vids.length}:${c.n}:${c.offers.length}:${!!c.prod}:${c.log[0] ? c.log[0][0] : 0}:${c.burn > now}:${resting(c, now)}:${Math.round(c.fat / 5)}:${crView}:${crSort}:${crTab}:${crMet}:${crView ? Math.floor(now / 1e4) : 0}`;
       if (cs !== renderCreator.sig) { if (!scrolling()) { renderCreator.sig = cs; render(); } }
-      else { const el = $('crSubs'); if (el) el.textContent = nf0.format(c.subs); if ($('cv-cr')) chartUpdate('cr', crSeries(c)); }
+      else { const el = $('crSubs'); if (el) el.textContent = crMetTxt(c); if ($('cv-cr')) chartUpdate('cr', crSeries(c)); }
     }
     if (tab === 'news' && S.info.length && S.info[0].id !== renderNews.last && !scrolling()) { renderNews.last = S.info[0].id; render(); }
     // Les écrans Entreprises se redessinent quand il se passe quelque chose dans une équipe.
@@ -6192,6 +6406,10 @@ $('main').addEventListener('click', e => {
     return;
   }
   if (t.dataset.itab) { investTab = t.dataset.itab; return render(); }
+  if (t.dataset.invmode) { invMode = t.dataset.invmode; render(); window.scrollTo(0, 0); return; }
+  if (t.dataset.sheet) return openSheet(t.dataset.sheet);
+  if (t.dataset.info) return infoModal(t.dataset.info);
+  if (t.dataset.locked) { const k = t.dataset.locked; return toast(tl('mk_locked', ITABS.find(x => x[0] === k)[1], eur(UNL_AT[k] * S.pi))); }
   if (t.dataset.ncat != null) { newsCat = t.dataset.ncat; return render(); }
   if (t.id === 'newsBack') { tab = prevTab; render(); window.scrollTo(0, 0); return; }
   if (t.dataset.opennews != null) { prevTab = tab; tab = 'news'; newsCat = t.dataset.opennews; render(); window.scrollTo(0, 0); return; }
@@ -6222,7 +6440,7 @@ $('main').addEventListener('click', e => {
   if (t.dataset.crsort) { crSort = t.dataset.crsort; return render(); }
   if (t.dataset.crtab) { crTab = t.dataset.crtab; return render(); }
   if (t.dataset.crmet) { crMet = t.dataset.crmet; return render(); }
-  if (['crCreate', 'crPost', 'crMerch', 'crBrand'].includes(t.id) || ['newplat', 'percr', 'crth', 'crdu', 'crpr', 'creq', 'crst', 'spok', 'spno', 'crpromo'].some(k => t.dataset[k] != null)) return crAction(t);
+  if (['crCreate', 'crPost', 'crMerch', 'crBrand'].includes(t.id) || ['newplat', 'percr', 'crth', 'crdu', 'crpr', 'creq', 'crst', 'spok', 'spno', 'crpromo', 'crrest'].some(k => t.dataset[k] != null)) return crAction(t);
   if (t.dataset.opp) return oppModal(t.dataset.opp);
   if (['pr', 'prreset', 'pon', 'q', 'mgrp', 'order', 'promo', 'eq', 'vbuy', 'vsell', 'vfix'].some(k => t.dataset[k] != null)) return opsAction(t);
   if (t.dataset.firm) { firmTab = 'ops'; bizView = 'firm'; firmU = +t.dataset.firm; render(); window.scrollTo(0, 0); return; }
